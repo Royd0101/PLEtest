@@ -2,7 +2,7 @@ from django.urls import path,include
 from . import views
 
 from .views import (
-    File_Document_view, Department_view
+    File_Document_view, Department_view,FileLog_view
 )
 
 urlpatterns = [
@@ -16,10 +16,16 @@ urlpatterns = [
             'put': 'update',
             'delete': 'destroy',
         })),
+        
+
         #api for department
         path('department/', Department_view.as_view({'get': 'list', 'post': 'create'}), name='department-list'),
         path('department/<int:pk>/', Department_view.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='department-detail'),
         
+        #api for logs
+        path('logs/', FileLog_view.as_view({'get': 'list', 'post': 'create'}), name='department-list'),
+        path('logs/<int:pk>/', FileLog_view.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='department-detail'),
+
         #custom api for user get list of data created by user
         path('expired/', File_Document_view.as_view({
             'get': 'expired',  # Custom action for expired files
@@ -51,6 +57,8 @@ urlpatterns = [
     path('renew_file_form/<int:file_id>/', views.renew_file_form, name='renew_file_form'),
     #file profile page
     path('display_file_page/<int:file_id>/', views.display_file_page, name='display_file_page'),
+    #user logs
+    path('users_logs/', views.users_logs, name='users_logs'),
 
 
     #render admin page for dashboard

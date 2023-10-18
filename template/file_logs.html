@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    {% load static %}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>File Log</title>
+    <style>
+      .log-container {
+        max-height: 400px; /* Set the maximum height for scrolling */
+        overflow-y: auto; /* Enable vertical scrolling */
+      }
+      .log-item {
+        margin-bottom: 10px; /* Add some spacing between log items */
+      }
+    </style>
+  </head>
+  <body>
+    {% csrf_token %} {% include 'navigation.html' %}
+    <div class="log-container">
+      {% for log in logs %}
+      <div class="log-item">
+        <p>
+          {{ log.user_firstname }} {{ log.user_lastname }} created a {{
+          log.document_type }} document on {{ log.timestamp }}
+        </p>
+      </div>
+      {% endfor %}
+    </div>
+  </body>
+</html>

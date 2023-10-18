@@ -35,6 +35,16 @@
           <div class="col-md-10">
             <!-- Admin Section -->
             {% if user.is_authenticated and user.is_staff %}
+            <div class="add-button">
+              <a
+                href="{% url 'users_logs' %}"
+                class="btn custom-create_file"
+                role="button"
+                aria-pressed="true"
+              >
+                <b>User logs</b>
+              </a>
+            </div>
             <div class="card">
               <a
                 href="{% url 'admin_valid' %}"

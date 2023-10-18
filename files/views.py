@@ -1,12 +1,11 @@
 from django.shortcuts import render ,redirect
-from .serializers import FileSerializer , DepartmentSerializer
+from .serializers import FileSerializer , DepartmentSerializer,FileLogSerializer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from django.utils import timezone
 from datetime import timedelta
-from .models import File_Document ,Department
-from users.models import Company
+from .models import File_Document ,Department , FileLog
 from django.shortcuts import render, get_object_or_404
 import requests
 from django.contrib.auth.decorators import login_required
@@ -20,7 +19,17 @@ from .forms import renew_form
 from .forms import DepartmentForm
 
 # Create your views here.
+class FileLog_view(ModelViewSet):
+    serializer_class = FileLogSerializer
 
+    def get_queryset(self):
+        return self.serializer_class.Meta.model.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
 class Department_view(ModelViewSet):
     serializer_class = DepartmentSerializer
 
@@ -165,6 +174,12 @@ def create_new_file(request):
             )
             file_document.save()
 
+            log_entry = FileLog.objects.create(
+                user=request.user,
+                file_document=file_document,
+                action='created'
+            )
+
             messages.success(request, 'File created successfully!')
             return redirect('create_new_file_form')
         else:
@@ -191,6 +206,13 @@ def renew_file(request, file_id):
             file.renewal_date = form.cleaned_data['renewal_date']
             file.expiry_date = form.cleaned_data['expiry_date']
             file.save()
+
+            # Create a log entry for the file renewal
+            log_entry = FileLog.objects.create(
+                user=request.user,
+                file_document=file,
+                action='renewed'
+            )
 
             messages.success(request, 'File renewed successfully!')
             return redirect('dashboard')
@@ -241,6 +263,10 @@ def create_department(request):
 
     return render(request, 'admin_add_department.html', {'form': form})
 
+#display logs
+def users_logs(request):
+    logs = FileLog.objects.all()
+    return render(request, 'file_logs.html', {'logs': logs})
 
 
 #display renew file pages
