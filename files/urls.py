@@ -68,6 +68,11 @@ urlpatterns = [
     path('department_list/', views.department_list, name='department_list'),
     path('create_department/', views.create_department, name='create_department'),
 
+    #display total document at dashboard
+    path('total_expired_document/', views.dashboard_total_expired, name='dashboard_total_renew'),
+    path('total_valid_document/', views.dashboard_total_valid, name='dashboard_total_renew'),
+    path('total_to_be_renew_document/', views.dashboard_total_renew, name='dashboard_total_renew'),
+
 
     #api
     #create new file api
