@@ -10,10 +10,10 @@
     {% include 'navigation.html' %} {% include 'toast.html' %}
     <h3>Create User</h3>
     <div class="small-container">
-    <form method="post" action="{% url 'create_user' %}">
+    <form method="post" action="{% url 'update_department' department_id=department.id %}">
       {% csrf_token %} {{ form.as_p }}
       <div class="text-end">
-        <a class="cancel-btn" href="{% url 'user_list' %}">Cancel</a>
+        <a class="cancel-btn" href="{% url 'department_list' %}">Cancel</a>
         <button class="user-submit-btn" type="submit">Submit</button>
       </div>
       </div>

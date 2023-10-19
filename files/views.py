@@ -11,7 +11,7 @@ import requests
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-
+from users.models import Company
 
 
 #import from form
@@ -302,18 +302,23 @@ def display_file_page(request, file_id):
 
 @login_required
 def update_department(request, department_id):
-    department = get_object_or_404(File_Document, id=department_id)
+    department = get_object_or_404(Department, id=department_id)
+    
     if request.method == 'POST':
         form = update_department_form(request.POST)
         if form.is_valid():
-            department.company = form.cleaned_data['company']
+            company = form.cleaned_data['company']
+            company_name = Company.objects.get(company_name=company)
+           
+            department.company = company_name
             department.department_name = form.cleaned_data['department_name']
             department.save()
     else:
-        form = update_department_form(initial={
-            'company': request.user.company,
+        initial_data = {
+            'company': department.company, 
             'department_name': department.department_name,
-        }) 
-    
+        }
+        form = update_department_form(initial=initial_data) 
+
     context = {'form': form, 'department': department}
     return render(request, 'update_department.html', context)

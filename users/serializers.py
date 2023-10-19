@@ -4,7 +4,7 @@ from django.db import transaction
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
-
+    company_name = serializers.EmailField(source='company.company_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -13,6 +13,7 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
             'email',
             'company',
+            'company_name',
             'password',
         )
 

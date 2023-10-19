@@ -14,7 +14,7 @@
       <form
         id="updateUserForm"
         method="POST"
-        action="{% url 'update_user' user_id=user.id %}"
+        action="{% url 'update_department' department_id=department.id  %}"
       >
         {% csrf_token %} {{ form.as_p }}
         <div class="text-end">

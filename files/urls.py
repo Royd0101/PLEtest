@@ -81,7 +81,7 @@ urlpatterns = [
     #get valid file list
     path('get_valid_file_list/', views.get_valid_file_list, name='get_valid_file_list'),
     #renew_file_api
-    path('renew_file/<int:file_id>/', views.renew_file, name='renew_file')
+    path('renew_file/<int:file_id>/', views.renew_file, name='renew_file'),
 
 
 
