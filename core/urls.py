@@ -66,6 +66,7 @@ urlpatterns = [
     path('update_department/', update_department, name='update_department'),
 
 
+
     #functions
     #user
     #login user api function
