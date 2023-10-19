@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from users.views import dashboard, create_user, create_user_page, user_list, update_user, update_user_page ,redirect_to_login, login_user, login_page, logout_user,user_profile ,company_page,create_company,company_list
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,users_logs,dashboard_total_renew,dashboard_total_valid,dashboard_total_expired
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,users_logs
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include([
@@ -64,10 +64,7 @@ urlpatterns = [
     path('admin_expired/', display_admin_expired, name='admin_expired'),
     path('admin_valid/', display_admin_valid, name='admin_valid'),
     path('admin_to_be_renew/', display_admin_to_be_renew, name='admin_to_be_renew'),
-    #display total document at dashboard
-    path('total_expired_document/', dashboard_total_expired, name='dashboard_total_renew'),
-    path('total_valid_document/', dashboard_total_valid, name='dashboard_total_renew'),
-    path('total_to_be_renew_document/', dashboard_total_renew, name='dashboard_total_renew'),
+
 
     #functions
     #user

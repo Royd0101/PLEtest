@@ -300,36 +300,3 @@ def display_file_page(request, file_id):
     file_profile = File_Document.objects.get(pk=file_id)  
     return render(request, 'file_profile.html', {'file_profile': file_profile})
 
-#dashboard ge total
-@login_required
-def dashboard_total_expired(request):
-    user_email = request.user.email
-    response = requests.get('http://127.0.0.1:8000/api/file/expired/', params={'user_email': user_email})
-    if response.status_code == 200 and response.text: 
-        expired_file = response.json()
-        total_expired_document = len(expired_file)
-    else:
-        total_expired_document = 0
-    return render(request, 'dashboard.html', {'total_expired_document': total_expired_document})
-
-@login_required
-def dashboard_total_valid(request):
-    user_email = request.user.email
-    response = requests.get('http://127.0.0.1:8000/api/file/valid_file/', params={'user_email': user_email})
-    if response.status_code == 200 and response.text: 
-        expired_file = response.json()
-        total_valid_document = len(expired_file)
-    else:
-        total_valid_document = 0
-    return render(request, 'dashboard.html', {'total_valid_document': total_valid_document})
-
-@login_required
-def dashboard_total_renew(request):
-    user_email = request.user.email
-    response = requests.get('http://127.0.0.1:8000/api/file/to_be_renew/', params={'user_email': user_email})
-    if response.status_code == 200 and response.text: 
-        expired_file = response.json()
-        total_to_be_renew_document = len(expired_file)
-    else:
-        total_to_be_renew_document = 0
-    return render(request, 'dashboard.html', {'total_to_be_renew_document': total_to_be_renew_document})
