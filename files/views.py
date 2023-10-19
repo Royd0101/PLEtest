@@ -17,7 +17,7 @@ from django.contrib import messages
 #import from form
 from .forms import create_file
 from .forms import renew_form
-from .forms import DepartmentForm
+from .forms import DepartmentForm,update_department_form
 
 # Create your views here.
 
@@ -77,7 +77,6 @@ class File_Document_view(ModelViewSet):
 
 #admin api
     #get the expired file
-
     @action(detail=False, methods=['get'])
     def admin_expired_list(self, request):
         queryset = self.get_queryset().filter(expiry_date__lt=timezone.now())
@@ -300,3 +299,21 @@ def display_file_page(request, file_id):
     file_profile = File_Document.objects.get(pk=file_id)  
     return render(request, 'file_profile.html', {'file_profile': file_profile})
 
+
+@login_required
+def update_department(request, department_id):
+    department = get_object_or_404(File_Document, id=department_id)
+    if request.method == 'POST':
+        form = update_department_form(request.POST)
+        if form.is_valid():
+            department.company = form.cleaned_data['company']
+            department.department_name = form.cleaned_data['department_name']
+            department.save()
+    else:
+        form = update_department_form(initial={
+            'company': request.user.company,
+            'department_name': department.department_name,
+        }) 
+    
+    context = {'form': form, 'department': department}
+    return render(request, 'update_department.html', context)

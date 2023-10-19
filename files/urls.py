@@ -67,7 +67,7 @@ urlpatterns = [
     path('admin_to_be_renew/', views.display_admin_to_be_renew, name='admin_to_be_renew'),
     path('department_list/', views.department_list, name='department_list'),
     path('create_department/', views.create_department, name='create_department'),
-
+    path('update_department/<int:department_id>/', views.update_department, name='update_department'),
 
 
 

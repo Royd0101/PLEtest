@@ -14,7 +14,7 @@ from django.contrib.auth.decorators import login_required
 #import from form
 from .forms import create_user_form
 from .forms import update_user_form
-from .forms import company_form
+from .forms import company_form 
 from django.http import HttpResponse
 
 
@@ -165,11 +165,6 @@ def logout_user(request):
 def dashboard(request):
     return render(request, 'dashboard.html')
 
-#user profile
-@login_required
-def user_profile(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    return render(request, 'user_profile.html', {'user': user})
 
 #create user page -----------------------------------------------------------------------------
 @login_required
@@ -218,7 +213,6 @@ def update_user_page(request, user_id):
     context = {'form': form, 'user': user} 
     return render(request, 'update_user.html', context)
 
-@login_required
 @login_required
 def create_company(request):
     if request.method == 'POST':

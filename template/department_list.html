@@ -55,16 +55,16 @@
                 <td>{{ department.department_name }}</td>
                 <td>
                   <a
-                    href="{% url 'update_user_page' user_id=user.id %}"
+                    href="{% url 'update_department' department_id=department.id %}"
                     class="btn custom-edit-user btn-sm"
                     role="button"
                     aria-pressed="true"
-                    data-user-id="{{ user.id }}"
+                    data-user-id="{{ department.id }}"
                     >Edit</a
                   >
                   <button
                     class="btn btn-danger btn-sm delete-button"
-                    data-user-id="{{ user.id }}"
+                    data-user-id="{{ department.id }}"
                   >
                     Delete
                   </button>

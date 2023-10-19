@@ -35,15 +35,14 @@
         >Add Company</a
       >
     </div>
-    <div class="container mt-5 custom-container">
+    <div class="container mt-4 custom-container">
       <div class="row justify-content-center">
-        <div class="col-m-2">
-          <table id="company_list" class="table custom-table">
+        <div class="col-m-3">
+          <table id="company_list" class="table table-sm">
             <thead class="bg-primary text-white">
               <tr>
                 <th scope="col">No.</th>
                 <th scope="col">Company</th>
-                <th scope="col">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -51,22 +50,6 @@
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ company.company_name }}</td>
-                <td>
-                  <a
-                    href="{% url 'update_user_page' user_id=user.id %}"
-                    class="btn custom-edit-user btn-sm"
-                    role="button"
-                    aria-pressed="true"
-                    data-user-id="{{ user.id }}"
-                    >Edit</a
-                  >
-                  <button
-                    class="btn btn-danger btn-sm delete-button"
-                    data-user-id="{{ user.id }}"
-                  >
-                    Delete
-                  </button>
-                </td>
               </tr>
               {% endfor %}
             </tbody>

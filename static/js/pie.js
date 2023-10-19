@@ -31,6 +31,7 @@ async function generatePieChart() {
     data: data,
   };
   new Chart(ctx, config);
+  a;
 }
 
 async function fetchFileCount(endpoint) {

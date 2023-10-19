@@ -3,6 +3,29 @@ from files.models import Department
 from users.models import Company
 
 
+class update_department_form(forms.ModelForm):
+    company = forms.ModelChoiceField(
+        queryset=Company.objects.all(),
+        widget=forms.Select(attrs={
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+    })
+    )
+    department_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+    })
+        
+    )
+
+    class Meta:
+        model = Department
+        fields = ['company','department_name']
+        
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['company'].queryset = Company.objects.all()
+
+
 class DepartmentForm(forms.ModelForm):
     company = forms.ModelChoiceField(
         queryset=Company.objects.all(),

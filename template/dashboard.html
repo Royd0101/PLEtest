@@ -30,21 +30,35 @@
   <body>
     {% csrf_token %} {% include 'navigation.html' %}
     <main class="dashboard-content">
+      {% if not user.is_staff %}
+      <div class="add-button m-2">
+        <a
+          href="{% url 'create_new_file_form' %}"
+          class="btn custom-create_file"
+          role="button"
+          aria-pressed="true"
+        >
+          <b> Add Document</b>
+        </a>
+      </div>
+      {% endif %}
+      <div class="d-flex align-items-center">
+        {% if user.is_authenticated and user.is_staff %}
+        <div class="add-button m-3">
+          <a
+            href="{% url 'users_logs' %}"
+            class="btn add-button btn-.text-body-tertiary"
+            role="button"
+            aria-pressed="true"
+          >
+            <img src="{% static 'img/log1.png' %}" alt="" />
+          </a>
+        </div>
+      </div>
+      {% endif %}
       <div class="container mt-4 custom-container">
         <div class="row">
-          <div class="col-md-10">
-            <div class="add-button">
-              <a
-                href="{% url 'users_logs' %}"
-                class="btn custom-create_file"
-                role="button"
-                aria-pressed="true"
-              >
-                <img src="../img/bg-masthead.jpg" alt="User Logs" />
-                <b>User logs</b>
-              </a>
-            </div>
-
+          <div class="col-md-4">
             <!-- Admin Section -->
             {% if user.is_authenticated and user.is_staff %}
 
@@ -59,6 +73,8 @@
                 <span id="valid"></span>
               </a>
             </div>
+          </div>
+          <div class="col-md-4">
             <div class="card">
               <a
                 href="{% url 'admin_to_be_renew' %}"
@@ -70,6 +86,9 @@
                 <span id="renew"></span>
               </a>
             </div>
+          </div>
+
+          <div class="col-md-4">
             <div class="card">
               <a
                 href="{% url 'admin_expired' %}"
@@ -81,66 +100,65 @@
                 <span id="expired"></span>
               </a>
             </div>
-            {% endif %} {% if not user.is_staff %}
-            <div class="add-button">
+          </div>
+          {% endif %} {% if not user.is_staff %}
+
+          <!-- USER SIDE-->
+          <div class="col-md-4">
+            <div class="card">
               <a
-                href="{% url 'create_new_file_form' %}"
-                class="btn custom-create_file"
+                href="{% url 'get_valid_file_list' %}"
+                class="custom-modal-button"
                 role="button"
                 aria-pressed="true"
+                style="text-decoration: none"
               >
-                <b> Add Document</b>
+                <h3>Valid Documents</h3>
               </a>
             </div>
           </div>
-        </div>
+          <div class="col-md-4">
+            <div class="card">
+              <a
+                href="{% url 'get_renew_file_list' %}"
+                class="custom-modal-button"
+                role="button"
+                aria-pressed="true"
+                style="text-decoration: none"
+              >
+                <h3>Due for Renewal Documents</h3>
+              </a>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card">
+              <a
+                href="{% url 'get_expired_file_list' %}"
+                class="custom-modal-button"
+                role="button"
+                aria-pressed="true"
+                style="text-decoration: none"
+              >
+                <h3>Expired Documents</h3>
+              </a>
+            </div>
+          </div>
+          {% endif %}
 
-        <div class="card">
-          <a
-            href="{% url 'get_valid_file_list' %}"
-            class="custom-modal-button"
-            role="button"
-            aria-pressed="true"
-            style="text-decoration: none"
-          >
-            <h3>Valid Documents</h3>
-          </a>
-        </div>
-
-        <div class="card">
-          <a
-            href="{% url 'get_renew_file_list' %}"
-            class="custom-modal-button"
-            role="button"
-            aria-pressed="true"
-            style="text-decoration: none"
-          >
-            <h3>Due for Renewal Documents</h3>
-          </a>
-        </div>
-
-        <div class="card">
-          <a
-            href="{% url 'get_expired_file_list' %}"
-            class="custom-modal-button"
-            role="button"
-            aria-pressed="true"
-            style="text-decoration: none"
-          >
-            <h3>Expired Documents</h3>
-          </a>
-        </div>
-        {% endif %}
-
-        <!-- File Statistics -->
-        <div class="card1">
-          <h6>File Statistics</h6>
-          <canvas id="pieChart"></canvas>
-
-          <script src="{% static 'js/pie.js' %}"></script>
-          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          <script src="{% static 'js/admin_api.js' %}"></script>
+          <div class="col-md-4">
+            <!-- File Statistics -->
+            <div class="card1">
+              <h6>File Statistics</h6>
+              <canvas id="pieChart"></canvas>
+              <script src="{% static 'js/pie.js' %}"></script>
+              <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+              <script src="{% static 'js/admin_api.js' %}"></script>
+              <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+              <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+              <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+            </div>
+          </div>
         </div>
       </div>
     </main>

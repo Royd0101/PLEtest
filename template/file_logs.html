@@ -20,18 +20,31 @@
     {% csrf_token %} {% include 'navigation.html' %}
     <div class="small-container mt-4">
       <div class="log-container">
-        {% for log in logs %}
-        <div class="log-item">
-          <p>
-            User {{ log.user.first_name }} {{ log.user.last_name }}
-            {{log.action}} a {{log.file.document_type }} document on
-            {{log.timestamp }}
-          </p>
-        </div>
-        {% endfor %}
+        <h4>Recent Activity:</h4>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Activity</th>
+              <th scope="col">Date/Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logs %}
+            <tr>
+              <td>
+                <p>
+                  User {{ log.user.first_name }} {{ log.user.last_name }}
+                  {{log.action}} a {{log.file.document_type }} document
+                </p>
+              </td>
+              <td>{{log.timestamp }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn mt-2 btn-primary float-end m-5"
+    <a href="{% url 'dashboard' %}" class="btn mt-2 btn-primary float-end m-4"
       >Back</a
     >
   </body>

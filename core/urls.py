@@ -17,8 +17,8 @@ from django.conf import settings
 from django.conf.urls.static import static 
 from django.contrib import admin
 from django.urls import path, include
-from users.views import dashboard, create_user, create_user_page, user_list, update_user, update_user_page ,redirect_to_login, login_user, login_page, logout_user,user_profile ,company_page,create_company,company_list
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,users_logs
+from users.views import dashboard, create_user, create_user_page, user_list, update_user, update_user_page ,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,users_logs,update_department
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include([
@@ -42,8 +42,6 @@ urlpatterns = [
     path('create_new_file_form/', create_new_file_form, name='create_new_file_form'),
     #renew file page
     path('renew_file_form/', renew_file_form, name='renew_file_form'),
-    #user profile
-    path('user_profile/', user_profile, name='user_profile'),
     #company page
     path('company_page/', company_page, name='company_page'),
     #department
@@ -64,6 +62,8 @@ urlpatterns = [
     path('admin_expired/', display_admin_expired, name='admin_expired'),
     path('admin_valid/', display_admin_valid, name='admin_valid'),
     path('admin_to_be_renew/', display_admin_to_be_renew, name='admin_to_be_renew'),
+    #update department
+    path('update_department/', update_department, name='update_department'),
 
 
     #functions
