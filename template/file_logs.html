@@ -3,29 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     {% load static %}
+    <link rel="stylesheet" href="{% static 'css/logs.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>File Log</title>
     <style>
       .log-container {
-        max-height: 400px; /* Set the maximum height for scrolling */
-        overflow-y: auto; /* Enable vertical scrolling */
+        max-height: 400px;
+        overflow-y: auto;
       }
       .log-item {
-        margin-bottom: 10px; /* Add some spacing between log items */
+        margin-bottom: 10px;
       }
     </style>
   </head>
   <body>
     {% csrf_token %} {% include 'navigation.html' %}
-    <div class="log-container">
-      {% for log in logs %}
-      <div class="log-item">
-        <p>
-          {{ log.user_firstname }} {{ log.user_lastname }} created a {{
-          log.document_type }} document on {{ log.timestamp }}
-        </p>
+    <div class="small-container mt-4">
+      <div class="log-container">
+        {% for log in logs %}
+        <div class="log-item">
+          <p>
+            User {{ log.user.first_name }} {{ log.user.last_name }}
+            {{log.action}} a {{log.file.document_type }} document on
+            {{log.timestamp }}
+          </p>
+        </div>
+        {% endfor %}
       </div>
-      {% endfor %}
     </div>
   </body>
 </html>

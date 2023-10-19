@@ -68,8 +68,11 @@ class update_user_form(forms.Form):
 class company_form(forms.ModelForm):
     
     company_name = forms.CharField(
-        widget=forms.TextInput(attrs={'style': 'background-color: #f7f7f7; padding: 5px;'})
-    )
+        widget=forms.TextInput(
+      attrs={
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+    }))
+    
     class Meta:
         model = Company
         fields = ['company_name']

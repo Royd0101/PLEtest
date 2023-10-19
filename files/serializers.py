@@ -35,18 +35,16 @@ class DepartmentSerializer(serializers.ModelSerializer):
         )
 
 class FileLogSerializer(serializers.ModelSerializer):
-    user_firstname = serializers.EmailField(source='user.first_name', read_only=True)
-    user_lastname = serializers.EmailField(source='user.last_name', read_only=True)
-    document_type = serializers.CharField(source='file_document.document_type', read_only=True)
+    first_name = serializers.EmailField(source='user.first_name', read_only=True)
+    last_name = serializers.EmailField(source='user.last_name', read_only=True)
+    file = serializers.EmailField(source='file.document_type', read_only=True)
     class Meta:
         model = FileLog
         fields = (
             'id',
-            'user',
-            'user_firstname',
-            'user_lastname',
-            'document_type',
-            'file_document',
+            'first_name',
+            'last_name',
+            'file',
             'action',
             'timestamp', 
         )

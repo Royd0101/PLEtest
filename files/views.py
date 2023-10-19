@@ -8,6 +8,7 @@ from datetime import timedelta
 from .models import File_Document ,Department , FileLog
 from django.shortcuts import render, get_object_or_404
 import requests
+from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -19,16 +20,7 @@ from .forms import renew_form
 from .forms import DepartmentForm
 
 # Create your views here.
-class FileLog_view(ModelViewSet):
-    serializer_class = FileLogSerializer
 
-    def get_queryset(self):
-        return self.serializer_class.Meta.model.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        queryset = self.get_queryset()
-        serializer = self.get_serializer(queryset, many=True)
-        return Response(serializer.data)
     
 class Department_view(ModelViewSet):
     serializer_class = DepartmentSerializer
@@ -46,7 +38,6 @@ class Department_view(ModelViewSet):
 
 class File_Document_view(ModelViewSet):
     serializer_class = FileSerializer
-
     def get_queryset(self):
         return self.serializer_class.Meta.model.objects.all()
 
@@ -110,7 +101,17 @@ class File_Document_view(ModelViewSet):
         queryset = self.get_queryset().filter(expiry_date__gte=timezone.now(), expiry_date__lte=two_months_before_expiry)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+    
+class FileLog_view(ModelViewSet):
+    serializer_class = FileLogSerializer
 
+    def get_queryset(self):
+        return self.serializer_class.Meta.model.objects.all()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 
 
@@ -176,7 +177,7 @@ def create_new_file(request):
 
             log_entry = FileLog.objects.create(
                 user=request.user,
-                file_document=file_document,
+                file=file_document,
                 action='created'
             )
 
@@ -210,7 +211,7 @@ def renew_file(request, file_id):
             # Create a log entry for the file renewal
             log_entry = FileLog.objects.create(
                 user=request.user,
-                file_document=file,
+                file=file,
                 action='renewed'
             )
 
@@ -222,7 +223,7 @@ def renew_file(request, file_id):
     else:
         form = renew_form(request.user.company, initial={ 
             'document_type': file.document_type,
-            'department_name': file.department_name.department_name,  # Provide the department name
+            'department_name': file.department_name.department_name,  
         })
 
     context = {'form': form, 'file': file}
@@ -264,8 +265,9 @@ def create_department(request):
     return render(request, 'admin_add_department.html', {'form': form})
 
 #display logs
+@login_required
 def users_logs(request):
-    logs = FileLog.objects.all()
+    logs = FileLog.objects.all().order_by('-timestamp')
     return render(request, 'file_logs.html', {'logs': logs})
 
 

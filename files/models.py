@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils import timezone
+from datetime import timedelta
 # Create your models here.
 
 class Department(models.Model):
@@ -39,9 +41,18 @@ class File_Document(models.Model):
 
 class FileLog(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    file_document = models.ForeignKey(File_Document, on_delete=models.CASCADE)
+    file = models.ForeignKey(File_Document, on_delete=models.CASCADE)
     action = models.CharField(max_length=50)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        current_utc_time = timezone.now()
+        # Calculate the time difference between UTC and Philippines timezone
+        time_difference = timedelta(hours=8) 
+
+        self.timestamp = current_utc_time + time_difference
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.email} {self.action} {self.file_document}"
+        return f"{self.user.email} {self.action} {self.file.document_type}"
