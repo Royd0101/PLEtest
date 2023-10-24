@@ -122,7 +122,6 @@ def get_expired_file_list(request):
     response = requests.get('http://127.0.0.1:8000/api/file/expired/', params={'user_email': user_email})
     if response.status_code == 200 and response.text: 
         expired_file = response.json()
-        
         return render(request, 'expired_file_list.html', {'expired_file': expired_file})
     else:
         error_message = f"Error fetching expired files. Status code: {response.status_code}"
@@ -258,7 +257,7 @@ def create_department(request):
         form = DepartmentForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('department_page')  
+            return redirect('department_list')  
     else:
         form = DepartmentForm()
 
@@ -313,6 +312,7 @@ def update_department(request, department_id):
             department.company = company_name
             department.department_name = form.cleaned_data['department_name']
             department.save()
+            return redirect('department_list')
     else:
         initial_data = {
             'company': department.company, 
@@ -322,3 +322,17 @@ def update_department(request, department_id):
 
     context = {'form': form, 'department': department}
     return render(request, 'update_department.html', context)
+
+#delete department
+@login_required
+def delete_department(request, department_id):
+    department = get_object_or_404(Department, id=department_id)
+
+    if request.method == 'POST':
+        department.delete()
+        messages.success(request, f'Department "{department.department_name}" has been deleted.')
+        return redirect('department_list')
+
+    context = {'department': department}
+    return render(request, 'department_list.html', context)
+

@@ -1,7 +1,13 @@
 from django.db import models
 from django.utils import timezone
 from datetime import timedelta
+import os
 # Create your models here.
+
+
+
+def get_upload_path(instance, filename):
+    return os.path.basename(filename)
 
 class Department(models.Model):
     department_name = models.CharField(max_length=50, null=True)
@@ -28,7 +34,7 @@ class File_Document(models.Model):
         default='Select Document Type' 
     )
     agency = models.CharField(max_length=50, default='Default Agency Name')
-    upload_file = models.FileField(upload_to='static/img')
+    upload_file = models.FileField(upload_to=get_upload_path)
     renewal_date = models.DateField()
     expiry_date = models.DateField()
 

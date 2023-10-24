@@ -17,8 +17,8 @@ from django.conf import settings
 from django.conf.urls.static import static 
 from django.contrib import admin
 from django.urls import path, include
-from users.views import dashboard, create_user, create_user_page, user_list, update_user, update_user_page ,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,users_logs,update_department
+from users.views import dashboard, create_user, create_user_page, user_list, update_user, update_user_page ,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,users_logs,update_department,delete_department
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include([
@@ -64,6 +64,9 @@ urlpatterns = [
     path('admin_to_be_renew/', display_admin_to_be_renew, name='admin_to_be_renew'),
     #update department
     path('update_department/', update_department, name='update_department'),
+    #delete department
+    path('delete_department/<', delete_department, name='delete_department'),
+
 
 
 
@@ -76,6 +79,8 @@ urlpatterns = [
     path('create_user/', create_user, name='create_user'),
     #update user api
     path('update_user/', update_user, name='update_user'),
+    #delete user
+    path('delete_user/', delete_user, name='delete_user'),
 
     #file
     #create file api function

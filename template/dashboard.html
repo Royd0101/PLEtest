@@ -3,28 +3,88 @@
   <head>
     <meta charset="UTF-8" />
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
   </head>
   <style>
-    .card {
-      background-color: #f2f2f2;
-      box-shadow: #949494;
-      width: 250px;
-      border: 1px solid #c1c1c1;
-      border-radius: 10px;
-      padding: 10px;
-      margin: 10px;
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
     }
-    .card1 {
-      background-color: #f2f2f2;
-      box-shadow: #949494;
-      width: 250px;
-      border: 1px solid #c1c1c1;
-      border-radius: 10px;
+
+    .nav {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      align-items: center;
+    }
+    h6 {
+      align-items: center;
+    }
+    .nav li {
+      margin-left: 20px;
+      font-size: 18px;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: #fff;
+      transition: color 0.3s;
+    }
+
+    .nav a:hover {
+      color: #ccc;
+    }
+
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 10px;
+      justify-content: center;
+    }
+
+    .card {
+      border: 1px solid #a8a8a8;
+      border-radius: 5px;
       padding: 10px;
       margin: 10px;
+      max-width: 250px;
+      text-align: center;
+      height: 100%; /* Add this line to set a fixed height */
+    }
+
+    .card h5 {
+      margin-top: 0;
+    }
+    .custom-create_file {
+      background: linear-gradient(to bottom, #d1e8a1, #9acd32, #7ea829);
+    }
+
+    @media screen and (max-width: 768px) {
+      .nav ul {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .nav li {
+        margin: 10px 0;
+      }
+
+      .card {
+        max-width: 100%;
+      }
     }
   </style>
   <body>
@@ -51,17 +111,20 @@
             role="button"
             aria-pressed="true"
           >
-            <img src="{% static 'img/log1.png' %}" alt="" />
+            <img
+              src="{% static 'img/log1.png' %}"
+              alt=""
+              style="font-size: 30px; color: #000; width: 30px; height: 30px"
+            />
           </a>
         </div>
       </div>
       {% endif %}
-      <div class="container mt-4 custom-container">
+      <div class="container mt-2 custom-container">
         <div class="row">
-          <div class="col-md-4">
-            <!-- Admin Section -->
-            {% if user.is_authenticated and user.is_staff %}
-
+          {% if user.is_authenticated and user.is_staff %}
+          <!-- Admin Section -->
+          <div class="col-md-3">
             <div class="card">
               <a
                 href="{% url 'admin_valid' %}"
@@ -69,12 +132,12 @@
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
-                ><h3>Valid Documents</h3>
+                ><h5>Valid Documents</h5>
                 <span id="valid"></span>
               </a>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="card">
               <a
                 href="{% url 'admin_to_be_renew' %}"
@@ -82,13 +145,13 @@
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
-                ><h3>Due for Renewal Documents</h3>
+                ><h5>Due for Renewal Documents</h5>
                 <span id="renew"></span>
               </a>
             </div>
           </div>
 
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="card">
               <a
                 href="{% url 'admin_expired' %}"
@@ -96,15 +159,22 @@
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
-                ><h3>Expired Documents</h3>
+                ><h5>Expired Documents</h5>
                 <span id="expired"></span>
               </a>
             </div>
           </div>
+          <!-- File Statistics -->
+          <div class="col-md-3">
+            <div class="card">
+              <h5>File Statistics</h5>
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
           {% endif %} {% if not user.is_staff %}
 
-          <!-- USER SIDE-->
-          <div class="col-md-4">
+          <!-- user section-->
+          <div class="col-md-3">
             <div class="card">
               <a
                 href="{% url 'get_valid_file_list' %}"
@@ -113,11 +183,11 @@
                 aria-pressed="true"
                 style="text-decoration: none"
               >
-                <h3>Valid Documents</h3>
+                <h5>Valid Documents</h5>
               </a>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="card">
               <a
                 href="{% url 'get_renew_file_list' %}"
@@ -126,11 +196,11 @@
                 aria-pressed="true"
                 style="text-decoration: none"
               >
-                <h3>Due for Renewal Documents</h3>
+                <h5>Due for Renewal Documents</h5>
               </a>
             </div>
           </div>
-          <div class="col-md-4">
+          <div class="col-md-3">
             <div class="card">
               <a
                 href="{% url 'get_expired_file_list' %}"
@@ -139,26 +209,26 @@
                 aria-pressed="true"
                 style="text-decoration: none"
               >
-                <h3>Expired Documents</h3>
+                <h5>Expired Documents</h5>
               </a>
             </div>
           </div>
           {% endif %}
 
-          <div class="col-md-4">
-            <!-- File Statistics -->
-            <div class="card1">
-              <h6>File Statistics</h6>
-              <canvas id="pieChart"></canvas>
-              <script src="{% static 'js/pie.js' %}"></script>
-              <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-              <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-              <script src="{% static 'js/admin_api.js' %}"></script>
-              <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-              <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-              <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+          <div class="col-md-3">
+            <div class="card">
+              <h5>File Statistics</h5>
+              <canvas id="bar-chart"></canvas>
             </div>
           </div>
+
+          <script src="{% static 'js/pie.js' %}"></script>
+          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+          <script src="{% static 'js/admin_api.js' %}"></script>
+          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         </div>
       </div>
     </main>

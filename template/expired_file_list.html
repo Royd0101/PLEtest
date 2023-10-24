@@ -38,7 +38,7 @@
                 <th scope="col">Department</th>
                 <th scope="col">Document Type</th>
                 <th scope="col">Agency</th>
-                <th scope="col">Uploaded File</th>
+                <th scope="col">Document</th>
                 <th scope="col">Renewed Date</th>
                 <th scope="col">Expiry Date</th>
                 <th scope="col">Action</th>
@@ -54,13 +54,10 @@
                 <td>{{ file.agency }}</td>
                 <td>
                   <a href="{{ file.upload_file }}" target="_blank">
-                    <img
-                      src="{{ file.upload_file}}"
-                      class="pdf-frame"
-                      width="25"
-                      height="25"
-                      style="overflow: hidden; border: none"
-                    />
+                    <i
+                      class="fas fa-file-alt pdf-icon"
+                      style="font-size: 30px; color: #000"
+                    ></i>
                   </a>
                 </td>
                 <td>{{ file.expiry_date }}</td>

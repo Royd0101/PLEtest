@@ -15,19 +15,19 @@ document.addEventListener("DOMContentLoaded", function () {
           "department_name",
           "document_type",
           "agency",
-          "upload_file",
+          "upload_file", // Assuming this is where the file URL is stored
           "renewal_date",
           "expiry_date",
           "user_fullname",
         ];
 
-        const fileName = item.upload_file.split("/").pop();
+        const fileName = item.upload_file.split("/").pop(); // Extract file name
 
         const rowData = cells.map((key) =>
           key === "user_fullname"
             ? `${item.user_firstname} ${item.user_lastname}`
             : key === "upload_file"
-            ? `<a href="${item.upload_file}" target="_blank">${fileName}</a>`
+            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 30px; color: #000;"></i></a>`
             : item[key]
         );
 
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "department_name",
           "document_type",
           "agency",
-          "upload_file",
+          "upload_file", // Assuming this is where the file URL is stored
           "renewal_date",
           "expiry_date",
           "user_fullname",
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
           key === "user_fullname"
             ? `${item.user_firstname} ${item.user_lastname}`
             : key === "upload_file"
-            ? `<a href="${item.upload_file}" target="_blank">${fileName}</a>`
+            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 30px; color: #000;"></i></a>`
             : item[key]
         );
 
@@ -91,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function () {
           "department_name",
           "document_type",
           "agency",
-          "upload_file",
+          "upload_file", // Assuming this is where the file URL is stored
           "renewal_date",
           "expiry_date",
           "user_fullname",
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
           key === "user_fullname"
             ? `${item.user_firstname} ${item.user_lastname}`
             : key === "upload_file"
-            ? `<a href="${item.upload_file}" target="_blank">${fileName}</a>`
+            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 30px; color: #000;"></i></a>`
             : item[key]
         );
 

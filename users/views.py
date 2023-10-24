@@ -128,6 +128,19 @@ def update_user(request, user_id):
     return render(request, 'update_user.html', context)
 
 
+#delete department
+@login_required
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    if request.method == 'POST':
+        user.delete()
+        messages.success(request, f'user has been deleted.')
+        return redirect('user_list')
+
+    context = {'user': user}
+    return render(request, 'user_list.html', context)
+
 
 #all pages--------------------------------------------------------------------------------------------
 #root

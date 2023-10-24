@@ -68,6 +68,7 @@ urlpatterns = [
     path('department_list/', views.department_list, name='department_list'),
     path('create_department/', views.create_department, name='create_department'),
     path('update_department/<int:department_id>/', views.update_department, name='update_department'),
+    path('delete_department/<int:department_id>/', views.delete_department, name='delete_department'),
 
 
 

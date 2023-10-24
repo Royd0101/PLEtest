@@ -13,6 +13,16 @@
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
     />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+      crossorigin="anonymous"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+      rel="stylesheet"
+    />
     <title>Valid File List</title>
   </head>
   <style>
@@ -25,7 +35,7 @@
     }
   </style>
   <body>
-    {% include 'navigation.html' %} {% csrf_token %}
+    {% include 'navigation.html' %} {% include 'toast.html' %} {% csrf_token %}
     <div class="m-2">
       <a
         href="{% url 'create_user_page' %}"
@@ -65,12 +75,20 @@
                     data-user-id="{{ user.id }}"
                     >Edit</a
                   >
-                  <button
-                    class="btn btn-danger btn-sm delete-button"
-                    data-user-id="{{ user.id }}"
+                  <form
+                    method="post"
+                    action="{% url 'delete_user' user_id=user.id %}"
+                    style="display: inline"
                   >
-                    Delete
-                  </button>
+                    {% csrf_token %}
+                    <button
+                      type="submit"
+                      class="btn btn-danger btn-sm delete-button"
+                      data-user-id="{{ user.id }}"
+                    >
+                      Delete
+                    </button>
+                  </form>
                 </td>
               </tr>
               {% endfor %}
@@ -96,14 +114,14 @@
     <a href="{% url 'dashboard' %}" class="btn mt-2 btn-secondary float-end m-5"
       >Back</a
     >
-    <script src="{% static 'js/admin_delete_user.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"></script>
     <script>
       $(document).ready(function () {
         $("#user_list").dataTable({
