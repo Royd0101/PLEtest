@@ -14,59 +14,23 @@
       padding: 0;
     }
 
-    .nav {
-      background-color: #333;
-      color: #fff;
-      padding: 10px 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .nav ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      align-items: center;
-    }
-    h6 {
-      align-items: center;
-    }
-    .nav li {
-      margin-left: 20px;
-      font-size: 18px;
-    }
-
-    .nav a {
-      text-decoration: none;
-      color: #fff;
-      transition: color 0.3s;
-    }
-
-    .nav a:hover {
-      color: #ccc;
-    }
-
-    .cards-container {
-      display: flex;
-      flex-wrap: wrap;
-      margin: 10px;
-      justify-content: center;
-    }
-
     .card {
-      border: 1px solid #a8a8a8;
-      border-radius: 5px;
-      padding: 10px;
+      width: 200px;
+      height: 150px;
       margin: 10px;
-      max-width: 250px;
-      text-align: center;
-      height: 100%; /* Add this line to set a fixed height */
+      border-radius: 10px;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+      background-color: #72D0F3;
+    }
+    
+
+    .card__name {
+      margin: 10px;
     }
 
-    .card h5 {
-      margin-top: 0;
+    .card__number {
+      text-align: center;
+      font-size: 24px;
     }
     .custom-create_file {
       background: linear-gradient(to bottom, #d1e8a1, #9acd32, #7ea829);
@@ -125,44 +89,59 @@
           {% if user.is_authenticated and user.is_staff %}
           <!-- Admin Section -->
           <div class="col-md-3">
-            <div class="card">
-              <a
+            <a
                 href="{% url 'admin_valid' %}"
                 class="custom-modal-button"
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
-                ><h5>Valid Documents</h5>
-                <span id="valid"></span>
-              </a>
-            </div>
+                >
+                <div class="card">
+                  <div class="card__name">
+                    <p>Valid Documents</p>
+                  </div>
+                  <div class="card__number">
+                    <h1><span id="valid"></span></h1>
+                  </div>
+                </div>
+          </a>
           </div>
           <div class="col-md-3">
-            <div class="card">
-              <a
+            <a
                 href="{% url 'admin_to_be_renew' %}"
                 class="custom-modal-button"
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
-                ><h5>Due for Renewal Documents</h5>
-                <span id="renew"></span>
-              </a>
-            </div>
+                >
+                <div class="card">
+                  <div class="card__name">
+                    <p>For Renewal Documents</p>
+                  </div>
+                  <div class="card__number">
+                    <h1><span id="renew"></span></h1>
+                  </div>
+                </div>
+          </a>
           </div>
 
           <div class="col-md-3">
-            <div class="card">
-              <a
+            <a
                 href="{% url 'admin_expired' %}"
                 class="custom-modal-button"
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
-                ><h5>Expired Documents</h5>
-                <span id="expired"></span>
-              </a>
-            </div>
+                >
+                <div class="card">
+                  <div class="card__name">
+                    <p>Expired Documents</p>
+                  </div>
+                  <div class="card__number">
+                    <h1><span id="expired"></span><h1>
+                  </div>
+                </div>
+          </a>
           </div>
           <!-- File Statistics -->
           <div class="col-md-3">
@@ -175,48 +154,68 @@
 
           <!-- user section-->
           <div class="col-md-3">
-            <div class="card">
-              <a
+            <a
                 href="{% url 'get_valid_file_list' %}"
                 class="custom-modal-button"
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
               >
-                <h5>Valid Documents</h5>
-                <h4>{{ num_valid_files }}</4>
-              </a>
-            </div>
+
+              <div class="card">
+                <div class="card__name">
+                  <p>Valid Documents</p>
+                </div>
+                <div class="card__number">
+                  <h1>{{ num_valid_files }}</h1>
+                </div>
+              </div>
+          </a>
           </div>
           <div class="col-md-3">
-            <div class="card">
-              <a
-                href="{% url 'get_renew_file_list' %}"
-                class="custom-modal-button"
-                role="button"
-                aria-pressed="true"
-                style="text-decoration: none"
-              >
-                <h5>Due for Renewal Documents</h5>
-                <h4>{{ num_renew_files }}</4>
-              </a>
+            <a
+            href="{% url 'get_renew_file_list' %}"
+            class="custom-modal-button"
+            role="button"
+            aria-pressed="true"
+            style="text-decoration: none"
+          >
+          <div class="card">
+            <div class="card__name">
+              <p>For Renewal Documents</p>
+            </div>
+            <div class="card__number">
+              <h1>{{ num_renew_files }}</h1>
             </div>
           </div>
+          </a>
+          </div>
           <div class="col-md-3">
-            <div class="card">
-              <a
+            <a
                 href="{% url 'get_expired_file_list' %}"
                 class="custom-modal-button"
                 role="button"
                 aria-pressed="true"
                 style="text-decoration: none"
               >
-                <h5>Expired Documents</h5>
-                <h4>{{ num_expired_files }}</4>
-              </a>
-            </div>
+
+              <div class="card">
+                <div class="card__name">
+                  <p>Expired Documents</p>
+                </div>
+                <div class="card__number">
+                  <h1>{{ num_expired_files }}</h1>
+                </div>
+              </div>
+          </a>
           </div>
           
+          <div class="col-md-3">
+            <div class="card">
+              <h5>File Statistics</h5>
+              <canvas id="pieChart"></canvas>
+            </div>
+          </div>
           {% endif %}
 
           <script src="{% static 'js/pie.js' %}"></script>
