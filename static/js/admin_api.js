@@ -9,13 +9,6 @@ document.addEventListener("DOMContentLoaded", function () {
     return cookies;
   }
 
-  // Use getCookies function to get cookies
-  const cookies = getCookies();
-
-  // Example of accessing a specific cookie named "exampleCookie"
-  const exampleCookieValue = cookies["exampleCookie"];
-  console.log("Value of exampleCookie:", exampleCookieValue);
-
   fetch("/api/file/expired_documents/")
     .then((response) => response.json())
     .then((data) => {

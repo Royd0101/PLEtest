@@ -4,6 +4,8 @@
   border-radius: 10px;
   border-style: solid;
   border-color: #eeecec;
+  max-width: 100%; /* Set a maximum width */
+  margin: 0 auto; /* Center the container */
 }
 
 .custom-delete-btn {

@@ -8,17 +8,24 @@
     <title>File Log</title>
     <style>
       .log-container {
-        max-height: 400px;
+        max-height: 800px;
         overflow-y: auto;
       }
       .log-item {
         margin-bottom: 10px;
       }
+
+      .container {
+        margin: 0 auto;
+        padding: 15px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
     </style>
   </head>
   <body>
     {% csrf_token %} {% include 'navigation.html' %}
-    <div class="small-container mt-4">
+    <div class="container mt-5">
       <div class="log-container">
         <h4>Recent Activity:</h4>
         <table class="table">
@@ -44,7 +51,9 @@
         </table>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn mt-2 btn-primary float-end m-4"
+    <a
+      href="{% url 'dashboard' %}"
+      class="btn mt-2 btn-secondary float-end mt-3 m-5"
       >Back</a
     >
   </body>

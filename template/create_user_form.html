@@ -6,17 +6,18 @@
     <link rel="stylesheet" href="{% static 'css/create_user.css' %}" />
     <title>Create User</title>
   </head>
+</style>
   <body>
     {% include 'navigation.html' %} {% include 'toast.html' %}
-    <h3>Create User</h3>
-    <div class="small-container">
-    <form method="post" action="{% url 'create_user' %}">
-      {% csrf_token %} {{ form.as_p }}
 
-        <a class="cancel-btn" href="{% url 'user_list' %}">Cancel</a>
-        <button class="user-submit-btn" type="submit">Submit</button>
-
+    <div class="small-container mt-3">
+      <form method="post" action="{% url 'create_user' %}">
+      {% csrf_token %}{{form.as_p}}
+      <div class="text-end">
+        <a class="btn btn-danger btm-sm" href="{% url 'user_list' %}">Cancel</a>
+        <button class="btn btn-secondary btm-sm " type="submit">Submit</button>
       </div>
-    </form>
+      </form>
+    </div>
   </body>
 </html>

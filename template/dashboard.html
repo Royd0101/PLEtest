@@ -91,7 +91,7 @@
     {% csrf_token %} {% include 'navigation.html' %}
     <main class="dashboard-content">
       {% if not user.is_staff %}
-      <div class="add-button m-2">
+      <div class="add-button m-4">
         <a
           href="{% url 'create_new_file_form' %}"
           class="btn custom-create_file"
@@ -184,6 +184,7 @@
                 style="text-decoration: none"
               >
                 <h5>Valid Documents</h5>
+                <h4>{{ num_valid_files }}</4>
               </a>
             </div>
           </div>
@@ -197,6 +198,7 @@
                 style="text-decoration: none"
               >
                 <h5>Due for Renewal Documents</h5>
+                <h4>{{ num_renew_files }}</4>
               </a>
             </div>
           </div>
@@ -210,17 +212,12 @@
                 style="text-decoration: none"
               >
                 <h5>Expired Documents</h5>
+                <h4>{{ num_expired_files }}</4>
               </a>
             </div>
           </div>
+          
           {% endif %}
-
-          <div class="col-md-3">
-            <div class="card">
-              <h5>File Statistics</h5>
-              <canvas id="bar-chart"></canvas>
-            </div>
-          </div>
 
           <script src="{% static 'js/pie.js' %}"></script>
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

@@ -2,41 +2,12 @@
   max-width: 400px; /* Adjust this value as needed */
   margin: 0 auto; /* Center the container horizontally */
   padding: 15px;
-  background-color: #f9f9f9;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.input-group {
-  margin-bottom: 15px;
+  box-shadow: 0 0 10px rgba(2, 1, 1, 0.1);
 }
 
 .label {
   display: block;
   font-weight: bold;
   margin-bottom: 5px;
-}
-
-.cancel-btn {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #a4a4a4;
-  color: #fff;
-  text-decoration: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-right: 10px;
-}
-
-/* Custom CSS for the Submit button */
-.user-submit-btn {
-  display: inline-block;
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  text-decoration: none;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
 }

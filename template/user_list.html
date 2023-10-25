@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/table.css' %}" />
     <link
@@ -48,7 +51,7 @@
     <div class="container mt-3 custom-container">
       <div class="row justify-content-center">
         <div class="col-m-2">
-          <table id="user_list" class="table table-sm">
+          <table id="user_list" class="table table-sm table-responsive">
             <thead class="bg-primary text-white">
               <tr>
                 <th scope="col">No.</th>
@@ -83,10 +86,10 @@
                     {% csrf_token %}
                     <button
                       type="submit"
-                      class="btn btn-danger btn-sm delete-button"
+                      class="btn btn-danger btn-sm"
                       data-user-id="{{ user.id }}"
                     >
-                      Delete
+                      <i class="fas fa-trash"></i>
                     </button>
                   </form>
                 </td>

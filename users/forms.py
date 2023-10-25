@@ -6,31 +6,31 @@ from .models import Company
 class create_user_form(forms.Form):
     first_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+        'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'class': 'form-control',
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+        'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
     email = forms.EmailField(widget=forms.EmailInput(attrs={
         'class': 'form-control',
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+        'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
     company = forms.ModelChoiceField(
         queryset=Company.objects.all(),
         empty_label="Select a Company",
         widget=forms.Select(attrs={
             'class': 'form-control',
-            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+            'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
         })
     )
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control',
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+        'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
         'class': 'form-control',
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+        'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
 
     def clean(self):

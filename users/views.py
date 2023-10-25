@@ -176,7 +176,26 @@ def logout_user(request):
 #dashboard page --------------------------------------------------------------------------------
 @login_required
 def dashboard(request):
-    return render(request, 'dashboard.html')
+    user_email = request.user.email
+    response1 = requests.get('http://127.0.0.1:8000/api/file/valid_file/', params={'user_email': user_email})
+    response2 = requests.get('http://127.0.0.1:8000/api/file/expired/', params={'user_email': user_email})
+    response3 = requests.get('http://127.0.0.1:8000/api/file/to_be_renew/', params={'user_email': user_email})
+
+    num_valid_files = num_expired_files = num_renew_files = 0
+
+    if response1.status_code == 200:
+        total_valid = response1.json()
+        num_valid_files = len(total_valid)
+        
+    if response2.status_code == 200:
+        total_expired = response2.json()
+        num_expired_files = len(total_expired)
+
+    if response3.status_code == 200:
+        total_renew = response3.json()
+        num_renew_files = len(total_renew)
+
+    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files})
 
 
 #create user page -----------------------------------------------------------------------------
