@@ -42,7 +42,7 @@
     <div class="m-2">
       <a
         href="{% url 'create_user_page' %}"
-        class="btn custom-add-user"
+        class="btn btn-secondary btm-sm"
         role="button"
         >Add User</a
       >
@@ -72,7 +72,7 @@
                 <td>
                   <a
                     href="{% url 'update_user_page' user_id=user.id %}"
-                    class="btn custom-edit-user btn-sm"
+                    class="btn btn-primary btn-sm"
                     role="button"
                     aria-pressed="true"
                     data-user-id="{{ user.id }}"
@@ -82,6 +82,7 @@
                     method="post"
                     action="{% url 'delete_user' user_id=user.id %}"
                     style="display: inline"
+                    onsubmit="return confirm('Are you sure you want to delete this user?');"
                   >
                     {% csrf_token %}
                     <button
@@ -114,7 +115,9 @@
         </span>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn mt-2 btn-secondary float-end m-5"
+    <a
+      href="{% url 'dashboard' %}"
+      class="btn mt-2 btn-danger btm-sm float-end m-5"
       >Back</a
     >
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

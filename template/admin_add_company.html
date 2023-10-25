@@ -3,10 +3,19 @@
 <head>
     <meta charset="UTF-8">
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/create_file.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Company</title>
 </head>
+<style>
+  .small-container {
+  max-width: 300px; /* Adjust this value as needed */
+  margin: 0 auto; /* Center the container horizontally */
+  padding: 15px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+</style>
 <body>
     {% include 'navigation.html' %} {% include 'toast.html' %}
     <h3>Create Company</h3>
@@ -14,8 +23,8 @@
     <form method="post" action="{% url 'create_company' %}">
       {% csrf_token %} {{ form.as_p }}
       <div class="text-end">
-        <a class="cancel-btn" href="{% url 'company_list' %}">Cancel</a>
-        <button class="user-submit-btn" type="submit">Submit</button>
+        <a class="btn btn-danger btn-sm" href="{% url 'company_list' %}">Cancel</a>
+        <button class="btn btn-primary btn-sm " type="submit">Submit</button>
       </div>
       </div>
     </form>

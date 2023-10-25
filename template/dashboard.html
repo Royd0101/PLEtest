@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     {% load static %}
-
+    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dashboard</title>
   </head>
@@ -15,19 +15,22 @@
     }
 
     .card {
+      display: flex;
+      justify-content: center;
+      margin: auto;
       width: 200px;
       height: 150px;
-      margin: 10px;
-      border-radius: 10px;
-      box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-      background-color: #72D0F3;
-    }
+      background-color: #4BBADF;
+  }
     
-
     .card__name {
       margin: 10px;
+      text-align: center;
     }
 
+  .dashboard-content .card {
+    background-color: #72D0F3;
+  }
     .card__number {
       text-align: center;
       font-size: 24px;
@@ -50,15 +53,31 @@
         max-width: 100%;
       }
     }
+    .dashboard-content  .pie-chart-card  {
+      background: linear-gradient(
+    to bottom,
+    #cdf0f7 1%,
+    #ffffff 15%,
+    #ffffff 89%,
+    #cdf0f7 100%
+  );
+  }
+    .pie-chart-card {
+  width: 250px;
+      height: 300px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 2px;
+}
   </style>
   <body>
-    {% csrf_token %} {% include 'navigation.html' %}
+    {% csrf_token %} {% include 'navigation.html' %} {% include 'toast.html' %}
     <main class="dashboard-content">
       {% if not user.is_staff %}
       <div class="add-button m-4">
         <a
           href="{% url 'create_new_file_form' %}"
-          class="btn custom-create_file"
+          class="btn btn-secondary btm-sm"
           role="button"
           aria-pressed="true"
         >
@@ -84,7 +103,7 @@
         </div>
       </div>
       {% endif %}
-      <div class="container mt-2 custom-container">
+      <div class="container">
         <div class="row">
           {% if user.is_authenticated and user.is_staff %}
           <!-- Admin Section -->
@@ -143,10 +162,9 @@
                 </div>
           </a>
           </div>
-          <!-- File Statistics -->
           <div class="col-md-3">
-            <div class="card">
-              <h5>File Statistics</h5>
+            <div class="pie-chart-card">
+              <h5>Document Statistics</h5>
               <canvas id="pieChart"></canvas>
             </div>
           </div>
@@ -211,22 +229,57 @@
           </div>
           
           <div class="col-md-3">
-            <div class="card">
-              <h5>File Statistics</h5>
-              <canvas id="pieChart"></canvas>
+            <div class="pie-chart-card">
+              <h5>Document Statistics</h5>
+              <canvas id="myCanvas"></canvas>
             </div>
           </div>
+         
           {% endif %}
-
           <script src="{% static 'js/pie.js' %}"></script>
+          <script src="{% static 'js/admin_api.js' %}"></script>
           <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
           <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          <script src="{% static 'js/admin_api.js' %}"></script>
           <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
           <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
           <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
         </div>
       </div>
     </main>
+    <script>
+      const canvas = document.querySelector("#myCanvas");
+      const ctx = canvas.getContext("2d");
+      
+      canvas.width = 500;
+      canvas.height = 300;
+      
+      const chart = new Chart(ctx, {
+        type: "pie",
+        data: {
+          labels: ["Valid", "For Renewal", "Expired"],
+          datasets: [
+            {
+              data: [
+                "{{ num_valid_files }}",
+                "{{ num_renew_files }}",
+                "{{ num_expired_files }}",
+              ],
+              backgroundColor:  [
+                "rgb(0, 128, 0)",
+                "rgb(255, 165, 0)",
+                "rgb(255, 0, 0)",
+              ],
+              borderWidth: 3,
+            },
+          ],
+        },
+        options: {
+    legend: {
+      display: false,
+    },
+  },
+        },
+      );
+        </script>
   </body>
 </html>

@@ -11,16 +11,18 @@ async function generatePieChart() {
       {
         data: [validFileCount, expiredFileCount, toBeRenewedFileCount],
         backgroundColor: [
-          "rgba(75, 192, 192, 0.2)",
-          "rgba(255, 99, 132, 0.2)",
-          "rgba(255, 206, 86, 0.2)",
+          // Change these colors to fit the black background
+          "rgba(144, 238, 144, 0.8)",
+          "rgba(255, 102, 102, 0.8)",
+          "rgba(255, 230, 0, 0.8)",
         ],
         borderColor: [
-          "rgba(75, 192, 192, 1)",
-          "rgba(255, 99, 132, 1)",
-          "rgba(255, 206, 86, 1)",
+          // Change these colors to fit the black background
+          "rgba(144, 238, 144, 0.8)",
+          "rgba(255, 102, 102, 0.8)",
+          "rgba(255, 230, 0, 0.8)",
         ],
-        borderWidth: 1,
+        borderWidth: 3,
       },
     ],
   };

@@ -8,14 +8,6 @@
   margin: 0 auto; /* Center the container */
 }
 
-.custom-delete-btn {
-  background: linear-gradient(to bottom, #d1e8a1, #9acd32, #7ea829);
-}
-
-.custom-add-user {
-  background: linear-gradient(to bottom, #d1e8a1, #9acd32, #7ea829);
-}
-
 .custom-edit-user {
   background: linear-gradient(to bottom, #d1e8a1, #9acd32, #7ea829);
 }

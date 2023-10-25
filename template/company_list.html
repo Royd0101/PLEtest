@@ -26,11 +26,11 @@
     }
   </style>
   <body>
-    {% include 'navigation.html' %} {% csrf_token %}
+    {% include 'navigation.html' %} {% include 'toast.html' %}{% csrf_token %}
     <div class="m-2">
       <a
         href="{% url 'create_company' %}"
-        class="btn custom-add-user"
+        class="btn btn-secondary btm-sm"
         role="button"
         >Add Company</a
       >
@@ -71,7 +71,9 @@
         </span>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn mt-2 btn-secondary float-end m-5"
+    <a
+      href="{% url 'dashboard' %}"
+      class="btn mt-2 btn-danger btm-sm float-end m-5"
       >Back</a
     >
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

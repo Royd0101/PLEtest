@@ -11,15 +11,6 @@
     {% include 'navigation.html' %} {% include 'toast.html' %}
 
     <h6>Create New File</h6>
-    {% if messages %}
-    <div class="position-fixed" style="top: 0; right: 0; margin: 10px">
-      {% for message in messages %} {% if message.tags == "error" %}
-      <div class="alert alert-danger" role="alert">{{ message }}</div>
-      {% else %}
-      <div class="alert alert-success" role="alert">{{ message }}</div>
-      {% endif %} {% endfor %}
-    </div>
-    {% endif %}
     <div class="small-container">
       <form
         method="post"
@@ -29,8 +20,10 @@
         {% csrf_token %} {{ form.as_p }}
 
         <div class="text-end">
-          <a class="cancel-btn" href="{% url 'dashboard' %}">Cancel</a>
-          <button class="user-submit-btn" type="submit">Submit</button>
+          <a class="btn btn-danger btn-sm" href="{% url 'dashboard' %}"
+            >Cancel</a
+          >
+          <button class="btn btn-primary btn-sm" type="submit">Submit</button>
         </div>
       </form>
     </div>

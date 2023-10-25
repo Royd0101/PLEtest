@@ -65,7 +65,7 @@ urlpatterns = [
     #update department
     path('update_department/', update_department, name='update_department'),
     #delete department
-    path('delete_department/<', delete_department, name='delete_department'),
+    path('delete_department/', delete_department, name='delete_department'),
 
 
 

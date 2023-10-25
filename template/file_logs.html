@@ -8,8 +8,17 @@
     <title>File Log</title>
     <style>
       .log-container {
-        max-height: 800px;
+        max-height: 350px;
         overflow-y: auto;
+      }
+
+      .log-container .table thead {
+        position: sticky;
+        top: 0;
+      }
+      .log-container h4 {
+        position: sticky;
+        top: 0;
       }
       .log-item {
         margin-bottom: 10px;
@@ -27,15 +36,14 @@
     {% csrf_token %} {% include 'navigation.html' %}
     <div class="container mt-5">
       <div class="log-container">
-        <h4>Recent Activity:</h4>
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">Activity</th>
+              <th scope="col">Recent Activity</th>
               <th scope="col">Date/Time</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody id="log-table-body">
             {% for log in logs %}
             <tr>
               <td>
@@ -57,4 +65,12 @@
       >Back</a
     >
   </body>
+  <script>
+    $(document).ready(function () {
+      $("#log-table-body").searchTable({
+        columns: [0, 1],
+        inputPlaceholder: "Search...",
+      });
+    });
+  </script>
 </html>
