@@ -233,7 +233,7 @@ def company_list(request):
 
 #display update user page -----------------------------------------------------------------------
 @login_required
-def update_user_page(request, user_id):
+def user_update(request, user_id):
     user = get_object_or_404(User, id=user_id)
     form = update_user_form(initial={
         'first_name': user.first_name,
@@ -243,7 +243,7 @@ def update_user_page(request, user_id):
     })
 
     context = {'form': form, 'user': user} 
-    return render(request, 'update_user.html', context)
+    return render(request, 'update_user_page.html', context)
 
 @login_required
 def create_company(request):

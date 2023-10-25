@@ -71,8 +71,8 @@
                 <td>{{ user.company }}</td>
                 <td>
                   <a
-                    href="{% url 'update_user_page' user_id=user.id %}"
-                    class="btn btn-primary btn-sm"
+                    href="{% url 'user_update' user_id=user.id %}"
+                    class="btn custom-edit-user btn-sm"
                     role="button"
                     aria-pressed="true"
                     data-user-id="{{ user.id }}"

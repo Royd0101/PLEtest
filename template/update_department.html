@@ -13,8 +13,8 @@
     <form method="post" action="{% url 'update_department' department_id=department.id %}">
       {% csrf_token %} {{ form.as_p }}
       <div class="text-end">
-        <a class="cancel-btn" href="{% url 'department_list' %}">Cancel</a>
-        <button class="user-submit-btn" type="submit">Submit</button>
+        <a class="btn btn-danger btn-sm" href="{% url 'department_list' %}">Cancel</a>
+        <button class="btn btn-primary btn-sm" type="submit">Submit</button>
       </div>
       </div>
     </form>
