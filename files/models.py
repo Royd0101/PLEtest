@@ -53,7 +53,6 @@ class FileLog(models.Model):
 
     def save(self, *args, **kwargs):
         current_utc_time = timezone.now()
-        # Calculate the time difference between UTC and Philippines timezone
         time_difference = timedelta(hours=8) 
 
         self.timestamp = current_utc_time + time_difference

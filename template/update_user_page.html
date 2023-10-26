@@ -18,8 +18,10 @@
       >
         {% csrf_token %} {{ form.as_p }}
         <div class="text-end">
-          <a class="cancel-btn" href="{% url 'user_list' %}">Cancel</a>
-          <button class="user-submit-btn" type="submit">Update</button>
+          <a class="btn btn-danger btn-sm" href="{% url 'user_list' %}"
+            >Cancel</a
+          >
+          <button class="btn btn-primary btn-sm" type="submit">Update</button>
         </div>
       </form>
     </div>

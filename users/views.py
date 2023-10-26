@@ -95,7 +95,7 @@ def create_user(request):
             messages.success(request, 'User Created successfully!')
             return redirect('create_user_page') 
         else:
-            messages.error(request, 'Invalid form. Please check your inputs.')
+            messages.warning(request, 'Invalid form. Please check your inputs.')
             form.cleaned_data['password'] = ''
             form.cleaned_data['confirm_password'] = ''
     else:
@@ -116,7 +116,10 @@ def update_user(request, user_id):
             user.company = form.cleaned_data['company']
             user.set_password(form.cleaned_data['password'])
             user.save()
-            return redirect('user_list') 
+            messages.success(request, 'User updated successfully.') 
+            return redirect('user_list')
+        else:
+            messages.error(request, 'Please correct the errors below.')  
     else:
         form = update_user_form(initial={
             'first_name': user.first_name,
@@ -159,6 +162,7 @@ def login_user(request):
         user = authenticate(request, email=email, password=password)
         if user is not None:
             login(request, user)
+            messages.success(request, 'User login Successfully.')
             return redirect('dashboard')
         else:
             messages.error(request, 'Email or Password not found.')
@@ -169,7 +173,6 @@ def login_user(request):
 @login_required
 def logout_user(request):
     logout(request)
-    messages.success(request, 'User logout successfully.')
     return redirect('redirect_to_login')
 
 
@@ -251,7 +254,10 @@ def create_company(request):
         form = company_form(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('company_page')  
+            messages.success(request, 'Company created successfully.')  
+            return redirect('company_page')
+        else:
+            messages.error(request, 'A company with this name already exists.')
     else:
         form = company_form()
 

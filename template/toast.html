@@ -5,25 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Toast</title>
   </head>
+  <style>
+    .messages {
+    list-style-type: none;
+    padding: 10px;
+    position: fixed;
+    top: 10px;
+    right: 10px;
+    width: 250px;
+}
+
+.messages li {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+.success {
+    background-color: #02864A;
+}
+
+.info {
+    background-color: #573cfa;
+}
+
+.warning {
+    background-color: #fb8d1a;
+}
+
+.error {
+    background-color: #e8083e;
+}
+
+  </style>
   <body>
     {% if messages %}
-    <div class="position-fixed" style="top: 0; right: 0; margin: 10px">
-      {% for message in messages %} {% if message.tags == "error" %}
-      <div class="alert alert-danger" role="alert">{{ message }}</div>
-      {% else %}
-      <div class="alert alert-success" role="alert">{{ message }}</div>
-      {% endif %} {% endfor %}
-    </div>
-    {% endif %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
   </body>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      setTimeout(function () {
-        var alerts = document.querySelectorAll(".alert");
-        alerts.forEach(function (alert) {
-          alert.remove();
+    setTimeout(function() {
+        document.querySelectorAll('.messages li').forEach(function(element) {
+            element.remove();
         });
-      }, 3000);
-    });
-  </script>
+    }, 5000);
+</script>
 </html>

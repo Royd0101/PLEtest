@@ -33,6 +33,12 @@ class create_user_form(forms.Form):
         'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
 
+    def clean_password(self):
+        password = self.cleaned_data.get('password')
+        if len(password) < 8:
+            raise forms.ValidationError("Password must be 8 characters or longer.")
+        return password
+
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get('password')

@@ -18,7 +18,6 @@
       <div class="login-header">
         <div class="log">Login</div>
       </div>
-      {% include 'toast.html' %}
       <form method="post" action="{% url 'login_user' %}">
         {% csrf_token %}
         <div class="form-group">

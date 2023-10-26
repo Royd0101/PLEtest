@@ -6,13 +6,15 @@ from rest_framework.decorators import action
 from django.utils import timezone
 from datetime import timedelta
 from .models import File_Document ,Department , FileLog
+from users.models import User
 from django.shortcuts import render, get_object_or_404
 import requests
 from django.utils import timezone
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from users.models import Company
-
+from .email_utils import send_notification_email
+from django.shortcuts import HttpResponse
 
 #import from form
 from .forms import create_file
@@ -257,10 +259,12 @@ def create_department(request):
         form = DepartmentForm(request.POST)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Department created successfully.')
             return redirect('department_list')  
+        else:
+            messages.error(request, 'A department with this name already exists in this company.')
     else:
         form = DepartmentForm()
-
     return render(request, 'admin_add_department.html', {'form': form})
 
 #display logs
@@ -336,3 +340,28 @@ def delete_department(request, department_id):
     context = {'department': department}
     return render(request, 'department_list.html', context)
 
+
+#sending email
+@login_required
+def check_document_expiry(request):
+    admin_user = User.objects.get(is_superuser=True)
+    admin_email = admin_user.email
+
+    # Get all documents that are about to expire (within 2 months)
+    expiration_threshold = timezone.now() + timedelta(days=60)
+    expiring_documents = File_Document.objects.filter(expiry_date__lte=expiration_threshold)
+
+    for document in expiring_documents:
+        # Calculate 2 months before expiration date
+        two_months_before_expiry = document.expiry_date - timedelta(days=60)
+
+        if timezone.now() >= two_months_before_expiry:
+            # Notify the user who owns the document
+            user_message = f'The document "{document.get_document_type_display()}" is about to expire. Please take action.'
+            send_notification_email(document, document.user.email, message=user_message)
+
+            # Notify the admin
+            admin_message = f'The document "{document.get_document_type_display()}" created by {document.user.user_firstname} is about to expire. Please take action.'
+            send_notification_email(document, admin_email, is_admin=True, message=admin_message)
+
+    return HttpResponse("Notifications sent successfully.")

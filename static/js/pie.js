@@ -11,20 +11,23 @@ async function generatePieChart() {
       {
         data: [validFileCount, expiredFileCount, toBeRenewedFileCount],
         backgroundColor: [
-          // Change these colors to fit the black background
-          "rgba(144, 238, 144, 0.8)",
-          "rgba(255, 102, 102, 0.8)",
-          "rgba(255, 230, 0, 0.8)",
+          "rgb(0, 128, 0)",
+          "rgb(255, 165, 0)",
+          "rgb(255, 0, 0)",
         ],
-        borderColor: [
-          // Change these colors to fit the black background
-          "rgba(144, 238, 144, 0.8)",
-          "rgba(255, 102, 102, 0.8)",
-          "rgba(255, 230, 0, 0.8)",
+        backgroundColor: [
+          "rgb(0, 128, 0)",
+          "rgb(255, 165, 0)",
+          "rgb(255, 0, 0)",
         ],
         borderWidth: 3,
       },
     ],
+    options: {
+      legend: {
+        display: false,
+      },
+    },
   };
 
   const ctx = document.getElementById("pieChart").getContext("2d");
