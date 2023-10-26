@@ -1,52 +1,44 @@
-async function generatePieChart() {
-  const validFileCount = await fetchFileCount("/api/file/valid_documents/");
-  const expiredFileCount = await fetchFileCount("/api/file/expired_documents/");
-  const toBeRenewedFileCount = await fetchFileCount(
-    "/api/file/renewal_documents/"
-  );
+var ctx = document.getElementById("barChart").getContext("2d");
 
-  const data = {
-    labels: ["Valid Files", "Expired Files", "To Be Renewed Files"],
-    datasets: [
-      {
-        data: [validFileCount, expiredFileCount, toBeRenewedFileCount],
-        backgroundColor: [
-          "rgb(0, 128, 0)",
-          "rgb(255, 165, 0)",
-          "rgb(255, 0, 0)",
+// Fetch data from API endpoints
+Promise.all([
+  fetch("/api/file/valid_documents"),
+  fetch("/api/file/renewal_documents"),
+  fetch("/api/file/expired_documents"),
+])
+  .then((responses) =>
+    Promise.all(responses.map((response) => response.json()))
+  )
+  .then((data) => {
+    var barChart = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: ["Valid", "For Renewal", "Expired"],
+        datasets: [
+          {
+            label: "Documents",
+            data: [data[0].length, data[1].length, data[2].length],
+            backgroundColor: [
+              "rgba(54, 162, 235, 0.2)",
+              "rgba(75, 192, 192, 0.2)",
+              "rgba(255, 99, 132, 0.2)",
+            ],
+            borderColor: [
+              "rgba(54, 162, 235, 1)",
+              "rgba(75, 192, 192, 1)",
+              "rgba(255, 99, 132, 1)",
+            ],
+            borderWidth: 1,
+          },
         ],
-        backgroundColor: [
-          "rgb(0, 128, 0)",
-          "rgb(255, 165, 0)",
-          "rgb(255, 0, 0)",
-        ],
-        borderWidth: 3,
       },
-    ],
-    options: {
-      legend: {
-        display: false,
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+          },
+        },
       },
-    },
-  };
-
-  const ctx = document.getElementById("pieChart").getContext("2d");
-  const config = {
-    type: "pie",
-    data: data,
-  };
-  new Chart(ctx, config);
-}
-
-async function fetchFileCount(endpoint) {
-  try {
-    const response = await fetch(endpoint);
-    const data = await response.json();
-    return data.length;
-  } catch (error) {
-    console.error(`Error fetching file count from ${endpoint}:`, error);
-    return 0;
-  }
-}
-
-generatePieChart();
+    });
+  })
+  .catch((error) => console.error("Error fetching data:", error));

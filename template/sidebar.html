@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sidebar</title>
+  </head>
+  <style>
+    .sidebar {
+      background-color: #eeeeee;
+      padding: 10px;
+      float: left;
+      width: 20%;
+      height: 100vh;
+    }
+
+    .sidebar ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .sidebar li a {
+      color: #333;
+      display: block;
+      padding: 10px;
+      text-decoration: none;
+    }
+
+    .sidebar li a:hover {
+      background-color: #eee;
+    }
+
+    .sidebar li a.active {
+      background-color: #008000;
+      color: #fff;
+    }
+  </style>
+  <body>
+    <nav class="sidebar">
+      <ul>
+        <li><a href="">Dashboard</a></li>
+        <li><a href="">User Management</a></li>
+        <li><a href="">Company</a></li>
+        <li><a href="">Department</a></li>
+      </ul>
+    </nav>
+  </body>
+</html>

@@ -9,18 +9,19 @@
   </head>
   <style>
     body {
+      background-color: #F1FAFE;
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
+     
     }
-
     .card {
       display: flex;
       justify-content: center;
       margin: auto;
       width: 200px;
       height: 150px;
-      background-color: #4BBADF;
+      background-color: #BEECF9;
   }
     
     .card__name {
@@ -29,7 +30,7 @@
     }
 
   .dashboard-content .card {
-    background-color: #72D0F3;
+    background-color: #BEECF9;
   }
     .card__number {
       text-align: center;
@@ -63,16 +64,17 @@
   );
   }
     .pie-chart-card {
-  width: 250px;
-      height: 300px;
+      width: 250px;
+      height: 200px;
       border: 1px solid #ccc;
       border-radius: 10px;
       padding: 2px;
 }
   </style>
-  <body>
+  <body style="background-color: #F1FAFE;">
     {% csrf_token %} {% include 'navigation.html' %} {% include 'toast.html' %}
     <main class="dashboard-content">
+      
       {% if not user.is_staff %}
       <div class="add-button m-4">
         <a
@@ -165,7 +167,7 @@
           <div class="col-md-3">
             <div class="pie-chart-card">
               <h5>Document Statistics</h5>
-              <canvas id="pieChart"></canvas>
+              <canvas id="barChart"></canvas>
             </div>
           </div>
           {% endif %} {% if not user.is_staff %}
@@ -227,7 +229,6 @@
               </div>
           </a>
           </div>
-          
           <div class="col-md-3">
             <div class="pie-chart-card">
               <h5>Document Statistics</h5>
@@ -246,40 +247,46 @@
         </div>
       </div>
     </main>
-    <script>
-      const canvas = document.querySelector("#myCanvas");
-      const ctx = canvas.getContext("2d");
-      
-      canvas.width = 500;
-      canvas.height = 300;
-      
-      const chart = new Chart(ctx, {
-        type: "pie",
-        data: {
-          labels: ["Valid", "For Renewal", "Expired"],
-          datasets: [
-            {
-              data: [
-                "{{ num_valid_files }}",
-                "{{ num_renew_files }}",
-                "{{ num_expired_files }}",
-              ],
-              backgroundColor:  [
-                "rgb(0, 128, 0)",
-                "rgb(255, 165, 0)",
-                "rgb(255, 0, 0)",
-              ],
-              borderWidth: 3,
-            },
-          ],
-        },
-        options: {
-    legend: {
-      display: false,
-    },
-  },
-        },
-      );
-        </script>
+          <script>
+            // Get the canvas element
+            var ctx = document.getElementById('myCanvas').getContext('2d');
+        
+            // Define data
+            var data = {
+              labels: ['Valid', 'For Renewal', 'Expired'],
+              datasets: [{
+                label: 'Documents',
+                data: [ "{{ num_valid_files }}", "{{ num_renew_files }}","{{ num_expired_files }}", ],
+                backgroundColor: [
+                 
+                  'rgba(54, 162, 235, 0.2)',
+                  'rgba(75, 192, 192, 0.2)',
+                  'rgba(255, 99, 132, 0.2)',
+                  
+                ],
+                borderColor: [
+                  
+                  'rgba(54, 162, 235, 1)',
+                  'rgba(75, 192, 192, 1)',
+                  'rgba(255, 99, 132, 1)',
+                  
+                ],
+                borderWidth: 1
+              }]
+            };
+        
+            // Create the bar chart
+            var barChart = new Chart(ctx, {
+              type: 'bar',
+              data: data,
+              options: {
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          </script>
   </body>
 </html>
