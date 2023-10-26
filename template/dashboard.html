@@ -73,6 +73,7 @@
   </style>
   <body style="background-color: #F1FAFE;">
     {% csrf_token %} {% include 'navigation.html' %} {% include 'toast.html' %}
+
     <main class="dashboard-content">
       
       {% if not user.is_staff %}
