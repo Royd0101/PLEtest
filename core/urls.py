@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from users.views import dashboard, create_user, create_user_page, user_list, update_user, user_update ,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,users_logs,update_department,delete_department,check_document_expiry
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,check_document_expiry
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include([
@@ -57,7 +57,7 @@ urlpatterns = [
     #display file profile
     path('display_file_page/', display_file_page, name='display_file_page'),
     #user logs
-    path('users_logs/', users_logs, name='users_logs'),
+    path('users_logs/', admin_logs, name='users_logs'),
     #render admin dashboard
     path('admin_expired/', display_admin_expired, name='admin_expired'),
     path('admin_valid/', display_admin_valid, name='admin_valid'),

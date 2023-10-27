@@ -113,8 +113,7 @@ class FileLog_view(ModelViewSet):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
-
+    
 
 #user ---------------------------------------------------------------------------------------------
 #get expired file list
@@ -153,6 +152,17 @@ def get_renew_file_list(request):
     else:
         return render(request, 'error_page.html')
 
+
+@login_required
+def user_logs(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/file/logs/', params={'user_email': user_email})
+    if response.status_code == 200 and response.text: 
+        logs = response.json()
+        return render(request, 'file_logs.html', {'logs': logs})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
    
 #function
 #create new file 
@@ -269,7 +279,7 @@ def create_department(request):
 
 #display logs
 @login_required
-def users_logs(request):
+def admin_logs(request):
     logs = FileLog.objects.all().order_by('-timestamp')
     return render(request, 'file_logs.html', {'logs': logs})
 

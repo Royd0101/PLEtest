@@ -47,6 +47,9 @@ urlpatterns = [
         path('renewal_documents/', File_Document_view.as_view({
             'get': 'admin_to_be_renew_list',  # Custom action for files to be renewed
         })), 
+        path('logs/', FileLog_view.as_view({
+            'get': 'logs',  # Custom action for files to be renewed
+        })), 
     ])),
 
     #create new file page
@@ -58,7 +61,8 @@ urlpatterns = [
     #file profile page
     path('display_file_page/<int:file_id>/', views.display_file_page, name='display_file_page'),
     #user logs
-    path('users_logs/', views.users_logs, name='users_logs'),
+    path('admin_logs/', views.admin_logs, name='admin_logs'),
+   
 
 
     #render admin page for dashboard

@@ -8,11 +8,16 @@
   </head>
   <style>
     .sidebar {
+      height: 100vh;
       background-color: #eeeeee;
       padding: 10px;
       float: left;
-      width: 20%;
-      height: 100vh;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        height: 75vh;
+      }
     }
 
     .sidebar ul {
@@ -35,15 +40,44 @@
       background-color: #008000;
       color: #fff;
     }
+    .burger-icon {
+      display: block;
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+      cursor: pointer;
+      width: 30px;
+      height: 30px;
+    }
+
+    .burger-icon:before {
+      content: "\f0c9";
+      font-family: Font Awesome 5 Free;
+      font-weight: 900;
+      font-size: 20px;
+      color: #000;
+    }
   </style>
   <body>
     <nav class="sidebar">
+      <div class="burger-icon"></div>
       <ul>
         <li><a href="">Dashboard</a></li>
+        {% if user.is_authenticated and user.is_staff %}
         <li><a href="">User Management</a></li>
         <li><a href="">Company</a></li>
         <li><a href="">Department</a></li>
+        {% endif %}
+        <li><a href="">Add Document</a></li>
       </ul>
     </nav>
   </body>
+  <script>
+    document
+      .querySelector(".burger-icon")
+      .addEventListener("click", function () {
+        document.querySelector(".sidebar").classList.toggle("active");
+      });
+  </script>
 </html>
