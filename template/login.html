@@ -19,7 +19,7 @@
         <div class="log">Login</div>
       </div>
       <form method="post" action="{% url 'login_user' %}">
-        {% csrf_token %}
+        {% csrf_token %} {% include 'toast.html' %}
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" name="email" required />
