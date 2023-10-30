@@ -1,293 +1,311 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/dashboard.css' %}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+
     <title>Dashboard</title>
+
+    <!-- Custom fonts for this template-->
+    <link
+      href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Custom styles for this template-->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/sb-admin-2.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/css/sb-admin-2.min.css' %}"
+    />
   </head>
-  <style>
-    body {
-      background-color: #F1FAFE;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-     
-    }
-    .card {
+<style>
+      .card {
       display: flex;
       justify-content: center;
       margin: auto;
-      width: 200px;
-      height: 150px;
-      background-color: #BEECF9;
+ 
+
   }
     
     .card__name {
       margin: 10px;
       text-align: center;
     }
+</style>
+  <body id="page-top">
+    
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        {% include 'sidebar.html' %}  {% include 'toast.html' %}
+        <!-- End of Topbar -->
 
-  .dashboard-content .card {
-    background-color: #BEECF9;
-  }
-    .card__number {
-      text-align: center;
-      font-size: 24px;
-    }
-    .custom-create_file {
-      background: linear-gradient(to bottom, #d1e8a1, #9acd32, #7ea829);
-    }
-
-    @media screen and (max-width: 768px) {
-      .nav ul {
-        flex-direction: column;
-        text-align: center;
-      }
-
-      .nav li {
-        margin: 10px 0;
-      }
-
-      .card {
-        max-width: 100%;
-      }
-    }
-    .dashboard-content  .pie-chart-card  {
-      background: linear-gradient(
-    to bottom,
-    #cdf0f7 1%,
-    #ffffff 15%,
-    #ffffff 89%,
-    #cdf0f7 100%
-  );
-  }
-    .pie-chart-card {
-      width: 240px;
-      height: 200px;
-      border: 1px solid #ccc;
-      border-radius: 10px;
-      padding: 2px;
-}
-  </style>
-  <body style="background-color: #F1FAFE;">
-    {% csrf_token %} {% include 'navigation.html' %} {% include 'toast.html' %}
-
-    <main class="dashboard-content">
-      
-      {% if not user.is_staff %}
-      <div class="add-button m-2 ml-2">
-        <a
-          href="{% url 'create_new_file_form' %}"
-          class="btn btn-secondary btm-sm"
-          role="button"
-          aria-pressed="true"
-        >
-          <b> Add Document</b>
-        </a>
-      </div>
-      {% endif %}
-      <div class="d-flex align-items-center">
-        {% if user.is_authenticated and user.is_staff %}
-        <div class="add-button m-3">
-          <a
-            href="{% url 'admin_logs' %}"
-            class="btn add-button btn-.text-body-tertiary"
-            role="button"
-            aria-pressed="true"
-          >
-            <img
-              src="{% static 'img/log1.png' %}"
-              alt=""
-              style="font-size: 30px; color: #000; width: 30px; height: 30px"
-            />
-          </a>
-        </div>
-      </div>
-      {% endif %}
-      <div class="container">
-        <div class="row">
-          {% if user.is_authenticated and user.is_staff %}
-          <!-- Admin Section -->
-          <div class="col-md-3">
-            <a
-                href="{% url 'admin_valid' %}"
-                class="custom-modal-button"
-                role="button"
-                aria-pressed="true"
-                style="text-decoration: none"
-                >
-                <div class="card">
-                  <div class="card__name">
-                    <p>Valid Documents</p>
-                  </div>
-                  <div class="card__number">
-                    <h1><span id="valid"></span></h1>
-                  </div>
-                </div>
-          </a>
-          </div>
-          <div class="col-md-3">
-            <a
-                href="{% url 'admin_to_be_renew' %}"
-                class="custom-modal-button"
-                role="button"
-                aria-pressed="true"
-                style="text-decoration: none"
-                >
-                <div class="card">
-                  <div class="card__name">
-                    <p>For Renewal Documents</p>
-                  </div>
-                  <div class="card__number">
-                    <h1><span id="renew"></span></h1>
-                  </div>
-                </div>
-          </a>
-          </div>
-
-          <div class="col-md-3">
-            <a
-                href="{% url 'admin_expired' %}"
-                class="custom-modal-button"
-                role="button"
-                aria-pressed="true"
-                style="text-decoration: none"
-                >
-                <div class="card">
-                  <div class="card__name">
-                    <p>Expired Documents</p>
-                  </div>
-                  <div class="card__number">
-                    <h1><span id="expired"></span><h1>
-                  </div>
-                </div>
-          </a>
-          </div>
-          <div class="col-md-3">
-            <div class="pie-chart-card">
-              <h5>Document Statistics</h5>
-              <canvas id="barChart"></canvas>
+          <!-- Begin Page Content -->
+          <div class="container-fluid">
+            <!-- Page Heading -->
+            <div
+              class="d-sm-flex align-items-center justify-content-between mb-4"
+            >  
+            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+              <!-- Admin Side -->
+             
+             
+              <a
+              href="{% url 'admin_logs' %}"
+              class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"
+              ><i class="fas fa-download fa-sm text-white-50"></i> Logs</a
+            >
             </div>
-          </div>
-          {% endif %} {% if not user.is_staff %}
+            <!-- Content Row -->
+            <div class="row">
+              <!-- Valid  Card -->
+              
+              <div class="col-xl-3 col-md-3 mb-4">
+                {% if not user.is_staff %}
+                <a href="{% url 'get_valid_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %}
+                  {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'admin_valid' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %} 
+                  <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            Valid Documents
+                          </div>
+                          <div class="h5 mb-0 font-weight-bold text-gray-800">
+                            {% if user.is_authenticated and user.is_staff %}
+                            <span id="valid"></span>
+                            {% endif %} 
+                            {% if not user.is_staff %}
+                            <span>{{ num_valid_files }}</span>
+                            {% endif %}
+                          </div>
+                        </div>
+                        <div class="col-auto">
+                          <i class="fas fa-calendar fa-2x text-gray-300"></i>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </a>
+              </div>
 
-          <!-- user section-->
-          <div class="col-md-3">
-            <a
-                href="{% url 'get_valid_file_list' %}"
-                class="custom-modal-button"
-                role="button"
-                aria-pressed="true"
-                style="text-decoration: none"
-              >
-
-              <div class="card">
-                <div class="card__name">
-                  <p>Valid Documents</p>
+              <!-- Renew Card -->
+              <div class="col-xl-3 col-md-6 mb-4">
+                {% if not user.is_staff %}
+                <a href="{% url 'get_renew_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'admin_to_be_renew' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %}
+                <div class="card border-left-warning shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div
+                          class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                        >
+                          For Renewal Documents
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                          {% if user.is_authenticated and user.is_staff %}
+                            <span id="renew"></span>
+                            {% endif %} 
+                            {% if not user.is_staff %}
+                            <span>{{ num_renew_files }}</span>
+                            {% endif %} 
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div class="card__number">
-                  <h1>{{ num_valid_files }}</h1>
+              </a>
+                </a>
+              </div>
+
+              <!-- Expired Card -->
+              <div class="col-xl-3 col-md-3 mb-4">
+              {% if not user.is_staff %}   
+              <a href="{% url 'get_expired_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'admin_expired' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %} 
+                <div class="card border-left-danger shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div
+                          class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+                        >
+                          Expired Documents
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                          <div class="col-auto">
+                            <div
+                              class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
+                            >
+                            {% if user.is_authenticated and user.is_staff %}
+                            <span id="expired"></span>
+                            {% endif %} 
+                            {% if not user.is_staff %}
+                            <span>{{ num_expired_files }}</span>
+                            {% endif %} 
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i
+                          class="fas fa-clipboard-list fa-2x text-gray-300"
+                        ></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </a>
+          </a>
+              </div>
+
+              <!-- Total Card -->
+              <div class="col-xl-3 col-md-3 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div
+                          class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                        >
+                          Total Documents
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                          18
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                        <i class="fas fa-comments fa-2x text-gray-300"></i>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-          </a>
-          </div>
-          <div class="col-md-3">
-            <a
-            href="{% url 'get_renew_file_list' %}"
-            class="custom-modal-button"
-            role="button"
-            aria-pressed="true"
-            style="text-decoration: none"
-          >
-          <div class="card">
-            <div class="card__name">
-              <p>For Renewal Documents</p>
             </div>
-            <div class="card__number">
-              <h1>{{ num_renew_files }}</h1>
-            </div>
-          </div>
-          </a>
-          </div>
-          <div class="col-md-3">
-            <a
-                href="{% url 'get_expired_file_list' %}"
-                class="custom-modal-button"
-                role="button"
-                aria-pressed="true"
-                style="text-decoration: none"
-              >
 
-              <div class="card">
-                <div class="card__name">
-                  <p>Expired Documents</p>
-                </div>
-                <div class="card__number">
-                  <h1>{{ num_expired_files }}</h1>
-                </div>
-              </div>
-          </a>
-          </div>
-          <div class="col-md-3">
-            <div class="pie-chart-card">
-              <h5>Document Statistics</h5>
-              <canvas id="myCanvas"></canvas>
-            </div>
-          </div>
          
-          {% endif %}
-          <script src="{% static 'js/pie.js' %}"></script>
-          <script src="{% static 'js/admin_api.js' %}"></script>
-          <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-          <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-          <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-          <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+            <div class="row">
+
+              <!-- Area Chart -->
+              <div class="col-xl-8 col-lg-7">
+                  <div class="card shadow mb-4">
+                      <!-- Card Header - Dropdown -->
+                      <div
+                          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                          <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                          <div class="dropdown no-arrow">
+                              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                  aria-labelledby="dropdownMenuLink">
+                                  <div class="dropdown-header">Dropdown Header:</div>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- Card Body -->
+                      <div class="card-body">
+                          <div class="chart-area">
+                              <canvas id="myAreaChart"></canvas>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+              <!-- Pie Chart -->
+              <div class="col-xl-4 col-lg-5">
+                  <div class="card shadow mb-4">
+                      <!-- Card Header - Dropdown -->
+                      <div
+                          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                          <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                          <div class="dropdown no-arrow">
+                              <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                  data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                  <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                              </a>
+                              <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                  aria-labelledby="dropdownMenuLink">
+                                  <div class="dropdown-header">Dropdown Header:</div>
+                                  <a class="dropdown-item" href="#">Action</a>
+                                  <a class="dropdown-item" href="#">Another action</a>
+                                  <div class="dropdown-divider"></div>
+                                  <a class="dropdown-item" href="#">Something else here</a>
+                              </div>
+                          </div>
+                      </div>
+                      <!-- Card Body -->
+                      <div class="card-body">
+                          <div class="chart-pie pt-4 pb-2">
+                              <canvas id="myPieChart"></canvas>
+                          </div>
+                          <div class="mt-4 text-center small">
+                              <span class="mr-2">
+                                  <i class="fas fa-circle text-primary"></i> Direct
+                              </span>
+                              <span class="mr-2">
+                                  <i class="fas fa-circle text-success"></i> Social
+                              </span>
+                              <span class="mr-2">
+                                  <i class="fas fa-circle text-info"></i> Referral
+                              </span>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          </div>
         </div>
+        <!-- End of Main Content -->
       </div>
-    </main>
-          <script>
-            // Get the canvas element
-            var ctx = document.getElementById('myCanvas').getContext('2d');
-        
-            // Define data
-            var data = {
-              labels: ['Valid', 'For Renewal', 'Expired'],
-              datasets: [{
-                label: 'Documents',
-                data: [ "{{ num_valid_files }}", "{{ num_renew_files }}","{{ num_expired_files }}", ],
-                backgroundColor: [
-                 
-                  'rgba(54, 162, 235, 0.2)',
-                  'rgba(75, 192, 192, 0.2)',
-                  'rgba(255, 99, 132, 0.2)',
-                  
-                ],
-                borderColor: [
-                  
-                  'rgba(54, 162, 235, 1)',
-                  'rgba(75, 192, 192, 1)',
-                  'rgba(255, 99, 132, 1)',
-                  
-                ],
-                borderWidth: 1
-              }]
-            };
-        
-            // Create the bar chart
-            var barChart = new Chart(ctx, {
-              type: 'bar',
-              data: data,
-              options: {
-                scales: {
-                  y: {
-                    beginAtZero: true
-                  }
-                }
-              }
-            });
-          </script>
+      <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+    <script src="{% static 'js/admin_api.js' %}"></script>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
+    <!-- Page level plugins -->
+    <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'bootstrap/js/demo/chart-area-demo.js' %}"></script>
+    <script src="{% static 'bootstrap/js/demo/chart-pie-demo.js' %}"></script>
   </body>
 </html>

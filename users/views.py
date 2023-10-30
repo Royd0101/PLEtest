@@ -262,6 +262,3 @@ def create_company(request):
         form = company_form()
 
     return render(request, 'admin_add_company.html', {'form': form})
-
-def index(request):
-    return render(request, 'index.html')
