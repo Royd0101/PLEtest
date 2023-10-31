@@ -27,7 +27,7 @@ document.addEventListener("DOMContentLoaded", function () {
           key === "user_fullname"
             ? `${item.user_firstname} ${item.user_lastname}`
             : key === "upload_file"
-            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 30px; color: #000;"></i></a>`
+            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 20px; color: #000;"></i></a>`
             : item[key]
         );
 
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
           key === "user_fullname"
             ? `${item.user_firstname} ${item.user_lastname}`
             : key === "upload_file"
-            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 30px; color: #000;"></i></a>`
+            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 10px; color: #000;"></i></a>`
             : item[key]
         );
 
@@ -103,7 +103,7 @@ document.addEventListener("DOMContentLoaded", function () {
           key === "user_fullname"
             ? `${item.user_firstname} ${item.user_lastname}`
             : key === "upload_file"
-            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 30px; color: #000;"></i></a>`
+            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 20px; color: #000;"></i></a>`
             : item[key]
         );
 

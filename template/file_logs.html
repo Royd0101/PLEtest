@@ -2,75 +2,119 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/logs.css' %}" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Log</title>
-    <style>
-      .log-container {
-        max-height: 350px;
-        overflow-y: auto;
-      }
-
-      .log-container .table thead {
-        position: sticky;
-        top: 0;
-      }
-      .log-container h4 {
-        position: sticky;
-        top: 0;
-      }
-      .log-item {
-        margin-bottom: 10px;
-      }
-
-      .container {
-        margin: 0 auto;
-        padding: 15px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-    </style>
+          <!-- Custom fonts for this template -->
+          <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
+          <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+          
+          <!-- Bootstrap CSS -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+          
+          <!-- DataTables CSS -->
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <title>To Be Renewed File List</title>
   </head>
-  <body>
-    {% csrf_token %} {% include 'navigation.html' %}
-    <div class="container mt-5">
-      <div class="log-container">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Recent Activity</th>
-              <th scope="col">Date/Time</th>
-            </tr>
-          </thead>
-          <tbody id="log-table-body">
-            {% for log in logs %}
-            <tr>
-              <td>
-                <p>
-                  User {{ log.user.first_name }} {{ log.user.last_name }}
-                  {{log.action}} a {{log.file.document_type }} document
-                </p>
-              </td>
-              <td>{{log.timestamp }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <style>
+    .card {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+
+    .card .table thead {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 1;
+    }
+
+    .card h4 {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      background-color: white;
+      z-index: 1;
+      padding: 10px 0;
+    }
+  </style>
+
+  <!-- Your existing code ... -->
+</head>
+ <body id="page-top">
+{% include 'toast.html' %} {% csrf_token %}
+      <!-- Page Wrapper -->
+      <div id="wrapper">
+        <!-- Sidebar -->
+        {% include 'sidebar.html' %}
+        <!-- End of Topbar -->
+  
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+  
+              <!-- DataTales Example -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">
+                  User Logs
+                  </h6>
+                </div>
+                <div class="card-body">
+          <table id="renew" class="table table-sm">
+            <tbody id="log-table-body">
+              <tr>
+                <th scope="col">Recent Activity</th>
+                <th scope="col">Date/Time</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in logs %}
+              <tr>
+                <td>
+                  <p>
+                    User {{ log.user.first_name }} {{ log.user.last_name }}
+                    {{log.action}} a {{log.file.document_type }} document
+                  </p>
+                </td>
+                <td>{{log.timestamp }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-    <a
-      href="{% url 'dashboard' %}"
-      class="btn mt-2 btn-secondary float-end mt-3 m-5"
-      >Back</a
-    >
-  </body>
-  <script>
-    $(document).ready(function () {
-      $("#log-table-body").searchTable({
-        columns: [0, 1],
-        inputPlaceholder: "Search...",
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1 mt-2">Back</a>
+  </div>
+</div>
+
+</div>
+</div>
+   
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{% static 'bootstrap/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!-- Page level custom scripts -->
+    <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
+
+    <script>
+      $(document).ready(function () {
+        $("#log-table-body").searchTable({
+          columns: [0, 1],
+          inputPlaceholder: "Search...",
+        });
       });
-    });
-  </script>
+    </script>
+  </body>
 </html>

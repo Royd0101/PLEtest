@@ -246,7 +246,7 @@ def user_update(request, user_id):
     })
 
     context = {'form': form, 'user': user} 
-    return render(request, 'update_user_page.html', context)
+    return render(request, 'update_user.html', context)
 
 @login_required
 def create_company(request):

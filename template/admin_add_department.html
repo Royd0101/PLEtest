@@ -1,36 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     {% load static %}
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Department</title>
-</head>
-<style>
-  .small-container {
-  max-width: 300px; /* Adjust this value as needed */
-  margin: 0 auto; /* Center the container horizontally */
-  padding: 15px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-</style>
-<body>
-    {% include 'navigation.html' %} {% include 'toast.html' %}
-    <h3>Create Department</h3>
-    <div class="small-container">
-    <form method="post" action="{% url 'create_department' %}">
-      {% csrf_token %} {{ form.as_p }}
-      <div class="text-end">
-        <a class="btn btn-danger btn-sm" href="{% url 'department_list' %}">Cancel</a>
-        <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+          <!-- Custom fonts for this template -->
+          <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
+          <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+          
+          <!-- Bootstrap CSS -->
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+          
+          <!-- DataTables CSS -->
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <title>Add Department</title>
+  </head>
+ <body id="page-top">
+{% include 'toast.html' %} {% csrf_token %}
+      <!-- Page Wrapper -->
+      <div id="wrapper">
+        <!-- Sidebar -->
+        {% include 'sidebar.html' %}
+        <!-- End of Topbar -->
+  
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+  
+              <!-- DataTales Example -->
+              <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                  <h6 class="m-0 font-weight-bold text-primary">
+                   Create Department
+                  </h6>
+                </div>
+              <div class="card-body">
+                <form method="post" action="{% url 'create_department' %}">
+                  {% csrf_token %} {{ form.as_p }}
+                  <div class="text-end">
+                    <a class="btn btn-danger btn-sm" href="{% url 'department_list' %}">Cancel</a>
+                    <button class="btn btn-primary btn-sm" type="submit">Submit</button>
+                  </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
       </div>
-      </div>
-    </form>
-    <a href="{% url 'department_list' %}" class="btn mt-2 btn-secondary float-end m-5"
-    >Back</a
-  >
-</body>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
+  </body>
 </html>

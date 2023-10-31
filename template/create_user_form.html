@@ -2,22 +2,74 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/create_user.css' %}" />
-    <title>Create User</title>
-  </head>
-</style>
-  <body>
-    {% include 'navigation.html' %} {% include 'toast.html' %}
+    <!-- Custom fonts for this template -->
+    <link
+      href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{% static 'bootstrap/css/sb-admin-2.min.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
 
-    <div class="small-container mt-3">
-      <form method="post" action="{% url 'create_user' %}">
-      {% csrf_token %}{{form.as_p}}
-      <div class="text-end">
-        <a class="btn btn-danger btm-sm" href="{% url 'user_list' %}">Cancel</a>
-        <button class="btn btn-secondary btm-sm " type="submit">Submit</button>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+    />
+
+    <!-- DataTables CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
+    />
+    <title>Add User</title>
+  </head>
+  <body id="page-top">
+    {% include 'toast.html' %} {% csrf_token %}
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+      <!-- Sidebar -->
+      {% include 'sidebar.html' %}
+      <!-- End of Topbar -->
+
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">Create User</h6>
+          </div>
+          <div class="card-body">
+            <form method="post" action="{% url 'create_user' %}">
+              {% csrf_token %}{{form.as_p}}
+              <div class="text-end">
+                <a class="btn btn-danger btm-sm" href="{% url 'user_list' %}"
+                  >Cancel</a
+                >
+                <button class="btn btn-secondary btm-sm" type="submit">
+                  Submit
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
-      </form>
     </div>
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
   </body>
 </html>

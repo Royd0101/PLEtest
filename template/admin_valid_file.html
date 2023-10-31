@@ -2,33 +2,38 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    {% load static %}
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    {% load static %} {% csrf_token %}
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
-    />
-    <title>Valid Documents</title>
-    <style>
-      .custom-container {
-        border: 1px solid #ccc;
-        border-radius: 10px;
-        margin-top: 50px;
-        padding: 20px;
-        box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-      }
-    </style>
-  </head>
+    <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+    
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+<title>Valid Documents</title>
+</head>
+<body id="page-top">
+{% include 'toast.html' %} {% csrf_token %}
+<!-- Page Wrapper -->
+<div id="wrapper">
+  <!-- Sidebar -->
+  {% include 'sidebar.html' %}
+  <!-- End of Topbar -->
 
-  <body>
-    {% include 'navigation.html' %} {% csrf_token %}
-    <div class="container mt-5 custom-container">
-      <div class="row justify-content-center">
-        <div class="col-m-2">
+      <!-- Begin Page Content -->
+      <div class="container-fluid">
+
+        <!-- DataTales Example -->
+        <div class="card shadow mb-4">
+          <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+              Valid Documents
+            </h6>
+          </div>
+          <div class="card-body">
           <table id="valid" class="table table-sm">
             <thead class="bg-primary text-white">
               <tr>
@@ -48,12 +53,27 @@
         </div>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn mt-2 btn-secondary float-end m-5"
-      >Back</a
-    >
-    <script src="{% static 'js/admin_table.js' %}"></script>
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
-  </body>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1 mt-2">Back</a>
+    </div>
+    </div>
+
+  </div>
+  </div>
+<script src="{% static 'js/admin_table.js' %}"></script>
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+<!-- Bootstrap core JavaScript-->
+<script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+<script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+<script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
+
+<!-- Page level plugins -->
+<script src="{% static 'bootstrap/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+<script src="{% static 'bootstrap/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+
+<!-- Page level custom scripts -->
+<script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
+</body>
 </html>
