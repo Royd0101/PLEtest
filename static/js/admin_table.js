@@ -2,7 +2,7 @@ document.addEventListener("DOMContentLoaded", function () {
   fetch("/api/file/expired_documents/")
     .then((response) => response.json())
     .then((data) => {
-      const table = $("#expired").DataTable({
+      const table = $("#expire").DataTable({
         lengthMenu: [5, 10, 25, 50, 75, 100],
         searching: true,
       });
@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", function () {
           key === "user_fullname"
             ? `${item.user_firstname} ${item.user_lastname}`
             : key === "upload_file"
-            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 10px; color: #000;"></i></a>`
+            ? `<a href="${item.upload_file}" target="_blank"><i class="fas fa-file-alt" style="font-size: 20px; color: #000;"></i></a>`
             : item[key]
         );
 

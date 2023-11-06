@@ -12,7 +12,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=50, null=True)
     last_name = models.CharField(max_length=50, null=True)
     email = models.EmailField(unique=True,null=True)
-    company = models.ForeignKey(Company, on_delete=models.SET_NULL, null=True)
+    company = models.ForeignKey('Company', on_delete=models.SET_NULL, null=True)
     is_staff = models.BooleanField(default=False)
     
     USERNAME_FIELD = 'email'
@@ -26,4 +26,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def user_email(self):
         return self.email
+    
 

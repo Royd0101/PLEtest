@@ -8,7 +8,7 @@ import requests
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404
 from .models import User
-from .models import Company
+from users.models import Company
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
 #import from form
@@ -103,30 +103,46 @@ def create_user(request):
     return render(request, 'create_user_form.html', {'form': form})
 
 
+
+#display update user page -----------------------------------------------------------------------
+@login_required
+def user_update(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+
+    initial = {
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+        'company': user.company,
+    }
+
+    form = update_user_form(initial=initial)
+    context = {'form': form}
+    return render(request, 'update_user.html', context)
+
 #update user data -----------------------------------------------------------------------------
 @login_required
 def update_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
+    
     if request.method == 'POST':
         form = update_user_form(request.POST)
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
             user.email = form.cleaned_data['email']
-            user.company = form.cleaned_data['company']
+            company = form.cleaned_data['company']
+            company_name = Company.objects.get(company_name=company)
+            user.company = company_name
             user.set_password(form.cleaned_data['password'])
             user.save()
-            messages.success(request, 'User updated successfully.') 
+            messages.success(request, 'User updated successfully.')
             return redirect('user_list')
         else:
-            messages.error(request, 'Please correct the errors below.')  
+            messages.error(request, 'Please correct the errors below.')
     else:
-        form = update_user_form(initial={
-            'first_name': user.first_name,
-            'last_name': user.last_name,
-            'email': user.email,
-            'company': user.company,
-        })
+        form = update_user_form(initial={ })
+    
     context = {'user': user, 'form': form}
     return render(request, 'update_user.html', context)
 
@@ -197,8 +213,10 @@ def dashboard(request):
     if response3.status_code == 200:
         total_renew = response3.json()
         num_renew_files = len(total_renew)
+    
+    total_files = num_valid_files + num_expired_files + num_renew_files
 
-    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files})
+    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'total_files':total_files})
 
 
 #create user page -----------------------------------------------------------------------------
@@ -234,19 +252,6 @@ def company_list(request):
         error_message = f"Error fetching expired files. Status code: {response.status_code}"
         return render(request, 'error_page.html', {'error_message': error_message})
 
-#display update user page -----------------------------------------------------------------------
-@login_required
-def user_update(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-    form = update_user_form(initial={
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'email': user.email,
-        'company': user.company,
-    })
-
-    context = {'form': form, 'user': user} 
-    return render(request, 'update_user.html', context)
 
 @login_required
 def create_company(request):

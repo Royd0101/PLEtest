@@ -21,11 +21,8 @@
   </head>
  <body id="page-top">
 {% include 'toast.html' %} {% csrf_token %}
-      <!-- Page Wrapper -->
       <div id="wrapper">
-        <!-- Sidebar -->
         {% include 'sidebar.html' %}
-        <!-- End of Topbar -->
         <div class="m-2">
           <a
             href="{% url 'create_user_page' %}"
@@ -34,11 +31,7 @@
             >Add User</a
           >
         </div>
-  
-            <!-- Begin Page Content -->
             <div class="container-fluid">
-  
-              <!-- DataTales Example -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">
@@ -72,7 +65,6 @@
                     data-user-id="{{ user.id }}"
                     >Edit</a
                   >
-               
                   <form
                     method="post"
                     action="{% url 'delete_user' user_id=user.id %}"

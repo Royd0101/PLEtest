@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Company
+from .models import Company ,User
 
 #create user form
 class create_user_form(forms.Form):
@@ -50,25 +50,32 @@ class create_user_form(forms.Form):
         return cleaned_data
 
 
-class update_user_form(forms.Form):
+class update_user_form(forms.ModelForm):
     first_name = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;','readonly': 'readonly',        
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',        
     }))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;','readonly': 'readonly',
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
         'readonly': 'readonly' 
     }))
     email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;','readonly': 'readonly',
-        'readonly': 'readonly' 
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
     }))
-    company = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;','readonly': 'readonly',
-    }))
+    company = forms.ModelChoiceField(
+        queryset=Company.objects.all(),
+        empty_label="Select a Company",
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
+        })
+    )
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
 
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name','email','company','password']
 
 class company_form(forms.ModelForm):
     

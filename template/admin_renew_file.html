@@ -16,11 +16,11 @@
 <title>Due for Renewed  Documents</title>
 </head>
 <body id="page-top">
-{% include 'toast.html' %} {% csrf_token %}
+ {% csrf_token %}
 <!-- Page Wrapper -->
 <div id="wrapper">
   <!-- Sidebar -->
-  {% include 'sidebar.html' %}
+  {% include 'sidebar.html' %} {% include 'toast.html' %}
   <!-- End of Topbar -->
 
       <!-- Begin Page Content -->

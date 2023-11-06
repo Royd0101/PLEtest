@@ -32,4 +32,13 @@ document.addEventListener("DOMContentLoaded", function () {
       const numberofToRenewFileElement = document.getElementById("renew");
       numberofToRenewFileElement.innerText = `${numberofToRenewFile}`;
     });
+
+  fetch("/api/file/")
+    .then((response) => response.json())
+    .then((data) => {
+      const numberofToRenewFile = data.length;
+      const numberofToRenewFileElement =
+        document.getElementById("total_documents");
+      numberofToRenewFileElement.innerText = `${numberofToRenewFile}`;
+    });
 });
