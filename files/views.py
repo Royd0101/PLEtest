@@ -195,7 +195,7 @@ def create_new_file(request):
             messages.success(request, 'File created successfully!')
             return redirect('create_new_file_form')
         else:
-            messages.error(request, 'Error creating file. Please check your inputs.')
+            messages.warning(request, 'Error creating file. Please check your inputs.')
     else:
         form = create_file(company=request.user.company)
     return render(request, 'create_new_file_form.html', {'form': form})
@@ -210,10 +210,9 @@ def renew_file(request, file_id):
         if form.is_valid():
             department_name = form.cleaned_data['department_name']
             department = Department.objects.get(department_name=department_name)
-
+            file.department_name = department 
             file.document_type = form.cleaned_data['document_type']
             file.agency = form.cleaned_data['agency']
-            file.department_name = department  
             file.upload_file = form.cleaned_data['upload_file']
             file.renewal_date = form.cleaned_data['renewal_date']
             file.expiry_date = form.cleaned_data['expiry_date']
@@ -229,7 +228,7 @@ def renew_file(request, file_id):
             messages.success(request, 'File renewed successfully!')
             return redirect('dashboard')
         else:
-            messages.error(request, 'Error renewing file. Please check your inputs.')
+            messages.warning(request, 'Error renewing file. Please check your inputs.')
             print(f'Form Errors: {form.errors}')
     else:
         form = renew_form(request.user.company, initial={ 
@@ -272,7 +271,7 @@ def create_department(request):
             messages.success(request, 'Department created successfully.')
             return redirect('department_list')  
         else:
-            messages.error(request, 'A department with this name already exists in this company.')
+            messages.warning(request, 'A department with this name already exists in this company.')
     else:
         form = DepartmentForm()
     return render(request, 'admin_add_department.html', {'form': form})

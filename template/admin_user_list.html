@@ -22,7 +22,7 @@
  <body id="page-top">
 {% csrf_token %}
       <div id="wrapper">
-        {% include 'sidebar.html' %}
+        {% include 'sidebar.html' %} {% include 'toast.html' %}
         <div class="m-2">
           <a
             href="{% url 'create_user_page' %}"
@@ -88,7 +88,7 @@
         </div>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-sm float-end m-1">Back</a>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1">Back</a>
   </div>
 </div>
 

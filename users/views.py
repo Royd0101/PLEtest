@@ -77,14 +77,14 @@ def create_user(request):
             confirm_password = form.cleaned_data['confirm_password']
 
             if password != confirm_password:
-                messages.error(request, 'Passwords do not match. Please try again.')
+                messages.warning(request, 'Passwords do not match. Please try again.')
                 form.cleaned_data['password'] = ''
                 form.cleaned_data['confirm_password'] = ''
                 return render(request, 'create_user_form.html', {'form': form})
 
             # Check if the email is already in use
             if User.objects.filter(email=email).exists():
-                messages.error(request, 'This email is already taken. Please choose a different one.')
+                messages.warning(request, 'This email is already taken. Please choose a different one.')
                 form.cleaned_data['password'] = ''
                 form.cleaned_data['confirm_password'] = ''
                 return render(request, 'create_user_form.html', {'form': form})
@@ -122,7 +122,7 @@ def update_user(request, user_id):
             messages.success(request, 'User updated successfully.')
             return redirect('user_list')
         else:
-            messages.error(request, 'Please correct the errors below.')
+            messages.warning(request, 'Please correct the errors below.')
     else:
         form = update_user_form(initial={ 
             'first_name': user.first_name,
@@ -169,7 +169,7 @@ def login_user(request):
             messages.success(request, 'User login Successfully.')
             return redirect('dashboard')
         else:
-            messages.error(request, 'Email or Password not found.')
+            messages.warning(request, 'Email or Password not found.')
     return render(request, 'login.html')
 
     
@@ -249,7 +249,7 @@ def create_company(request):
             messages.success(request, 'Company created successfully.')  
             return redirect('company_page')
         else:
-            messages.error(request, 'A company with this name already exists.')
+            messages.warning(request, 'A company with this name already exists.')
     else:
         form = company_form()
 

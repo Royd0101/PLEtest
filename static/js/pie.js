@@ -1,4 +1,4 @@
-var ctx = document.getElementById("pie").getContext("2d");
+var pieCanvas = document.getElementById("pie").getContext("2d");
 
 Promise.all([
   fetch("/api/file/valid_documents"),
@@ -9,7 +9,7 @@ Promise.all([
     Promise.all(responses.map((response) => response.json()))
   )
   .then((data) => {
-    var barChart = new Chart(ctx, {
+    var barChart = new Chart(pieCanvas, {
       type: "pie",
       data: {
         labels: ["Valid", "For Renewal", "Expired"],

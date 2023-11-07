@@ -36,23 +36,46 @@
     <title>Add User</title>
   </head>
   <body id="page-top">
-    {% include 'toast.html' %} {% csrf_token %}
-    <!-- Page Wrapper -->
+    {% csrf_token %}
     <div id="wrapper">
-      <!-- Sidebar -->
-      {% include 'sidebar.html' %}
-      <!-- End of Topbar -->
-
-      <!-- Begin Page Content -->
+      > {% include 'sidebar.html' %} {% include 'toast.html' %}
       <div class="container-fluid">
-        <!-- DataTales Example -->
         <div class="card shadow mb-4">
           <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Create User</h6>
           </div>
           <div class="card-body">
-            <form method="post" action="{% url 'create_user' %}">
-              {% csrf_token %}{{form.as_p}}
+            <form method="post" action="{% url 'create_user' %}" class="w-80">
+              {% csrf_token %}
+
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.first_name.label_tag }} {{ form.first_name }}
+                </div>
+                <div class="col">
+                  {{ form.last_name.label_tag }} {{ form.last_name }}
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.email.label_tag }} {{ form.email }}
+                </div>
+                <div class="col">
+                  {{ form.company.label_tag }} {{ form.company }}
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.password.label_tag }} {{ form.password }}
+                </div>
+                <div class="col">
+                  {{ form.confirm_password.label_tag }}
+                  {{form.confirm_password}}
+                </div>
+              </div>
+
               <div class="text-end">
                 <a class="btn btn-danger btm-sm" href="{% url 'user_list' %}"
                   >Cancel</a

@@ -38,7 +38,7 @@
   <body id="page-top">
     {% csrf_token %}
     <div id="wrapper">
-      {% include 'sidebar.html' %}
+      {% include 'sidebar.html' %} {% include 'toast.html' %}
       <div class="container-fluid">
         <div class="card shadow mb-4">
           <div class="card-header py-3">
@@ -50,7 +50,25 @@
               method="POST"
               action="{% url 'update_user' user_id=user.id %}"
             >
-              {% csrf_token %} {{ form.as_p }}
+              {% csrf_token %}
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.first_name.label_tag }} {{ form.first_name }}
+                </div>
+                <div class="col">
+                  {{ form.last_name.label_tag }} {{ form.last_name }}
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.company.label_tag }} {{ form.company }}
+                </div>
+                <div class="col">
+                  {{ form.password.label_tag }} {{ form.password }}
+                </div>
+              </div>
+
               <div class="text-end">
                 <a class="btn btn-danger btn-sm" href="{% url 'user_list' %}"
                   >Cancel</a

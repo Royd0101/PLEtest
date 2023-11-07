@@ -98,7 +98,6 @@
                           </div>
                         </div>
                         <div class="col-auto">
-                          <i class="fas fa-calendar fa-2x text-gray-300"></i>
                         </div>
                       </div>
                     </div>
@@ -133,7 +132,6 @@
                         </div>
                       </div>
                       <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
                       </div>
                     </div>
                   </div>
@@ -174,9 +172,6 @@
                         </div>
                       </div>
                       <div class="col-auto">
-                        <i
-                          class="fas fa-clipboard-list fa-2x text-gray-300"
-                        ></i>
                       </div>
                     </div>
                   </div>
@@ -187,12 +182,12 @@
 
               <!-- Total Card -->
               <div class="col-xl-3 col-md-6 mb-4">
-                <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card border-left-primary shadow h-100 py-2">
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
                         <div
-                          class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                          class="text-xs font-weight-bold text-primary text-uppercase mb-1"
                         >
                           Total Documents
                         </div>
@@ -206,7 +201,7 @@
                         </div>
                       </div>
                       <div class="col-auto">
-                        <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                        <i class="fas fa-fw fa-file  fa-2x text-gray-300"></i>
                       </div>
                     </div>
                   </div>
@@ -244,7 +239,12 @@
                       <!-- Card Body -->
                       <div class="card-body">
                           <div class="chart-pie pt-4 pb-2">
+                            {% if user.is_authenticated and user.is_staff %}
                               <canvas id="pie" style="height: 150px;"></canvas>
+                              {% endif %} 
+                              {% if not user.is_staff %}
+                              <canvas id="user_pie" style="height: 150px;"></canvas>
+                              {% endif %} 
                           </div>
                       </div>
                   </div>
@@ -262,7 +262,9 @@
    
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-
+    <script src="{% static 'js/admin_api.js' %}"></script>
+        <script src="{% static 'js/pie.js' %}"></script>
+        <script src="{% static 'js/bar.js' %}"></script>
     <!-- Core plugin JavaScript-->
     <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
 
@@ -272,8 +274,8 @@
     <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
 
     <script>
-const canvas = document.querySelector("#myChart");
-const myChart = new Chart(canvas, {
+let User_canvas = document.querySelector("#myChart");
+let myChart = new Chart(User_canvas, {
   type: "bar",
   data: {
     labels: ['Valid', 'For Renewal', 'Expired'],
@@ -313,9 +315,50 @@ const myChart = new Chart(canvas, {
   },
 });
 
+var User_pieCanvas = document.getElementById("user_pie").getContext("2d");
+
+var validFiles = parseInt("{{ num_valid_files }}");
+var renewFiles = parseInt("{{ num_renew_files }}");
+var expiredFiles = parseInt("{{ num_expired_files }}");
+
+var barChart = new Chart(User_pieCanvas, {
+  type: "pie",
+  data: {
+    labels: ["Valid", "For Renewal", "Expired"],
+    datasets: [
+      {
+        label: "Documents",
+        data: [validFiles, renewFiles, expiredFiles],
+        backgroundColor: [
+          "rgba(0, 128, 0, 0.2)", // Lighter green
+          "rgba(255, 165, 0, 0.2)", // Lighter orange for warning
+          "rgba(255, 0, 0, 0.2)", // Lighter red for danger
+        ],
+        borderColor: [
+          "rgba(0, 128, 0, 1)", // Full green
+          "rgba(255, 165, 0, 1)", // Full orange for warning
+          "rgba(255, 0, 0, 1)", // Full red for danger
+        ],
+        borderWidth: 1,
+      },
+    ],
+  },
+  options: {
+    maintainAspectRatio: false,
+    tooltips: {
+      backgroundColor: "rgb(255,255,255)",
+      bodyFontColor: "#858796",
+      borderColor: "#dddfeb",
+      borderWidth: 1,
+      xPadding: 15,
+      yPadding: 15,
+      displayColors: false,
+      caretPadding: 10,
+    },
+  },
+});
+
     </script>
-        <script src="{% static 'js/admin_api.js' %}"></script>
-        <script src="{% static 'js/pie.js' %}"></script>
-        <script src="{% static 'js/bar.js' %}"></script>
+        
   </body>
 </html>

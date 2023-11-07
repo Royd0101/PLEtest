@@ -1,4 +1,4 @@
-const canvas = document.querySelector("#bar");
+const barCanvas = document.querySelector("#bar");
 
 // Fetch data from APIs
 Promise.all([
@@ -8,7 +8,7 @@ Promise.all([
 ])
   .then((responses) => Promise.all(responses.map((res) => res.json())))
   .then((data) => {
-    const myChart = new Chart(canvas, {
+    const myChart = new Chart(barCanvas, {
       type: "bar",
       data: {
         labels: ["Valid", "For Renewal", "Expired"],
