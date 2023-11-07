@@ -17,7 +17,7 @@ from django.conf import settings
 from django.conf.urls.static import static 
 from django.contrib import admin
 from django.urls import path, include
-from users.views import dashboard, create_user, create_user_page, user_list, update_user, user_update ,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user, delete_company
+from users.views import dashboard, create_user, create_user_page, user_list, update_user,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user, delete_company
 from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,check_document_expiry
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -36,8 +36,6 @@ urlpatterns = [
     path('create_user_page/', create_user_page, name='create_user_page'),
     #Display user list page
     path('user_list/', user_list, name='user_list'),
-    #Display update user page
-    path('user_update/', user_update, name='user_update'),
     #Create new file page
     path('create_new_file_form/', create_new_file_form, name='create_new_file_form'),
     #renew file page

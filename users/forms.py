@@ -58,7 +58,7 @@ class update_user_form(forms.ModelForm):
         'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
     }))
     email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;','readonly': 'readonly' 
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
     }))
     company = forms.ModelChoiceField(
         queryset=Company.objects.all(),
@@ -68,9 +68,12 @@ class update_user_form(forms.ModelForm):
             'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
         })
     )
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
-    }))
+    password = forms.CharField(
+        required=False,  # Set the field to be optional
+        widget=forms.PasswordInput(attrs={
+            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+        })
+    )
 
     class Meta:
         model = User

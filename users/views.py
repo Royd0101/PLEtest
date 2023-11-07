@@ -103,22 +103,6 @@ def create_user(request):
 
 
 
-#display update user page -----------------------------------------------------------------------
-@login_required
-def user_update(request, user_id):
-    user = get_object_or_404(User, id=user_id)
-
-    initial = {
-        'first_name': user.first_name,
-        'last_name': user.last_name,
-        'email': user.email,
-        'company': user.company,
-    }
-
-    form = update_user_form(initial=initial)
-    context = {'form': form}
-    return render(request, 'update_user.html', context)
-
 #update user data -----------------------------------------------------------------------------
 @login_required
 def update_user(request, user_id):
@@ -129,16 +113,22 @@ def update_user(request, user_id):
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
-            if form.cleaned_data['email'] != user.email:
-                user.email = form.cleaned_data['email']
+            new_email = form.cleaned_data['email']
+           
+            if new_email != user.email and User.objects.filter(email=new_email).exists():
+                messages.error(request, 'Email already exists. Please choose a different email.')
+                return render(request, 'update_user.html', {'user': user, 'form': form})
+            
+            user.email = new_email
+            
             company = form.cleaned_data['company']
             company_name = Company.objects.get(company_name=company)
             user.company = company_name
             
             if form.cleaned_data['password']:
                 user.set_password(form.cleaned_data['password'])
-            
             user.save()
+            print(f'New Email: {new_email}')
             messages.success(request, 'User updated successfully.')
             return redirect('user_list')
         else:
@@ -152,8 +142,7 @@ def update_user(request, user_id):
         })
     
     context = {'user': user, 'form': form}
-    return render(request, 'update_user.html', context)
-
+    return render(request, 'admin_update_user.html', context)
 
 
 #delete department
@@ -167,7 +156,7 @@ def delete_user(request, user_id):
         return redirect('user_list')
 
     context = {'user': user}
-    return render(request, 'user_list.html', context)
+    return render(request, 'admin_user_list.html', context)
 
 
 #all pages--------------------------------------------------------------------------------------------
@@ -271,7 +260,7 @@ def user_list(request):
     if request.user.is_staff:
         users = User.objects.filter(is_staff=False).order_by('first_name')
         context = {"users": users}
-        return render(request, 'user_list.html', context)
+        return render(request, 'admin_user_list.html', context)
     else:
         return HttpResponse("You do not have permission to access this page.")
 
