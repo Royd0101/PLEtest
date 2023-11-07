@@ -107,20 +107,11 @@ def create_user(request):
 @login_required
 def update_user(request, user_id):
     user = get_object_or_404(User, id=user_id)
-    
     if request.method == 'POST':
         form = update_user_form(request.POST)
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
-            new_email = form.cleaned_data['email']
-           
-            if new_email != user.email and User.objects.filter(email=new_email).exists():
-                messages.error(request, 'Email already exists. Please choose a different email.')
-                return render(request, 'update_user.html', {'user': user, 'form': form})
-            
-            user.email = new_email
-            
             company = form.cleaned_data['company']
             company_name = Company.objects.get(company_name=company)
             user.company = company_name
@@ -128,7 +119,6 @@ def update_user(request, user_id):
             if form.cleaned_data['password']:
                 user.set_password(form.cleaned_data['password'])
             user.save()
-            print(f'New Email: {new_email}')
             messages.success(request, 'User updated successfully.')
             return redirect('user_list')
         else:
@@ -188,32 +178,6 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('redirect_to_login')
-
-@login_required
-def chart(request):
-    user_email = request.user.email
-    response1 = requests.get('http://127.0.0.1:8000/api/file/valid_file/', params={'user_email': user_email})
-    response2 = requests.get('http://127.0.0.1:8000/api/file/expired/', params={'user_email': user_email})
-    response3 = requests.get('http://127.0.0.1:8000/api/file/to_be_renew/', params={'user_email': user_email})
-
-    num_valid_files = num_expired_files = num_renew_files = 0
-
-    if response1.status_code == 200:
-        total_valid = response1.json()
-        num_valid_files = len(total_valid)
-        
-    if response2.status_code == 200:
-        total_expired = response2.json()
-        num_expired_files = len(total_expired)
-
-    if response3.status_code == 200:
-        total_renew = response3.json()
-        num_renew_files = len(total_renew)
-    
-    total_files = num_valid_files + num_expired_files + num_renew_files
-
-    return render(request, 'chart.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'total_files':total_files})
-
 
 #dashboard page --------------------------------------------------------------------------------
 @login_required

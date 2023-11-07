@@ -31,73 +31,11 @@
       href="{% static 'bootstrap/css/sb-admin-2.min.css' %}"
     />
   </head>
-<style>
-      .card {
-      display: flex;
-      justify-content: center;
-      margin: auto;
- 
 
-  }
-    
-    .card__name {
-      margin: 10px;
-      text-align: center;
-    }
-</style>
   <body id="page-top">
-    
-    <!-- Page Wrapper -->
-    <div id="wrapper">
-        <!-- Sidebar -->  {% csrf_token %}
-          <div class="container-fluid">
-
-         
-            <div class="row">
-              <div class="col-xl-8 col-lg-7">
-                  <div class="card shadow mb-4">
-                      <!-- Card Header - Dropdown -->
-                      <div
-                          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                          <h6 class="m-0 font-weight-bold text-primary">Documents Overview</h6>
-                      </div>
-                      <!-- Card Body -->
-                      <div class="card-body" >
-                          <div class="chart-area" >
-                            {% if not user.is_staff %}
-                              <canvas id="user-chart"></canvas>
-                              {% endif %} 
-                              {% if user.is_authenticated and user.is_staff %}
-                              <canvas id="bar"></canvas>
-                              {% endif %} 
-                          </div>
-                      </div>
-                  </div>
-              </div>
-
-              <!-- Pie Chart -->
-              <div class="col-xl-4 col-lg-5">
-                  <div class="card shadow mb-4">
-                      <!-- Card Header - Dropdown -->
-                      <!-- Card Body -->
-                      <div class="card-body">
-                          <div class="chart-pie pt-4 pb-2">
-                              <canvas id="pie" style="height: 150px;"></canvas>
-                          </div>
-                      </div>
-                  </div>
-              </div>
-          </div>
-          </div>
-        </div>
-        <!-- End of Main Content -->
-      </div>
-      <!-- End of Content Wrapper -->
-    </div>
-    <!-- End of Page Wrapper -->
+    <canvas id="user-chart"></canvas>
 
     <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'js/pie.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
@@ -108,46 +46,46 @@
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
     <!-- Page level plugins -->
     <script>
-const canvas = document.querySelector("#user-chart");
-const myChart = new Chart(canvas, {
-  type: "bar",
-  data: {
-    labels: ['Valid', 'For Renewal', 'Expired'],
-    datasets: [
-      {
-        label: "Documents",
-        data: [
-            "{{ num_valid_files }}",
-            "{{ num_renew_files }}",
-            "{{ num_expired_files }}",
+      const canvas = document.querySelector("#user-chart");
+      const myChart = new Chart(canvas, {
+        type: "bar",
+        data: {
+          labels: ["Valid", "For Renewal", "Expired"],
+          datasets: [
+            {
+              label: "Documents",
+              data: [
+                "{{ num_valid_files }}",
+                "{{ num_renew_files }}",
+                "{{ num_expired_files }}",
+              ],
+              backgroundColor: [
+                "rgba(0, 128, 0, 0.2)", // Lighter green
+                "rgba(255, 165, 0, 0.2)", // Lighter orange for warning
+                "rgba(255, 0, 0, 0.2)", // Lighter red for danger
+              ],
+              borderColor: [
+                "rgba(0, 128, 0, 1)", // Full green
+                "rgba(255, 165, 0, 1)", // Full orange for warning
+                "rgba(255, 0, 0, 1)", // Full red for danger
+              ],
+              borderWidth: 1,
+            },
           ],
-          backgroundColor: [
-            'rgba(0, 128, 0, 0.2)', // Lighter green
-            'rgba(255, 165, 0, 0.2)', // Lighter orange for warning
-            'rgba(255, 0, 0, 0.2)', // Lighter red for danger
-          ],
-          borderColor: [
-            'rgba(0, 128, 0, 1)', // Full green
-            'rgba(255, 165, 0, 1)', // Full orange for warning
-            'rgba(255, 0, 0, 1)', // Full red for danger
-          ],
-          borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
+        },
+        options: {
+          responsive: true,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  beginAtZero: true,
+                },
+              },
+            ],
           },
         },
-      ],
-    },
-  },
-});
+      });
     </script>
   </body>
 </html>

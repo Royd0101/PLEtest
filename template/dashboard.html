@@ -270,10 +270,8 @@
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
     <!-- Page level plugins -->
     <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
-    <script src="{% static 'js/admin_api.js' %}"></script>
-    <script src="{% static 'js/pie.js' %}"></script>
+
     <script>
-      // Create an empty canvas element
 const canvas = document.querySelector("#myChart");
 const myChart = new Chart(canvas, {
   type: "bar",
@@ -316,5 +314,8 @@ const myChart = new Chart(canvas, {
 });
 
     </script>
+        <script src="{% static 'js/admin_api.js' %}"></script>
+        <script src="{% static 'js/pie.js' %}"></script>
+        <script src="{% static 'js/bar.js' %}"></script>
   </body>
 </html>

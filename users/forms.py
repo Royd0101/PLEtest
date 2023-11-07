@@ -57,9 +57,6 @@ class update_user_form(forms.ModelForm):
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
     }))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
-    }))
     company = forms.ModelChoiceField(
         queryset=Company.objects.all(),
         empty_label="Select a Company",
@@ -77,7 +74,7 @@ class update_user_form(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['first_name', 'last_name','email','company','password']
+        fields = ['first_name', 'last_name','company','password']
 
 class company_form(forms.ModelForm):
     
