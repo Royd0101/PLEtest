@@ -56,10 +56,9 @@ class update_user_form(forms.ModelForm):
     }))
     last_name = forms.CharField(widget=forms.TextInput(attrs={
         'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
-        'readonly': 'readonly' 
     }))
     email = forms.EmailField(widget=forms.EmailInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;','readonly': 'readonly' 
     }))
     company = forms.ModelChoiceField(
         queryset=Company.objects.all(),

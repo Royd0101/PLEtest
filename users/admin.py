@@ -4,7 +4,7 @@ from .models import User, Company
 @admin.register(User)
 class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('id', 'first_name',)
-    list_display = ('id', 'first_name','last_name','email')
+    list_display = ('id', 'first_name','last_name','email','company')
 
 
 @admin.register(Company)

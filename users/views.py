@@ -7,8 +7,7 @@ from django.contrib import messages
 import requests
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404
-from .models import User
-from users.models import Company
+from .models import User, Company
 from rest_framework import status
 from django.contrib.auth.decorators import login_required
 #import from form
@@ -19,7 +18,7 @@ from django.http import HttpResponse
 
 
 # Create your views here.
-class Company(ModelViewSet):
+class Company_views(ModelViewSet):
     serializer_class = CompanySerializer
 
     def get_queryset(self):
@@ -130,21 +129,31 @@ def update_user(request, user_id):
         if form.is_valid():
             user.first_name = form.cleaned_data['first_name']
             user.last_name = form.cleaned_data['last_name']
-            user.email = form.cleaned_data['email']
+            if form.cleaned_data['email'] != user.email:
+                user.email = form.cleaned_data['email']
             company = form.cleaned_data['company']
             company_name = Company.objects.get(company_name=company)
             user.company = company_name
-            user.set_password(form.cleaned_data['password'])
+            
+            if form.cleaned_data['password']:
+                user.set_password(form.cleaned_data['password'])
+            
             user.save()
             messages.success(request, 'User updated successfully.')
             return redirect('user_list')
         else:
             messages.error(request, 'Please correct the errors below.')
     else:
-        form = update_user_form(initial={ })
+        form = update_user_form(initial={ 
+            'first_name': user.first_name,
+            'last_name': user.last_name,
+            'email': user.email,
+            'company': user.company,
+        })
     
     context = {'user': user, 'form': form}
     return render(request, 'update_user.html', context)
+
 
 
 #delete department
@@ -190,6 +199,31 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     return redirect('redirect_to_login')
+
+@login_required
+def chart(request):
+    user_email = request.user.email
+    response1 = requests.get('http://127.0.0.1:8000/api/file/valid_file/', params={'user_email': user_email})
+    response2 = requests.get('http://127.0.0.1:8000/api/file/expired/', params={'user_email': user_email})
+    response3 = requests.get('http://127.0.0.1:8000/api/file/to_be_renew/', params={'user_email': user_email})
+
+    num_valid_files = num_expired_files = num_renew_files = 0
+
+    if response1.status_code == 200:
+        total_valid = response1.json()
+        num_valid_files = len(total_valid)
+        
+    if response2.status_code == 200:
+        total_expired = response2.json()
+        num_expired_files = len(total_expired)
+
+    if response3.status_code == 200:
+        total_renew = response3.json()
+        num_renew_files = len(total_renew)
+    
+    total_files = num_valid_files + num_expired_files + num_renew_files
+
+    return render(request, 'chart.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'total_files':total_files})
 
 
 #dashboard page --------------------------------------------------------------------------------
@@ -267,3 +301,14 @@ def create_company(request):
         form = company_form()
 
     return render(request, 'admin_add_company.html', {'form': form})
+
+@login_required
+def delete_company(request, company_id):
+    company = get_object_or_404(Company, id=company_id)
+    if request.method == 'POST':
+        company.delete()
+        messages.success(request, f'Company "{company.company_name}" has been deleted.')
+        return redirect('company_list')
+
+    context = {'company': company}
+    return render(request, 'company_list.html', context)

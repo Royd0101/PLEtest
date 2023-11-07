@@ -49,8 +49,7 @@
     
     <!-- Page Wrapper -->
     <div id="wrapper">
-        <!-- Sidebar --> 
-        {% include 'sidebar.html' %}  {% include 'toast.html' %} {% csrf_token %}
+        <!-- Sidebar -->  {% csrf_token %}
           <div class="container-fluid">
 
          
@@ -66,10 +65,10 @@
                       <div class="card-body" >
                           <div class="chart-area" >
                             {% if not user.is_staff %}
-                              <canvas id="myChart"></canvas>
+                              <canvas id="user-chart"></canvas>
                               {% endif %} 
                               {% if user.is_authenticated and user.is_staff %}
-                              <canvas id="bar" style="height: 200px;"></canvas>
+                              <canvas id="bar"></canvas>
                               {% endif %} 
                           </div>
                       </div>
@@ -109,10 +108,7 @@
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
     <!-- Page level plugins -->
     <script>
-      // Create an empty canvas element
-const canvas = document.querySelector("#myChart");
-
-// Create a new Chart object
+const canvas = document.querySelector("#user-chart");
 const myChart = new Chart(canvas, {
   type: "bar",
   data: {
@@ -152,7 +148,6 @@ const myChart = new Chart(canvas, {
     },
   },
 });
-
     </script>
   </body>
 </html>

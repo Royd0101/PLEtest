@@ -1,10 +1,10 @@
 from django.urls import path, include
-from .views import Users, create_user, update_user, dashboard, create_user_page, user_list, user_update,redirect_to_login, login_user, login_page, logout_user, company_page,create_company,company_list,delete_user
+from .views import Users, create_user, update_user, dashboard, create_user_page, user_list, user_update,redirect_to_login, login_user, login_page, logout_user, company_page,create_company,company_list,delete_user,delete_company
 from django.contrib.auth import views as auth_views
 
 
 from .views import (
-    Company
+    Company_views
 )
 
 urlpatterns = [
@@ -19,8 +19,8 @@ urlpatterns = [
             'delete': 'destroy',
         })),
 
-        path('company/', Company.as_view({'get': 'list', 'post': 'create'}), name='company-list'),
-        path('company/<int:pk>/', Company.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='company-detail'),
+        path('company/', Company_views.as_view({'get': 'list', 'post': 'create'}), name='company-list'),
+        path('company/<int:pk>/', Company_views.as_view({'get': 'retrieve', 'put': 'update', 'delete': 'destroy'}), name='company-detail'),
     ])),
     
     #api
@@ -29,6 +29,7 @@ urlpatterns = [
     path('login_user/', login_user, name='login_user'),
     path('logout_user/', logout_user, name='logout_user'),
     path('create_company/', create_company, name='create_company'),
+    path('delete_company/<int:company_id>/', delete_company, name='delete_company'),
     path('company_list/', company_list, name='company_list'),
 
     #pages
@@ -40,6 +41,4 @@ urlpatterns = [
     path('user_list/', user_list, name='user_list'),
     path('user_update/<int:user_id>/', user_update, name='user_update'),
     path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
-
-
 ]

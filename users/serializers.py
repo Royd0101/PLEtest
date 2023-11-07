@@ -2,8 +2,13 @@ from rest_framework import serializers
 from users.models import User, Company
 from django.db import transaction
 
+
+    
+
+
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, min_length=8)
+    company_name =  serializers.EmailField(source='company.company_name', read_only=True)
     class Meta:
         model = User
         fields = (
@@ -12,6 +17,7 @@ class UserSerializer(serializers.ModelSerializer):
             'last_name',
             'email',
             'company',
+            'company_name',
             'password',
         )
 
@@ -23,6 +29,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
     
 class CompanySerializer(serializers.ModelSerializer):
     class Meta:
@@ -31,5 +38,3 @@ class CompanySerializer(serializers.ModelSerializer):
             'id',
             'company_name',
         )
-    
-    

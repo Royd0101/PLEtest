@@ -259,7 +259,7 @@
     <!-- End of Page Wrapper -->
 
     <!-- Bootstrap core JavaScript-->
-    <script src="{% static 'js/pie.js' %}"></script>
+   
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
@@ -271,11 +271,10 @@
     <!-- Page level plugins -->
     <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
     <script src="{% static 'js/admin_api.js' %}"></script>
+    <script src="{% static 'js/pie.js' %}"></script>
     <script>
       // Create an empty canvas element
 const canvas = document.querySelector("#myChart");
-
-// Create a new Chart object
 const myChart = new Chart(canvas, {
   type: "bar",
   data: {
