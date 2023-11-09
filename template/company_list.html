@@ -25,25 +25,16 @@
       <div id="wrapper">
         <!-- Sidebar -->
         {% include 'sidebar.html' %} {% include 'toast.html' %} 
-        <!-- End of Topbar -->
-        <div class="m-2">
-          <a
-        href="{% url 'create_company' %}"
-        class="btn btn-secondary btn-sm"
-        role="button"
-        >Add Company</a
-      >
-        </div>
-  
-            <!-- Begin Page Content -->
             <div class="container-fluid">
-  
-              <!-- DataTales Example -->
-              <div class="card shadow mb-4">
+              <div class="card shadow mb-2">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">
-                   Company List
-                  </h6>
+                  <div class=" d-flex align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        Company List
+                    </h6>
+                    <a href="{% url 'create_company' %}" class="btn btn-primary ml-auto" role="button">Add Company</a>
+                  </div>
+                
                 </div>
                 <div class="card-body">
           <table id="company_list" class="table table-sm">
@@ -63,7 +54,7 @@
                 method="post"
                 action="{% url 'delete_company' company_id=company.id %}"
                 style="display: inline"
-                onsubmit="return confirm('Are you sure you want to delete this user?');"
+                onsubmit="return confirm('Are you sure you want to delete this Company?');"
               >
                 {% csrf_token %}
                 <button
@@ -82,7 +73,7 @@
         </div>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary btn-sm float-end m-1">Back</a>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1  mr-4">Back</a>
   </div>
 </div>
 

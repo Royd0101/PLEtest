@@ -25,7 +25,7 @@
       overflow-y: auto;
     }
 
-    .card .table thead {
+    .card .table th {
       position: -webkit-sticky;
       position: sticky;
       top: 0;
@@ -33,11 +33,10 @@
       z-index: 1;
     }
 
-    .card h4 {
+    h6 {
       position: -webkit-sticky;
       position: sticky;
       top: 0;
-      background-color: white;
       z-index: 1;
       padding: 10px 0;
     }
@@ -51,18 +50,11 @@
       <div id="wrapper">
         <!-- Sidebar -->
         {% include 'sidebar.html' %}
-        <!-- End of Topbar -->
-  
-            <!-- Begin Page Content -->
+        <h3 class="m-0 font-weight-bold text-primary ml-4">
+          User Logs
+          </h3>
             <div class="container-fluid">
-  
-              <!-- DataTales Example -->
               <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">
-                  User Logs
-                  </h6>
-                </div>
                 <div class="card-body">
           <table id="renew" class="table table-sm">
             <tbody id="log-table-body">
@@ -76,8 +68,8 @@
               <tr>
                 <td>
                   <p>
-                    User {{ log.user.first_name }} {{ log.user.last_name }}
-                    {{log.action}} an {{log.file.document_type }} document
+                    User {{ log.user.first_name }} {{ log.user.last_name }} from {{ log.file.company }}
+                    {{log.action}} an {{log.file.document_type }} document for the {{ log.file.department_name }} department.
                   </p>
                 </td>
                 <td>{{log.timestamp }}</td>
@@ -88,7 +80,7 @@
         </div>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1 mt-2">Back</a>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end me-4">Back</a>
   </div>
 </div>
 

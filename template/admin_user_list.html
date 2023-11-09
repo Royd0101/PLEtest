@@ -23,20 +23,15 @@
 {% csrf_token %}
       <div id="wrapper">
         {% include 'sidebar.html' %} {% include 'toast.html' %}
-        <div class="m-2">
-          <a
-            href="{% url 'create_user_page' %}"
-            class="btn btn-secondary btn-sm"
-            role="button"
-            >Add User</a
-          >
-        </div>
             <div class="container-fluid">
-              <div class="card shadow mb-4">
+              <div class="card shadow mb-2">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">
-                   User List
-                  </h6>
+                  <div class=" d-flex align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">
+                        User List
+                    </h6>
+                    <a href="{% url 'create_user_page' %}" class="btn btn-primary ml-auto" role="button">Add User</a>
+                  </div>
                 </div>
                 <div class="card-body">
           <table id="user_list" class="table table-sm">
@@ -88,7 +83,7 @@
         </div>
       </div>
     </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1">Back</a>
+    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1 mr-4">Back</a>
   </div>
 </div>
 
@@ -107,7 +102,6 @@
 
     <!-- Page level custom scripts -->
     <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
-
     <script>
       $(document).ready(function () {
         $("#user_list").dataTable({

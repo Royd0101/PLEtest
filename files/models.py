@@ -22,7 +22,7 @@ class Department(models.Model):
 class File_Document(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     company = models.ForeignKey('users.Company', on_delete=models.CASCADE, default=1) 
-    department_name = models.ForeignKey(Department, on_delete=models.SET_NULL, null=True)
+    department_name = models.ForeignKey(Department, on_delete=models.CASCADE, default=1)
 
     document_type = models.CharField(
         max_length=50,
