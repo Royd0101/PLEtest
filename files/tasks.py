@@ -3,6 +3,7 @@ from celery import task
 from django.utils import timezone
 from .models import File_Document
 from users.models import User
+from django.utils import timezone
 from .email_utils import send_notification_email
 
 @task

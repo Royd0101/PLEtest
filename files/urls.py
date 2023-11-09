@@ -89,5 +89,5 @@ urlpatterns = [
     path('renew_file/<int:file_id>/', views.renew_file, name='renew_file'),
 
     #sending email
-    path('sending_email/', views.check_document_expiry, name='sending_email'),
+    path('automatic_send_mail', views.automatic_send_mail, name='automatic_send_mail'),
 ]

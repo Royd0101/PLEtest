@@ -15,7 +15,8 @@ from django.contrib import messages
 from users.models import Company
 from .email_utils import send_notification_email
 from django.shortcuts import HttpResponse
-from django.core.mail import send_mail
+
+from files.tasks import check_document_expiry
 #import from form
 from .forms import create_file
 from .forms import renew_form
@@ -352,37 +353,7 @@ def delete_department(request, department_id):
 
 #sending email
 @login_required
-def check_document_expiry(request):
-    admin_user = User.objects.get(is_superuser=True)
-    admin_email = admin_user.email
-
-    # Get all documents that are about to expire (within 2 months)
-    expiration_threshold = timezone.now() + timezone.timedelta(days=60)
-    expiring_documents = File_Document.objects.filter(expiry_date__lte=expiration_threshold)
-
-    for document in expiring_documents:
-        # Convert expiry_date to datetime with a default timezone (e.g., UTC)
-        expiry_datetime = timezone.make_aware(timezone.datetime(
-            document.expiry_date.year,
-            document.expiry_date.month,
-            document.expiry_date.day
-        ))
-
-        # Calculate 2 months before expiration date
-        two_months_before_expiry = expiry_datetime - timezone.timedelta(days=60)
-
-        if timezone.now() >= two_months_before_expiry and timezone.now() < expiry_datetime:
-            # Notify the user who owns the document about upcoming expiration
-            user_message = f'The document from the company {document.user.company}, {document.department_name} department, which is a {document.get_document_type_display()} document, is expiring soon. Please renew it.'
-            send_notification_email(document, document.user.email, message=user_message)
-
-        elif timezone.now() >= expiry_datetime:
-            # Notify the user and the admin about the expired document
-            user_message = f'The document from the company {document.user.company}, {document.department_name} department, which is a {document.get_document_type_display()} document, has expired. Please take action.'
-            send_notification_email(document, document.user.email, message=user_message)
-
-            admin_message = f'The document "{document.get_document_type_display()}" created by {document.user.first_name} {document.user.last_name} has expired. Please take action.'
-            send_notification_email(document, admin_email, is_admin=True, message=admin_message)
-
-    return HttpResponse("Notifications sent successfully.")
+def automatic_send_mail(request):
+    result = check_document_expiry.delay()
+    return HttpResponse("Task scheduled.")
 

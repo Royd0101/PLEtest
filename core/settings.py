@@ -10,7 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
-
+from django.utils import timezone
 from pathlib import Path
 from dotenv import load_dotenv
 from distutils.util import strtobool
@@ -166,9 +166,20 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = 'webmaster@example.com'
 
-
+# Celery Configuration
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
+CELERY_TIMEZONE = 'Asia/Manila'
+
+
+# Celery Beat Configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_BEAT_SCHEDULE = {
+    'check_document_expiry': {
+        'task': 'files.tasks.check_document_expiry',  # Update with your actual task path
+        'schedule': timezone.timedelta(days=1),  # Daily at midnight
+    },
+}
