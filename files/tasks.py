@@ -1,12 +1,12 @@
 
-from celery import task
 from django.utils import timezone
 from .models import File_Document
 from users.models import User
 from django.utils import timezone
+from celery import shared_task
 from .email_utils import send_notification_email
 
-@task
+@shared_task
 def check_document_expiry():
     admin_user = User.objects.get(is_superuser=True)
     admin_email = admin_user.email
