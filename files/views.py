@@ -167,7 +167,7 @@ def user_logs(request):
     response = requests.get('http://127.0.0.1:8000/api/file/user_log/', params={'user_email': user})
     if response.status_code == 200:
         user_log = response.json()
-        print(user_log)
+        user_log = FileLog.objects.all().order_by('-timestamp')
         return render(request, 'file_logs.html', {'user_log': user_log})
     else:
         return render(request, 'error_page.html')
