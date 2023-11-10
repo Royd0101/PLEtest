@@ -38,18 +38,20 @@ class FileSerializer(serializers.ModelSerializer):
 
 
 class FileLogSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='user.email', read_only=True)
     first_name = serializers.EmailField(source='user.first_name', read_only=True)
     last_name = serializers.EmailField(source='user.last_name', read_only=True)
-    file = serializers.EmailField(source='file.document_type', read_only=True)
+    file_name = serializers.EmailField(source='file.document_type', read_only=True)
     company_name = serializers.EmailField(source='file.company', read_only=True)
     department_name = serializers.EmailField(source='file.department_name', read_only=True)
     class Meta:
         model = FileLog
         fields = (
             'id',
+            'user_email',
             'first_name',
             'last_name',
-            'file',
+            'file_name',
             'company_name',
             'department_name',
             'action',

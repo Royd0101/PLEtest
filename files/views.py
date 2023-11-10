@@ -15,7 +15,7 @@ from django.contrib import messages
 from users.models import Company
 from .email_utils import send_notification_email
 from django.shortcuts import HttpResponse
-
+from .tasks import check_document_expiry
 from files.tasks import check_document_expiry
 #import from form
 from .forms import create_file
@@ -115,6 +115,13 @@ class FileLog_view(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
+    @action(detail=False, methods=['get'])
+    def user_list_log(self, request, *args, **kwargs):
+        user_email = request.query_params.get('user_email') 
+        queryset = self.get_queryset().filter(user__email=user_email)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
 
 #user ---------------------------------------------------------------------------------------------
 #get expired file list
@@ -156,15 +163,16 @@ def get_renew_file_list(request):
 
 @login_required
 def user_logs(request):
-    user_email = request.user.email
-    response = requests.get('http://127.0.0.1:8000/api/file/logs/', params={'user_email': user_email})
-    if response.status_code == 200 and response.text: 
-        logs = response.json()
-        return render(request, 'file_logs.html', {'logs': logs})
+    user = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/file/user_log/', params={'user_email': user})
+    if response.status_code == 200:
+        user_log = response.json()
+        print(user_log)
+        return render(request, 'file_logs.html', {'user_log': user_log})
     else:
-        error_message = f"Error fetching expired files. Status code: {response.status_code}"
-        return render(request, 'error_page.html', {'error_message': error_message})
-   
+        return render(request, 'error_page.html')
+    
+
 #function
 #create new file 
 @login_required

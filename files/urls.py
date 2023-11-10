@@ -50,6 +50,10 @@ urlpatterns = [
         path('logs/', FileLog_view.as_view({
             'get': 'logs',  # Custom action for files to be renewed
         })), 
+
+        path('user_log/', FileLog_view.as_view({
+            'get': 'user_list_log',  # Custom action for files to be renewed
+        })), 
     ])),
 
     #create new file page
@@ -62,6 +66,7 @@ urlpatterns = [
     path('display_file_page/<int:file_id>/', views.display_file_page, name='display_file_page'),
     #user logs
     path('admin_logs/', views.admin_logs, name='admin_logs'),
+    path('user_logs/', views.user_logs, name='user_logs'),
    
 
 
@@ -90,4 +95,5 @@ urlpatterns = [
 
     #sending email
     path('automatic_send_mail', views.automatic_send_mail, name='automatic_send_mail'),
+
 ]

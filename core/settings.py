@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os
+from datetime import time
 from django.utils import timezone
 from pathlib import Path
 from dotenv import load_dotenv
@@ -174,12 +175,17 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'UTC'
 CELERY_TIMEZONE = 'Asia/Manila'
 
+CELERY_APP = 'core.celery:app'
 
 # Celery Beat Configuration
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     'check_document_expiry': {
-        'task': 'files.tasks.check_document_expiry',  # Update with your actual task path
-        'schedule': timezone.timedelta(days=1),  # Daily at midnight
+        'task': 'files.tasks.check_document_expiry',
+        'schedule': timezone.timedelta(hours=9, minutes=5),   # Schedule every day at 12 noon in UTC
+        'args': (),  # Pass any arguments to the task if needed
     },
 }
+
+
+
