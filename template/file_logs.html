@@ -71,11 +71,11 @@
                     <p>
                         User {{ log.first_name }} {{ log.last_name }}
                         {% if log.action == 'renewed' %}
-                          {{ log.action }} a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expire on "{{ log.expiry_date }}".
+                          {{ log.action }} a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expire on "{{ log.expired_date }}".
                           <p><b>Old File: </b><a href="{{ log.previous_file }}" target="_blank">Open File</a>
                           <p><b>New File: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
                         {% elif log.action == 'created' %}
-                           "{{ log.company_name }}" "{{ log.department_name }}" that will expired on "{{ log.expired_date }}". 
+                          uploaded a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expired on "{{ log.expiry_date }}". 
                            <p><b>New File: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
                         {% endif %}
                     </p>
@@ -92,11 +92,11 @@
                     <p>
                           
                         {% if user_logs.action == 'renewed' %}
-                        You  {{ user_logs.action }} a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expire on "{{ user_logs.expiry_date }}".
+                        You  {{ user_logs.action }} a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expire on "{{ user_logs.expired_date }}".
                             <p><b>Old File: </b><a href="{{ user_logs.previous_file }}" target="_blank">Open File</a>
                             <p><b>New File: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
                         {% elif user_logs.action == 'created' %}
-                        You uploaded a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expired on "{{ user_logs.expired_date }}".
+                        You uploaded a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expired on "{{ user_logs.expiry_date }}".
                         
                             <p><b>New File: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
                         {% endif %}

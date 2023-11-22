@@ -44,8 +44,8 @@ class FileLogSerializer(serializers.ModelSerializer):
     file_name = serializers.EmailField(source='file.document_type', read_only=True)
     company_name = serializers.EmailField(source='file.company', read_only=True)
     department_name = serializers.EmailField(source='file.department_name', read_only=True)
-    previous_file_name = serializers.EmailField(source='previous_file.upload_file', read_only=True)
     current_file_name = serializers.EmailField(source='file.upload_file', read_only=True)
+    expired_date = serializers.EmailField(source='file.expiry_date', read_only=True)
     class Meta:
         model = FileLog
         fields = (
@@ -59,6 +59,8 @@ class FileLogSerializer(serializers.ModelSerializer):
             'department_name',
             'action',
             'timestamp', 
-            'previous_file_name',
+            'previous_file',
             'current_file_name',
+            'expiry_date',
+            'expired_date',
         )

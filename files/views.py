@@ -173,8 +173,8 @@ def user_logs(request):
 
         for log_entry in user_log:
             timestamp_utc = timezone.datetime.strptime(log_entry['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
-            timestamp_manila = timestamp_utc + timezone.timedelta(hours=0)  # Assuming Philippines is UTC+8
-            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M %p")  # 12-hour format with AM/PM, without seconds
+            timestamp_manila = timestamp_utc + timezone.timedelta(hours=0)  
+            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M %p")  
 
             for log_entry in user_log:
                 log_entry['current_file_url'] = f"{settings.MEDIA_URL}{log_entry.get('current_file_name', '')}"
@@ -214,6 +214,7 @@ def create_new_file(request):
             log_entry = FileLog.objects.create(
                 user=request.user,
                 file=file_document,
+                expiry_date= file_document.expiry_date,
                 action='created'
             )
 
@@ -230,7 +231,8 @@ def create_new_file(request):
 @login_required
 def renew_file(request, file_id):
     file = get_object_or_404(File_Document, id=file_id)
-    previous_file = copy.deepcopy(file)
+    previous_file_path = file.upload_file.path  # Save the path of the old file
+
     if request.method == 'POST':
         form = renew_form(request.user.company, request.POST, request.FILES)
         if form.is_valid():
@@ -244,16 +246,11 @@ def renew_file(request, file_id):
             file.expiry_date = form.cleaned_data['expiry_date']
             file.save()
 
-            previous_file.pk = None 
-            previous_file.action = 'renewed'  
-            previous_file.save()
-
-
             # Create a log entry for the file renewal
             log_entry = FileLog.objects.create(
                 user=request.user,
                 file=file,
-                previous_file=previous_file,
+                previous_file=previous_file_path,  # Assign file path directly
                 action='renewed'
             )
 
@@ -319,10 +316,13 @@ def admin_logs(request):
         for log_entry in admin_logs:
             timestamp_utc = timezone.datetime.strptime(log_entry['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
             timestamp_manila = timestamp_utc + timezone.timedelta(hours=0) 
-            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M:%S %p")  
+            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M %p") 
+
+            for log_entry in admin_logs:
+                log_entry['current_file_url'] = f"{settings.MEDIA_URL}{log_entry.get('current_file_name', '')}" 
 
         # Sort logs based on the converted timestamp
-        admin_logs = sorted(admin_logs, key=lambda x: timezone.datetime.strptime(x['timestamp'], "%Y-%m-%d %I:%M:%S %p"), reverse=True)
+        admin_logs = sorted(admin_logs, key=lambda x: timezone.datetime.strptime(x['timestamp'], "%Y-%m-%d %I:%M %p"), reverse=True)
 
         return render(request, 'file_logs.html', {'admin_logs': admin_logs})
     else:
@@ -336,8 +336,6 @@ def admin_view(request, log_id):
     if response.status_code == 200:
         log_view = response.json()
         log_view['current_file_url'] = f"{settings.MEDIA_URL}{log_view.get('current_file_name', '')}"
-        log_view['previous_file_url'] = f"{settings.MEDIA_URL}{log_view.get('previous_file_name', '')}"
-
         return render(request, 'view_file.html', {'log_view': log_view})
     else:
         return render(request, 'error_page.html')

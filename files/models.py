@@ -40,7 +40,8 @@ class File_Document(models.Model):
 class FileLog(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     file = models.ForeignKey(File_Document, on_delete=models.CASCADE, related_name='file_logs')  
-    previous_file = models.ForeignKey(File_Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='previous_file_logs')
+    previous_file = models.FileField(upload_to=get_upload_path, null=True, blank=True)
+    expiry_date = models.DateField(default=None, null=True, blank=True)
     action = models.CharField(max_length=50)
     timestamp = models.DateTimeField()
 
