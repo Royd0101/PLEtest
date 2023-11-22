@@ -67,7 +67,6 @@ urlpatterns = [
     #user logs
     path('admin_logs/', views.admin_logs, name='admin_logs'),
     path('user_logs/', views.user_logs, name='user_logs'),
-   
 
 
     #render admin page for dashboard
@@ -94,6 +93,7 @@ urlpatterns = [
     path('renew_file/<int:file_id>/', views.renew_file, name='renew_file'),
 
     #sending email
-    path('automatic_send_mail', views.automatic_send_mail, name='automatic_send_mail'),
+    path('automatic_send_mail/', views.automatic_send_mail, name='automatic_send_mail'),
+
 
 ]

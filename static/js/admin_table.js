@@ -16,8 +16,8 @@ document.addEventListener("DOMContentLoaded", function () {
           "document_type",
           "agency",
           "upload_file", // Assuming this is where the file URL is stored
-          "renewal_date",
           "expiry_date",
+          "renewal_date",
           "user_fullname",
         ];
 
@@ -54,8 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
           "document_type",
           "agency",
           "upload_file", // Assuming this is where the file URL is stored
-          "renewal_date",
           "expiry_date",
+          "renewal_date",
           "user_fullname",
         ];
 
@@ -92,8 +92,8 @@ document.addEventListener("DOMContentLoaded", function () {
           "document_type",
           "agency",
           "upload_file", // Assuming this is where the file URL is stored
-          "renewal_date",
           "expiry_date",
+          "renewal_date",
           "user_fullname",
         ];
 

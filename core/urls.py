@@ -70,7 +70,6 @@ urlpatterns = [
 
 
 
-
     #functions
     #user
     #login user api function
@@ -99,9 +98,9 @@ urlpatterns = [
 
 
     #sending email
-    path('automatic_send_mail', automatic_send_mail, name='automatic_send_mail'),
-
+    path('automatic_send_mail/', automatic_send_mail, name='automatic_send_mail'),
 
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+

@@ -78,8 +78,7 @@ def create_user(request):
 
             if password != confirm_password:
                 messages.warning(request, 'Passwords do not match. Please try again.')
-                form.cleaned_data['password'] = ''
-                form.cleaned_data['confirm_password'] = ''
+                form.add_error('confirm_password', 'Passwords do not match.')
                 return render(request, 'create_user_form.html', {'form': form})
 
             # Check if the email is already in use
@@ -94,7 +93,7 @@ def create_user(request):
             messages.success(request, 'User Created successfully!')
             return redirect('create_user_page') 
         else:
-            messages.warning(request, 'Invalid form. Please check your inputs.')
+            messages.warning(request, 'Invalid input. Please check your inputs.')
             form.cleaned_data['password'] = ''
             form.cleaned_data['confirm_password'] = ''
     else:
@@ -200,10 +199,8 @@ def dashboard(request):
     if response3.status_code == 200:
         total_renew = response3.json()
         num_renew_files = len(total_renew)
-    
-    total_files = num_valid_files + num_expired_files + num_renew_files
 
-    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'total_files':total_files})
+    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files})
 
 
 #create user page -----------------------------------------------------------------------------

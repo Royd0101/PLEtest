@@ -68,8 +68,9 @@
                     ></i>
                   </a>
                 </td>
-                <td>{{ file.expiry_date }}</td>
+                
                 <td>{{ file.renewal_date }}</td>
+                <td>{{ file.expiry_date }}</td>
                 <td>
                   <a
                     href="{% url 'renew_file_form' file_id=file.id %}"

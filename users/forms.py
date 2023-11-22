@@ -1,5 +1,5 @@
 from django import forms
-
+from django.db import transaction
 from .models import Company ,User
 
 #create user form
@@ -24,11 +24,13 @@ class create_user_form(forms.Form):
             'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
         })
     )
-    password = forms.CharField(widget=forms.PasswordInput(attrs={
+    password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
-    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={
+    confirm_password = forms.CharField(
+        widget=forms.PasswordInput(attrs={
         'class': 'form-control',
         'style': 'width: 100%; padding: 4px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
     }))
@@ -66,7 +68,8 @@ class update_user_form(forms.ModelForm):
         })
     )
     password = forms.CharField(
-        required=False,  # Set the field to be optional
+        required=False, 
+        min_length=8,
         widget=forms.PasswordInput(attrs={
             'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
         })
@@ -75,6 +78,19 @@ class update_user_form(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name','company','password']
+
+    @transaction.atomic
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+
+        if self.cleaned_data.get('password'):
+            instance.set_password(self.cleaned_data['password'])
+
+        if commit:
+            instance.save()
+            self.save_m2m()
+
+        return instance
 
 class company_form(forms.ModelForm):
     

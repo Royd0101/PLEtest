@@ -16,12 +16,14 @@ from users.models import Company
 from .email_utils import send_notification_email
 from django.shortcuts import HttpResponse
 from .tasks import check_document_expiry
-from files.tasks import check_document_expiry
 #import from form
 from .forms import create_file
 from .forms import renew_form
 from .forms import DepartmentForm,update_department_form
-
+import pytz
+import datetime
+import copy
+from django.conf import settings
 # Create your views here.
 
     
@@ -165,12 +167,26 @@ def get_renew_file_list(request):
 def user_logs(request):
     user = request.user.email
     response = requests.get('http://127.0.0.1:8000/api/file/user_log/', params={'user_email': user})
+    
     if response.status_code == 200:
         user_log = response.json()
-        user_log = FileLog.objects.all().order_by('-timestamp')
+
+        for log_entry in user_log:
+            timestamp_utc = timezone.datetime.strptime(log_entry['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            timestamp_manila = timestamp_utc + timezone.timedelta(hours=0)  # Assuming Philippines is UTC+8
+            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M %p")  # 12-hour format with AM/PM, without seconds
+
+            for log_entry in user_log:
+                log_entry['current_file_url'] = f"{settings.MEDIA_URL}{log_entry.get('current_file_name', '')}"
+                log_entry['previous_file_url'] = f"{settings.MEDIA_URL}{log_entry.get('previous_file_name', '')}"
+
+
+        user_log.sort(key=lambda x: timezone.datetime.strptime(x['timestamp'], "%Y-%m-%d %I:%M %p"), reverse=True)
+
         return render(request, 'file_logs.html', {'user_log': user_log})
     else:
         return render(request, 'error_page.html')
+
     
 
 #function
@@ -214,6 +230,7 @@ def create_new_file(request):
 @login_required
 def renew_file(request, file_id):
     file = get_object_or_404(File_Document, id=file_id)
+    previous_file = copy.deepcopy(file)
     if request.method == 'POST':
         form = renew_form(request.user.company, request.POST, request.FILES)
         if form.is_valid():
@@ -227,10 +244,16 @@ def renew_file(request, file_id):
             file.expiry_date = form.cleaned_data['expiry_date']
             file.save()
 
+            previous_file.pk = None 
+            previous_file.action = 'renewed'  
+            previous_file.save()
+
+
             # Create a log entry for the file renewal
             log_entry = FileLog.objects.create(
                 user=request.user,
                 file=file,
+                previous_file=previous_file,
                 action='renewed'
             )
 
@@ -288,9 +311,38 @@ def create_department(request):
 #display logs
 @login_required
 def admin_logs(request):
-    logs = FileLog.objects.all().order_by('-timestamp')
-    return render(request, 'file_logs.html', {'logs': logs})
+    response = requests.get('http://127.0.0.1:8000/api/file/logs/')
+    if response.status_code == 200:
+        admin_logs = response.json()
 
+        # Convert timestamp to Philippines time and update the logs
+        for log_entry in admin_logs:
+            timestamp_utc = timezone.datetime.strptime(log_entry['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            timestamp_manila = timestamp_utc + timezone.timedelta(hours=0) 
+            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M:%S %p")  
+
+        # Sort logs based on the converted timestamp
+        admin_logs = sorted(admin_logs, key=lambda x: timezone.datetime.strptime(x['timestamp'], "%Y-%m-%d %I:%M:%S %p"), reverse=True)
+
+        return render(request, 'file_logs.html', {'admin_logs': admin_logs})
+    else:
+        return render(request, 'error_page.html')
+    
+@login_required
+def admin_view(request, log_id):
+    log_api_url = f'http://127.0.0.1:8000/api/file/logs/{log_id}/'
+    response = requests.get(log_api_url)
+
+    if response.status_code == 200:
+        log_view = response.json()
+        log_view['current_file_url'] = f"{settings.MEDIA_URL}{log_view.get('current_file_name', '')}"
+        log_view['previous_file_url'] = f"{settings.MEDIA_URL}{log_view.get('previous_file_name', '')}"
+
+        return render(request, 'view_file.html', {'log_view': log_view})
+    else:
+        return render(request, 'error_page.html')
+
+   
 
 #display renew file pages
 @login_required
@@ -314,6 +366,8 @@ def display_admin_valid(request):
 @login_required
 def display_admin_to_be_renew(request):
     return render(request, 'admin_renew_file.html')
+
+
 
 @login_required
 def display_file_page(request, file_id):

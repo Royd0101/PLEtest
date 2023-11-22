@@ -165,7 +165,6 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-DEFAULT_FROM_EMAIL = 'webmaster@example.com'
 
 # Celery Configuration
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
@@ -182,8 +181,8 @@ CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_BEAT_SCHEDULE = {
     'check_document_expiry': {
         'task': 'files.tasks.check_document_expiry',
-        'schedule': timezone.timedelta(hours=9, minutes=5),   # Schedule every day at 12 noon in UTC
-        'args': (),  # Pass any arguments to the task if needed
+        'schedule': timezone.timedelta(hours=12, minutes=0),   
+        'args': (),  
     },
 }
 

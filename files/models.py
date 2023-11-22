@@ -24,15 +24,7 @@ class File_Document(models.Model):
     company = models.ForeignKey('users.Company', on_delete=models.CASCADE, default=1) 
     department_name = models.ForeignKey(Department, on_delete=models.CASCADE, default=1)
 
-    document_type = models.CharField(
-        max_length=50,
-        choices=[
-            ('contract', 'Contract'),
-            ('invoice', 'Invoice'),
-            ('report', 'Report'),
-        ],
-        default='Select Document Type' 
-    )
+    document_type = models.CharField(max_length=50)
     agency = models.CharField(max_length=50, default='Default Agency Name')
     upload_file = models.FileField(upload_to=get_upload_path)
     renewal_date = models.DateField()
@@ -47,7 +39,8 @@ class File_Document(models.Model):
 
 class FileLog(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
-    file = models.ForeignKey(File_Document, on_delete=models.CASCADE)
+    file = models.ForeignKey(File_Document, on_delete=models.CASCADE, related_name='file_logs')  
+    previous_file = models.ForeignKey(File_Document, null=True, blank=True, on_delete=models.SET_NULL, related_name='previous_file_logs')
     action = models.CharField(max_length=50)
     timestamp = models.DateTimeField()
 

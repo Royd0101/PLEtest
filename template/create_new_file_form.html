@@ -50,7 +50,41 @@
               action="{% url 'create_new_file' %}"
               enctype="multipart/form-data"
             >
-              {% csrf_token %} {{ form.as_p }}
+              {% csrf_token %}
+
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.department_name.label_tag }} {{ form.department_name}}
+                </div>
+                <div class="col">
+                  {{ form.document_type.label_tag }} {{ form.document_type }}
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.agency.label_tag }} {{ form.agency }}
+                </div>
+                <div class="col">
+                  {{ form.upload_file.label_tag }}
+                  <div>{{ form.upload_file }}</div>
+                </div>
+              </div>
+
+              <div class="row mb-3">
+                <div class="col">
+                  {{ form.renewal_date.label_tag }} {{ form.renewal_date }}
+                </div>
+                <div class="col">
+                  {{ form.expiry_date.label_tag }} {{ form.expiry_date }}
+                </div>
+              </div>
+
+              <input
+                type="hidden"
+                name="company"
+                value="{{ form.company.value }}"
+              />
 
               <div class="text-end">
                 <a class="btn btn-danger btn-sm" href="{% url 'dashboard' %}"

@@ -1,7 +1,7 @@
 from django import forms
 from files.models import Department
 from users.models import Company
-
+import datetime
 
 class update_department_form(forms.ModelForm):
     company = forms.ModelChoiceField(
@@ -54,15 +54,9 @@ class DepartmentForm(forms.ModelForm):
 
 class create_file(forms.Form):
     department_name = forms.ChoiceField(choices=[], required=True, widget=forms.Select(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'}))
-    document_type = forms.ChoiceField(
-        choices=[
-            ('contract', 'Contract'),
-            ('invoice', 'Invoice'),
-            ('report', 'Report'),
-        ],
-        initial='Select Document Type',
+    document_type = forms.CharField(
         required=True,
-        widget=forms.Select(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
+        widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
     agency = forms.CharField(widget=forms.TextInput(attrs={
         'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
@@ -71,6 +65,7 @@ class create_file(forms.Form):
     
     renewal_date = forms.DateField(
         required=True,
+        initial=datetime.date.today(),
         widget=forms.TextInput(attrs={'type': 'date', 'style': 'width: 100%; display: block; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
 
@@ -91,25 +86,20 @@ class create_file(forms.Form):
             departments = Department.objects.filter(company=company)
             return [(department.department_name, department.department_name) for department in departments]
         return []
+    
 
 
 class renew_form(forms.Form):
-    document_type = forms.ChoiceField(
-        choices=[
-            ('Select Document Type', '- Select Document Type -'),
-            ('contract', 'Contract'),
-            ('invoice', 'Invoice'),
-            ('report', 'Report'),
-        ],
-        initial='Select Document Type',
+    document_type = forms.CharField(
         required=True,
-        widget=forms.Select(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
+        widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
     agency = forms.CharField(widget=forms.TextInput(attrs={
         'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;','readonly': 'readonly' 
     }))
     upload_file = forms.FileField()
     renewal_date = forms.DateField(
+        initial=datetime.date.today(),
         required=True,
         widget=forms.TextInput(attrs={'type': 'date', 'style': 'width: 100%; display: inline-block; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )

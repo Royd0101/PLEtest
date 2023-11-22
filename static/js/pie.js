@@ -5,9 +5,19 @@ Promise.all([
   fetch("/api/file/renewal_documents"),
   fetch("/api/file/expired_documents"),
 ])
-  .then((responses) =>
-    Promise.all(responses.map((response) => response.json()))
-  )
+  .then((responses) => {
+    return Promise.all(
+      responses.map((response) => {
+        if (!response.ok) {
+          throw new Error(
+            `Error fetching data: ${response.status} - ${response.statusText}`
+          );
+        }
+        return response.json();
+      })
+    );
+  })
+
   .then((data) => {
     var barChart = new Chart(pieCanvas, {
       type: "pie",
