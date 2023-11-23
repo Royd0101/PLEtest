@@ -15,6 +15,7 @@ from .forms import create_user_form
 from .forms import update_user_form
 from .forms import company_form 
 from django.http import HttpResponse
+from collections import Counter
 
 
 # Create your views here.
@@ -181,26 +182,90 @@ def logout_user(request):
 #dashboard page --------------------------------------------------------------------------------
 @login_required
 def dashboard(request):
-    user_email = request.user.email
+
+    admin_response1 = requests.get('http://127.0.0.1:8000/api/file/valid_documents/')
+    admin_response2 = requests.get('http://127.0.0.1:8000/api/file/renewal_documents/')
+    admin_response3 = requests.get('http://127.0.0.1:8000/api/file/expired_documents/')
+
+    user_email = request.user.email  
     response1 = requests.get('http://127.0.0.1:8000/api/file/valid_file/', params={'user_email': user_email})
     response2 = requests.get('http://127.0.0.1:8000/api/file/expired/', params={'user_email': user_email})
     response3 = requests.get('http://127.0.0.1:8000/api/file/to_be_renew/', params={'user_email': user_email})
 
     num_valid_files = num_expired_files = num_renew_files = 0
+    admin_num_valid_files = admin_num_expired_files = admin_num_renew_files = 0
+
 
     if response1.status_code == 200:
         total_valid = response1.json()
         num_valid_files = len(total_valid)
+        agencies1 = [item.get('agency') for item in total_valid]
+        agency_counts1 = dict(Counter(agencies1))
         
     if response2.status_code == 200:
         total_expired = response2.json()
         num_expired_files = len(total_expired)
+        agencies2 = [item.get('agency') for item in total_expired]
+        agency_counts2 = dict(Counter(agencies2))
 
     if response3.status_code == 200:
         total_renew = response3.json()
         num_renew_files = len(total_renew)
+        agencies3 = [item.get('agency') for item in total_renew]
+        agency_counts3 = dict(Counter(agencies3))
 
-    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files})
+#admin
+    if admin_response1.status_code == 200:
+        admin_total_valid = admin_response1.json()
+        admin_num_valid_files = len(admin_total_valid)
+
+        admin_agency_counts_by_company = {}
+
+        for item in admin_total_valid:
+            company_name = item.get('company_name')  
+            agency = item.get('agency')
+            if company_name not in admin_agency_counts_by_company:
+                admin_agency_counts_by_company[company_name] = {}
+
+            if agency not in admin_agency_counts_by_company[company_name]:
+                admin_agency_counts_by_company[company_name][agency] = 1
+            else:
+                admin_agency_counts_by_company[company_name][agency] += 1
+        
+    if admin_response2.status_code == 200:
+        admin_total_renew = admin_response2.json()
+        admin_num_renew_files = len(admin_total_renew)
+        
+        admin_agency_counts_by_company1 = {}
+
+        for item in admin_total_renew:
+            company_name = item.get('company_name')  
+            agency = item.get('agency')
+            if company_name not in admin_agency_counts_by_company1:
+                admin_agency_counts_by_company1[company_name] = {}
+
+            if agency not in admin_agency_counts_by_company1[company_name]:
+                admin_agency_counts_by_company1[company_name][agency] = 1
+            else:
+                admin_agency_counts_by_company1[company_name][agency] += 1
+
+    if admin_response3.status_code == 200:
+        admin_total_expired = admin_response3.json()
+        admin_num_expired_files = len(admin_total_expired)
+        admin_agency_counts_by_company2 = {}
+
+        for item in admin_total_expired:
+            company_name = item.get('company_name')  
+            agency = item.get('agency')
+            if company_name not in admin_agency_counts_by_company2:
+                admin_agency_counts_by_company2[company_name] = {}
+
+            if agency not in admin_agency_counts_by_company2[company_name]:
+                admin_agency_counts_by_company2[company_name][agency] = 1
+            else:
+                admin_agency_counts_by_company2[company_name][agency] += 1
+
+    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'agency_counts1': agency_counts1, 'agency_counts2': agency_counts2, 'agency_counts3': agency_counts3, 'admin_count1':admin_num_valid_files,'admin_count2':admin_num_renew_files,'admin_count3':admin_num_expired_files, 'admin_agency1':admin_agency_counts_by_company,'admin_agency2':admin_agency_counts_by_company1,'admin_agency3':admin_agency_counts_by_company2  })
 
 
 #create user page -----------------------------------------------------------------------------

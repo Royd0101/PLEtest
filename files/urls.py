@@ -70,9 +70,6 @@ urlpatterns = [
 
 
     #render admin page for dashboard
-    path('admin_expired/', views.display_admin_expired, name='admin_expired'),
-    path('admin_valid/', views.display_admin_valid, name='admin_valid'),
-    path('admin_to_be_renew/', views.display_admin_to_be_renew, name='admin_to_be_renew'),
     path('department_list/', views.department_list, name='department_list'),
     path('create_department/', views.create_department, name='create_department'),
     path('update_department/<int:department_id>/', views.update_department, name='update_department'),
@@ -94,6 +91,11 @@ urlpatterns = [
 
     #sending email
     path('automatic_send_mail/', views.automatic_send_mail, name='automatic_send_mail'),
+
+    #admin 
+    path('admin_expired_list/', views.admin_expired_file_list, name='admin_expired_list'),
+    path('admin_valid_list', views.admin_valid_file_list, name='admin_valid_list'),
+    path('admin_renew_list', views.admin_renew_file_list, name='admin_renew_list'),
 
 
 ]

@@ -83,7 +83,7 @@
                 <a href="{% url 'get_valid_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
                   {% if user.is_authenticated and user.is_staff %}
-                <a href="{% url 'admin_valid' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                <a href="{% url 'admin_valid_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                   <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
@@ -94,11 +94,32 @@
                           </div>
                           <div class="h5 mb-0 font-weight-bold text-gray-800">
                             {% if user.is_authenticated and user.is_staff %}
-                            <span id="valid"></span>
+                            <span>{{ admin_count1 }}</span>
+                            <div
+                            class="text-xs font-weight-bold text-uppercase"
+                          >
+                            {% for company_name, agency_counts in admin_agency1.items %}
+                                <span>{{ company_name }}</span>
+                                <ul>
+                                  {% for agency, count in agency_counts.items %}
+                                    <li>{{ agency }}: {{ count }}</li>
+                                  {% endfor %}
+                                </ul>
+                              {% endfor %}
+                            </div>
                             {% endif %} 
                             {% if not user.is_staff %}
                             <span>{{ num_valid_files }}</span>
                             {% endif %}
+
+                            <div
+                            class="text-xs font-weight-bold text-uppercase"
+                          >
+                          {% for agency, count in agency_counts1.items %}
+                          <div>{{ agency }}: {{ count }}</div>
+                        {% endfor %}
+                          </div>
+
                           </div>
                         </div>
                         <div class="col-auto">
@@ -115,7 +136,7 @@
                 {% if not user.is_staff %}
                 <a href="{% url 'get_renew_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}  {% if user.is_authenticated and user.is_staff %}
-                <a href="{% url 'admin_to_be_renew' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                <a href="{% url 'admin_renew_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
                 <div class="card border-left-warning shadow h-100 py-2">
                   <div class="card-body">
@@ -128,11 +149,29 @@
                         </div>
                         <div class="h5 mb-0 font-weight-bold text-gray-800">
                           {% if user.is_authenticated and user.is_staff %}
-                            <span id="renew"></span>
+                          <span>{{ admin_count2 }}</span>
+                          <div class="text-xs font-weight-bold text-uppercase">
+                            {% for company_name, agency_counts in admin_agency2.items %}
+                                <span>{{ company_name }}</span>
+                                <ul>
+                                  {% for agency, count in agency_counts.items %}
+                                    <li>{{ agency }}: {{ count }}</li>
+                                  {% endfor %}
+                                </ul>
+                              {% endfor %}
+                            </div>
                             {% endif %} 
                             {% if not user.is_staff %}
                             <span>{{ num_renew_files }}</span>
                             {% endif %} 
+                            <div
+                          class="text-xs font-weight-bold text-uppercase"
+                        >
+                        {% for agency, count in agency_counts3.items %}
+                        <div>{{ agency }}: {{ count }}</div>
+                      {% endfor %}
+                        </div>
+                            
                         </div>
                       </div>
                       <div class="col-auto">
@@ -149,7 +188,7 @@
               {% if not user.is_staff %}   
               <a href="{% url 'get_expired_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                 {% endif %}  {% if user.is_authenticated and user.is_staff %}
-                <a href="{% url 'admin_expired' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                <a href="{% url 'admin_expired_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                 <div class="card border-left-danger shadow h-100 py-2">
                   <div class="card-body">
@@ -166,11 +205,28 @@
                               class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
                             >
                             {% if user.is_authenticated and user.is_staff %}
-                            <span id="expired"></span>
+                            <span>{{ admin_count3 }}</span>
+                            <div class="text-xs font-weight-bold text-uppercase">
+                              {% for company_name, agency_counts in admin_agency3.items %}
+                                  <span>{{ company_name }}</span>
+                                  <ul>
+                                    {% for agency, count in agency_counts.items %}
+                                      <li>{{ agency }}: {{ count }}</li>
+                                    {% endfor %}
+                                  </ul>
+                                {% endfor %}
+                              </div>
                             {% endif %} 
                             {% if not user.is_staff %}
                             <span>{{ num_expired_files }}</span>
                             {% endif %} 
+                            <div
+                          class="text-xs font-weight-bold text-uppercase"
+                        >
+                        {% for agency, count in agency_counts2.items %}
+                        <div>{{ agency }}: {{ count }}</div>
+                      {% endfor %}
+                        </div>
                             </div>
                           </div>
                         </div>
@@ -240,7 +296,6 @@
    
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'js/admin_api.js' %}"></script>
         <script src="{% static 'js/pie.js' %}"></script>
         <script src="{% static 'js/bar.js' %}"></script>
     <!-- Core plugin JavaScript-->

@@ -20,9 +20,7 @@ from .tasks import check_document_expiry
 from .forms import create_file
 from .forms import renew_form
 from .forms import DepartmentForm,update_department_form
-import pytz
-import datetime
-import copy
+from django.db.models import Count
 from django.conf import settings
 # Create your views here.
 
@@ -56,6 +54,7 @@ class File_Document_view(ModelViewSet):
     def expired(self, request):
         user_email = request.query_params.get('user_email') 
         queryset = self.get_queryset().filter(expiry_date__lt=timezone.now(), user__email=user_email)
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -67,7 +66,7 @@ class File_Document_view(ModelViewSet):
         queryset = self.get_queryset().filter(
             expiry_date__gte=expiration_threshold,  user__email=user_email
         )
-
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -77,6 +76,7 @@ class File_Document_view(ModelViewSet):
         user_email = request.query_params.get('user_email') 
         two_months_before_expiry = timezone.now() + timedelta(days=60)
         queryset = self.get_queryset().filter(expiry_date__gte=timezone.now(), expiry_date__lte=two_months_before_expiry,user__email=user_email )
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -95,6 +95,7 @@ class File_Document_view(ModelViewSet):
         queryset = self.get_queryset().filter(
             expiry_date__gte=expiration_threshold
         )
+        agency_counts = queryset.values('company__company_name', 'agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -161,6 +162,38 @@ def get_renew_file_list(request):
         return render(request, 'to_be_renew_file_list.html', {'renew_file': renew_file})
     else:
         return render(request, 'error_page.html')
+        
+    
+#admin list
+@login_required
+def admin_expired_file_list(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/expired_documents/')
+    if response.status_code == 200 and response.text: 
+        admin_expired1 = response.json()
+        return render(request, 'admin_expired_file.html', {'admin_expired1': admin_expired1})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
+    
+@login_required
+def admin_valid_file_list(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/valid_documents/')
+    if response.status_code == 200 and response.text: 
+        admin_valid1 = response.json()
+        return render(request, 'admin_valid_file.html', {'admin_valid1': admin_valid1})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
+    
+@login_required
+def admin_renew_file_list(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/renewal_documents/')
+    if response.status_code == 200 and response.text: 
+        admin_renew1 = response.json()
+        return render(request, 'admin_renew_file.html', {'admin_renew1': admin_renew1})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
 
 
 @login_required
@@ -353,17 +386,6 @@ def renew_file_form(request, file_id):
     }) 
     context = {'form': form, 'file': file}
     return render(request, 'renew_file_form.html', context)
-
-#admin dashboard page
-@login_required
-def display_admin_expired(request):
-    return render(request, 'admin_expired_file.html')
-@login_required
-def display_admin_valid(request):
-    return render(request, 'admin_valid_file.html')
-@login_required
-def display_admin_to_be_renew(request):
-    return render(request, 'admin_renew_file.html')
 
 
 

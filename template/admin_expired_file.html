@@ -48,7 +48,29 @@
                 <th scope="col">Uploaded By</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+              {% for file in admin_expired1 %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ file.company_name }}</td>
+                <td>{{ file.department_name }}</td>
+                <td>{{ file.document_type }}</td>
+                <td>{{ file.agency }}</td>
+                <td>
+                  <a href="{{ file.upload_file }}" target="_blank">
+                    <i
+                      class="fas fa-file-alt pdf-icon"
+                      style="font-size: 20px; color: #000"
+                    ></i>
+                  </a>
+                </td>
+                
+                <td>{{ file.renewal_date }}</td>
+                <td>{{ file.expiry_date }}</td>
+                <td>{{ file.user_firstname }} {{ file.user_lastname }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
           </table>
         </div>
       </div>
@@ -59,7 +81,6 @@
 
   </div>
   </div>
-<script src="{% static 'js/admin_table.js' %}"></script>
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
@@ -75,5 +96,12 @@
 
 <!-- Page level custom scripts -->
 <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
+<script>
+  $(document).ready(function () {
+    $("#expire").dataTable({
+      lengthMenu: [5, 10, 25, 50, 75, 100],
+    });
+  });
+</script>
 </body>
 </html>

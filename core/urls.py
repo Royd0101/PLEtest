@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from users.views import dashboard, create_user, create_user_page, user_list, update_user,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user, delete_company
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file ,display_admin_expired, display_admin_valid, display_admin_to_be_renew,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs,admin_expired_file_list,admin_valid_file_list,admin_renew_file_list
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include([
@@ -59,10 +59,6 @@ urlpatterns = [
     #user logs
     path('admin_logs/', admin_logs, name='admin_logs'),
     path('user_logs/',user_logs, name='user_logs'),
-    #render admin dashboard
-    path('admin_expired/', display_admin_expired, name='admin_expired'),
-    path('admin_valid/', display_admin_valid, name='admin_valid'),
-    path('admin_to_be_renew/', display_admin_to_be_renew, name='admin_to_be_renew'),
     #update department
     path('update_department/', update_department, name='update_department'),
     #delete department
@@ -95,6 +91,11 @@ urlpatterns = [
     path('get_renew_file_list/', get_renew_file_list, name='get_renew_file_list'),
     #renew document api
     path('renew_file/', renew_file, name='renew_file'),
+
+        #admin 
+    path('admin_expired_list/', admin_expired_file_list, name='admin_expired_list'),
+    path('admin_valid_list', admin_valid_file_list, name='admin_valid_list'),
+    path('admin_renew_list', admin_renew_file_list, name='admin_renew_list'),
 
 
     #sending email
