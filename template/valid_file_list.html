@@ -49,10 +49,12 @@
                 <th scope="col">Document</th>
                 <th scope="col">Renewed Date</th>
                 <th scope="col">Expiry Date</th>
+                <th scope="col">Receipt</th>
+                <th scope="col">Amount</th>
               </tr>
             </thead>
             <tbody>
-              {% for file in valid_file %}
+               {% for file in valid_file %}
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ file.company_name }}</td>
@@ -69,6 +71,15 @@
                 </td>
                 <td>{{ file.renewal_date }}</td>
                 <td>{{ file.expiry_date }}</td>
+                {% if file.valid_receipts.all %}
+                  {% for receipt in valid_receipts %}
+                    <td>{{ receipt.receipt }}</td>
+                    <td>{{ receipt.fined }}</td>
+                  {% endfor %}
+                {% else %}
+                  <td colspan="">None</td>
+                  <td colspan="">None</td>
+                {% endif %}
                
               </tr>
               {% endfor %}

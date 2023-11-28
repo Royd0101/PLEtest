@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'files',
+    'receipt',
 
     'celery',
     'django_celery_beat',

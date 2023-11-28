@@ -186,14 +186,16 @@ def dashboard(request):
     admin_response1 = requests.get('http://127.0.0.1:8000/api/file/valid_documents/')
     admin_response2 = requests.get('http://127.0.0.1:8000/api/file/renewal_documents/')
     admin_response3 = requests.get('http://127.0.0.1:8000/api/file/expired_documents/')
+    admin_response4 = requests.get('http://127.0.0.1:8000/api/receipts/')
 
     user_email = request.user.email  
     response1 = requests.get('http://127.0.0.1:8000/api/file/valid_file/', params={'user_email': user_email})
     response2 = requests.get('http://127.0.0.1:8000/api/file/expired/', params={'user_email': user_email})
     response3 = requests.get('http://127.0.0.1:8000/api/file/to_be_renew/', params={'user_email': user_email})
+    response4 = requests.get('http://127.0.0.1:8000/api/receipts/receipt', params={'user_email': user_email})
 
-    num_valid_files = num_expired_files = num_renew_files = 0
-    admin_num_valid_files = admin_num_expired_files = admin_num_renew_files = 0
+    num_valid_files = num_expired_files = num_renew_files = num_penalty_files = 0
+    admin_num_valid_files = admin_num_expired_files = admin_num_renew_files  = admin_num_penalty_files= 0
 
 
     if response1.status_code == 200:
@@ -213,6 +215,12 @@ def dashboard(request):
         num_renew_files = len(total_renew)
         agencies3 = [item.get('agency') for item in total_renew]
         agency_counts3 = dict(Counter(agencies3))
+    
+    if response4.status_code == 200:
+        penalty_document = response4.json()
+        num_penalty_files = len(penalty_document)
+        agencies4 = [item.get('agency') for item in penalty_document]
+        agency_counts4 = dict(Counter(agencies4))
 
 #admin
     if admin_response1.status_code == 200:
@@ -264,8 +272,24 @@ def dashboard(request):
                 admin_agency_counts_by_company2[company_name][agency] = 1
             else:
                 admin_agency_counts_by_company2[company_name][agency] += 1
+    
+    if admin_response4.status_code == 200:
+        admin_total_penalty = admin_response4.json()
+        admin_num_penalty_files = len(admin_total_penalty)
+        admin_agency_counts_by_company3 = {}
 
-    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'agency_counts1': agency_counts1, 'agency_counts2': agency_counts2, 'agency_counts3': agency_counts3, 'admin_count1':admin_num_valid_files,'admin_count2':admin_num_renew_files,'admin_count3':admin_num_expired_files, 'admin_agency1':admin_agency_counts_by_company,'admin_agency2':admin_agency_counts_by_company1,'admin_agency3':admin_agency_counts_by_company2  })
+        for item in admin_total_penalty:
+            company_name = item.get('company_name')  
+            agency = item.get('agency')
+            if company_name not in admin_agency_counts_by_company3:
+                admin_agency_counts_by_company3[company_name] = {}
+
+            if agency not in admin_agency_counts_by_company3[company_name]:
+                admin_agency_counts_by_company3[company_name][agency] = 1
+            else:
+                admin_agency_counts_by_company3[company_name][agency] += 1
+
+    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'num_penalty_files': num_penalty_files, 'agency_counts1': agency_counts1, 'agency_counts2': agency_counts2, 'agency_counts3': agency_counts3,  'agency_counts4': agency_counts4, 'admin_count1':admin_num_valid_files,'admin_count2':admin_num_renew_files,'admin_count3':admin_num_expired_files, 'admin_agency1':admin_agency_counts_by_company,'admin_agency2':admin_agency_counts_by_company1,'admin_agency3':admin_agency_counts_by_company2, 'admin_count4':admin_num_penalty_files,'admin_agency4':admin_agency_counts_by_company3  })
 
 
 #create user page -----------------------------------------------------------------------------

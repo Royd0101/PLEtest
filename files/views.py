@@ -200,7 +200,6 @@ def admin_renew_file_list(request):
 def user_logs(request):
     user = request.user.email
     response = requests.get('http://127.0.0.1:8000/api/file/user_log/', params={'user_email': user})
-    
     if response.status_code == 200:
         user_log = response.json()
 
@@ -230,7 +229,10 @@ def create_new_file(request):
         form = create_file(request.user.company, request.POST, request.FILES)
         if form.is_valid():
             department_name = form.cleaned_data['department_name']
-            department = Department.objects.get(department_name=department_name)
+            department = Department.objects.filter(
+                department_name=department_name,
+                company=request.user.company
+            ).first()
 
             file_document = File_Document(
                 user=request.user,
@@ -242,6 +244,7 @@ def create_new_file(request):
                 renewal_date=form.cleaned_data['renewal_date'],
                 expiry_date=form.cleaned_data['expiry_date']
             )
+            print(department_name)
             file_document.save()
 
             log_entry = FileLog.objects.create(
@@ -270,7 +273,10 @@ def renew_file(request, file_id):
         form = renew_form(request.user.company, request.POST, request.FILES)
         if form.is_valid():
             department_name = form.cleaned_data['department_name']
-            department = Department.objects.get(department_name=department_name)
+            department = Department.objects.filter(
+                department_name=department_name,
+                company=request.user.company
+            ).first()
             file.department_name = department 
             file.document_type = form.cleaned_data['document_type']
             file.agency = form.cleaned_data['agency']
@@ -295,7 +301,8 @@ def renew_file(request, file_id):
     else:
         form = renew_form(request.user.company, initial={ 
             'document_type': file.document_type,
-            'department_name': file.department_name.department_name,  
+            'department_name': file.department_name.department_name,
+            'agency': file.agency, 
         })
 
     context = {'form': form, 'file': file}
@@ -438,4 +445,3 @@ def delete_department(request, department_id):
 def automatic_send_mail(request):
     result = check_document_expiry.delay()
     return HttpResponse("Task scheduled.")
-

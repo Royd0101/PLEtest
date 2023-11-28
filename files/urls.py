@@ -97,5 +97,4 @@ urlpatterns = [
     path('admin_valid_list', views.admin_valid_file_list, name='admin_valid_list'),
     path('admin_renew_list', views.admin_renew_file_list, name='admin_renew_list'),
 
-
 ]

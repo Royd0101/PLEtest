@@ -32,10 +32,6 @@ class File_Document(models.Model):
 
     def __str__(self):
         return self.document_type
-    
-    def delete(self):
-        self.upload_file.delete()
-        super().delete()
 
 class FileLog(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)

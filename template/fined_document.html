@@ -17,7 +17,7 @@
           
           <!-- DataTables CSS -->
           <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
-    <title>To Be Renewed File List</title>
+    <title>Fined Document List</title>
   </head>
  <body id="page-top">
 {% include 'toast.html' %} {% csrf_token %}
@@ -34,12 +34,12 @@
               <div class="card shadow mb-2">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">
-                    Expired Documents
+                    Fined Documents
                   </h6>
                 </div>
                 <div class="card-body">
-          <table id="renew" class="table table-sm">
-            <thead class="bg-primary text-white table-sm">
+          <table id="fine" class="table table-sm">
+            <thead class="bg-primary text-white">
               <tr>
                 <th scope="col">No.</th>
                 <th scope="col">Company</th>
@@ -49,11 +49,12 @@
                 <th scope="col">Document</th>
                 <th scope="col">Renewed Date</th>
                 <th scope="col">Expiry Date</th>
-                <th scope="col">Action</th>
+                <th scope="col">Receipt</th>
+                <th scope="col">Penalty</th>
               </tr>
             </thead>
             <tbody>
-              {% for file in expired_file %}
+              {% for file in valid_receipts %}
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ file.company_name }}</td>
@@ -61,48 +62,30 @@
                 <td>{{ file.document_type }}</td>
                 <td>{{ file.agency }}</td>
                 <td>
-                  <a href="{{ file.upload_file }}" target="_blank">
+                  <a href="{{ file.document }}" target="_blank">
                     <i
                       class="fas fa-file-alt pdf-icon"
                       style="font-size: 20px; color: #000"
                     ></i>
                   </a>
                 </td>
-                
                 <td>{{ file.renewal_date }}</td>
                 <td>{{ file.expiry_date }}</td>
                 <td>
-
-                  <div class="modal fade" id="renewConfirmationModal_{{ file.id }}" tabindex="-1" role="dialog" aria-labelledby="renewConfirmationModalLabel" aria-hidden="true">
-                    <div class="modal-dialog" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="renewConfirmationModalLabel">"This document has been renewed after the expiry date, is there a penalty for renewal?"</h5>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-footer">
-                              <a href="{% url 'create_receipt' file_id=file.id %}" class="btn btn-primary">Yes</a>
-                                <!-- Add a form submission button here -->
-                                <a href="{% url 'renew_file_form' file_id=file.id %}" class="btn btn-primary">No</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                role="button"
-                aria-pressed="true"
-                data-toggle="modal"
-                data-target="#renewConfirmationModal_{{ file.id }}"
-                data-file-id="{{ file.id }}"
-              >Renew</button>
-                </td>
+                    <a href="{{ file.receipt }}" target="_blank">
+                      <i
+                        class="fas fa-file-alt pdf-icon"
+                        style="font-size: 20px; color: #000"
+                      ></i>
+                    </a>
+                  </td>
+                  <td>{{ file.fined }}</td>
+                
+               
               </tr>
+              
               {% endfor %}
+              <p>{{ user_total_fine }}</p>
             </tbody>
           </table>
         </div>
@@ -127,26 +110,10 @@
 
     <!-- Page level custom scripts -->
     <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
-    <script>
-      function updateModalData(fileID) {
-        console.log("File ID:", fileID);
 
-        $('#renewConfirmationModal').on('hidden.bs.modal', function () {
-      location.reload();
-    });
-      }
-    
-      document.addEventListener('DOMContentLoaded', function () {
-        const renewButton = document.querySelector('.btn-sm[data-toggle="modal"]');
-        renewButton.addEventListener('click', function (event) {
-          const fileID = event.target.dataset.fileId;
-          updateModalData(fileID);
-        });
-      });
-    </script>
     <script>
       $(document).ready(function () {
-        $("#renew").dataTable({
+        $("#fine").dataTable({
           lengthMenu: [5, 10, 25, 50, 75, 100],
         });
       });
