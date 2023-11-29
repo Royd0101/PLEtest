@@ -83,11 +83,19 @@
                 
                
               </tr>
-              
+             
               {% endfor %}
-              <p>{{ user_total_fine }}</p>
+              <tfoot>
+                <tr>
+                  <td colspan="8"></td>
+                  <td class="text-end"><strong>Total: </strong></td>
+                  <td> {{ user_total_fine }}</td>
+                </tr>
+              </tfoot>
             </tbody>
+         
           </table>
+          
         </div>
       </div>
     </div>

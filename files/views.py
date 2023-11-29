@@ -6,7 +6,6 @@ from rest_framework.decorators import action
 from django.utils import timezone
 from datetime import timedelta
 from .models import File_Document ,Department , FileLog
-from users.models import User
 from django.shortcuts import render, get_object_or_404
 import requests
 from django.utils import timezone
@@ -142,18 +141,6 @@ def get_expired_file_list(request):
 
 #get expired file list
 @login_required
-def get_valid_file_list(request):
-    user_email = request.user.email
-    response = requests.get('http://127.0.0.1:8000/api/file/valid_file/', params={'user_email': user_email})
-    if response.status_code == 200:
-        valid_file = response.json()
-        return render(request, 'valid_file_list.html', {'valid_file': valid_file})
-    else:
-        return render(request, 'error_page.html')
-
-
-#get expired file list
-@login_required
 def get_renew_file_list(request):
     user_email = request.user.email
     response = requests.get('http://127.0.0.1:8000/api/file/to_be_renew/', params={'user_email': user_email})
@@ -177,13 +164,11 @@ def admin_expired_file_list(request):
     
 @login_required
 def admin_valid_file_list(request):
-    response = requests.get('http://127.0.0.1:8000/api/file/valid_documents/')
-    if response.status_code == 200 and response.text: 
-        admin_valid1 = response.json()
-        return render(request, 'admin_valid_file.html', {'admin_valid1': admin_valid1})
-    else:
-        error_message = f"Error fetching expired files. Status code: {response.status_code}"
-        return render(request, 'error_page.html', {'error_message': error_message})
+    file_documents_with_receipts = File_Document.objects.prefetch_related('receipt_set').all()
+    context = {
+        'file_documents_with_receipts': file_documents_with_receipts,
+    }
+    return render(request, 'admin_valid_file.html', context)
     
 @login_required
 def admin_renew_file_list(request):
@@ -445,3 +430,12 @@ def delete_department(request, department_id):
 def automatic_send_mail(request):
     result = check_document_expiry.delay()
     return HttpResponse("Task scheduled.")
+
+
+def file_documents_with_receipts(request):
+    current_user = request.user
+    file_documents_with_receipts = File_Document.objects.filter(user=current_user).prefetch_related('receipt_set').all()
+    context = {
+        'file_documents_with_receipts': file_documents_with_receipts,
+    }
+    return render(request, 'valid_file_list.html', context)

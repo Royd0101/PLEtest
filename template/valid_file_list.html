@@ -21,16 +21,9 @@
   </head>
  <body id="page-top">
 {% include 'toast.html' %} {% csrf_token %}
-      <!-- Page Wrapper -->
       <div id="wrapper">
-        <!-- Sidebar -->
         {% include 'sidebar.html' %}
-        <!-- End of Topbar -->
-  
-            <!-- Begin Page Content -->
             <div class="container-fluid">
-  
-              <!-- DataTales Example -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
                   <h6 class="m-0 font-weight-bold text-primary">
@@ -50,37 +43,39 @@
                 <th scope="col">Renewed Date</th>
                 <th scope="col">Expiry Date</th>
                 <th scope="col">Receipt</th>
-                <th scope="col">Amount</th>
+                <th scope="col">Penalty</th>
               </tr>
             </thead>
             <tbody>
-               {% for file in valid_file %}
+              {% for file_document in file_documents_with_receipts %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ file.company_name }}</td>
-                <td>{{ file.department_name }}</td>
-                <td>{{ file.document_type }}</td>
-                <td>{{ file.agency }}</td>
+                <td>{{file_document.company.company_name }}</td>
+                <td>{{ file_document.department_name.department_name }}</td>
+                <td>{{ file_document.document_type }}</td>
+                <td>{{ file_document.agency }}</td>
                 <td>
-                  <a href="{{ file.upload_file }}" target="_blank">
+                  <a href="{{ file_document.upload_file.url }}" target="_blank">
                     <i
                       class="fas fa-file-alt pdf-icon"
                       style="font-size: 20px; color: #000"
                     ></i>
                   </a>
                 </td>
-                <td>{{ file.renewal_date }}</td>
-                <td>{{ file.expiry_date }}</td>
-                {% if file.valid_receipts.all %}
-                  {% for receipt in valid_receipts %}
-                    <td>{{ receipt.receipt }}</td>
+                <td>{{ file_document.renewal_date }}</td>
+                <td>{{ file_document.expiry_date }}</td>
+                {% for receipt in file_document.receipt_set.all %}
+                    <td> <a href="{{  receipt.receipt.url }}" target="_blank">
+                      <i
+                        class="fas fa-file-alt pdf-icon"
+                        style="font-size: 20px; color: #000"
+                      ></i>
+                    </a></td>
                     <td>{{ receipt.fined }}</td>
-                  {% endfor %}
-                {% else %}
-                  <td colspan="">None</td>
-                  <td colspan="">None</td>
+                {% endfor %} {% if not file_document.receipt_set.all %}
+                   <td> <strong>None</strong></td>
+                   <td> <strong>None</strong></td>
                 {% endif %}
-               
               </tr>
               {% endfor %}
             </tbody>

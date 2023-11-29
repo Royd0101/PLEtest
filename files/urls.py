@@ -84,8 +84,6 @@ urlpatterns = [
     path('get_renew_file_list/', views.get_renew_file_list, name='get_renew_file_list'),
     #get expired file list
     path('get_expired_file_list/', views.get_expired_file_list, name='get_expired_file_list'),
-    #get valid file list
-    path('get_valid_file_list/', views.get_valid_file_list, name='get_valid_file_list'),
     #renew_file_api
     path('renew_file/<int:file_id>/', views.renew_file, name='renew_file'),
 
@@ -96,5 +94,7 @@ urlpatterns = [
     path('admin_expired_list/', views.admin_expired_file_list, name='admin_expired_list'),
     path('admin_valid_list', views.admin_valid_file_list, name='admin_valid_list'),
     path('admin_renew_list', views.admin_renew_file_list, name='admin_renew_list'),
+
+    path('file_documents_with_receipts', views.file_documents_with_receipts, name='file_documents_with_receipts'),
 
 ]

@@ -41,18 +41,20 @@
                 <th scope="col">Renewed Date</th>
                 <th scope="col">Expiry Date</th>
                 <th scope="col">Uploaded By</th>
+                <th scope="col">Receipt</th>
+                <th scope="col">Penalty</th>
               </tr>
             </thead>
             <tbody>
-              {% for file in admin_valid1 %}
+              {% for file_document in file_documents_with_receipts %}
               <tr>
                 <td>{{ forloop.counter }}</td>
-                <td>{{ file.company_name }}</td>
-                <td>{{ file.department_name }}</td>
-                <td>{{ file.document_type }}</td>
-                <td>{{ file.agency }}</td>
+                <td>{{ file_document.company.company_name }}</td>
+                <td>{{ file_document.department_name }}</td>
+                <td>{{ file_document.document_type }}</td>
+                <td>{{ file_document.agency }}</td>
                 <td>
-                  <a href="{{ file.upload_file }}" target="_blank">
+                  <a href="{{ file.upload_file.url }}" target="_blank">
                     <i
                       class="fas fa-file-alt pdf-icon"
                       style="font-size: 20px; color: #000"
@@ -60,10 +62,24 @@
                   </a>
                 </td>
                 
-                <td>{{ file.renewal_date }}</td>
-                <td>{{ file.expiry_date }}</td>
-                <td>{{ file.user_firstname }} {{ file.user_lastname }}</td>
-              </tr>
+                <td>{{ file_document.renewal_date }}</td>
+                <td>{{ file_document.expiry_date }}</td>
+                <td>{{ file_document.user.first_name }} {{ file.user.last_name }}</td>
+                {% if file_document.receipt_set.all %}
+                {% for receipt in file_document.receipt_set.all %}
+                  <td><a href="{{ receipt.receipt.url }}" target="_blank">
+                    <i
+                      class="fas fa-file-alt pdf-icon"
+                      style="font-size: 20px; color: #000"
+                    ></i>
+                  </a></td>
+                  <td>{{ receipt.fined }}</td>
+                {% endfor %}
+                  {% else %}
+                    <td>None</td>
+                    <td>None</td>
+                  {% endif %}
+                  </tr>
               {% endfor %}
             </tbody>
           </table>

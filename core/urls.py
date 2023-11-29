@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from users.views import dashboard, create_user, create_user_page, user_list, update_user,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user, delete_company
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,get_valid_file_list,renew_file,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs,admin_expired_file_list,admin_valid_file_list,admin_renew_file_list
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,renew_file,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs,admin_expired_file_list,admin_valid_file_list,admin_renew_file_list,file_documents_with_receipts
 from receipt.views import create_receipt,receipt_valid_documents,admin_receipt_documents
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -87,8 +87,6 @@ urlpatterns = [
     
     #get expired list api
     path('get_expired_file_list/', get_expired_file_list, name='get_expired_file_list'),
-    #get valid list api
-    path('get_valid_file_list/', get_valid_file_list, name='get_valid_file_list'),
     #get renew list api
     path('get_renew_file_list/', get_renew_file_list, name='get_renew_file_list'),
     #renew document api
@@ -109,6 +107,7 @@ urlpatterns = [
     path('receipt_valid_documents/', receipt_valid_documents, name='receipt_valid_documents'),
     path('admin_receipt_documents/', admin_receipt_documents, name='admin_receipt_documents'),
 
+    path('file_documents_with_receipts', file_documents_with_receipts, name='file_documents_with_receipts'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

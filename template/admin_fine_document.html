@@ -84,7 +84,13 @@
                   <td class="small-cell">{{ file.fined }}</td>
                   {% endfor %}
               </tr>
-             
+              <tfoot>
+                <tr>
+                  <td colspan="9"></td>
+                  <td class="text-end"><strong>Total: </strong></td>
+                  <td> {{ total_fine }}</td>
+                </tr>
+              </tfoot>
             </tbody>
           </table>
         </div>
