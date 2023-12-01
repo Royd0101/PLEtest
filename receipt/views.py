@@ -75,3 +75,4 @@ def admin_receipt_documents(request):
     else:
         error_message = f"Error fetching expired files. Status code: {response.status_code}"
         return render(request, 'error_page.html', {'error_message': error_message})
+        

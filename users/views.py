@@ -16,6 +16,7 @@ from .forms import update_user_form
 from .forms import company_form 
 from django.http import HttpResponse
 from collections import Counter
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -351,3 +352,5 @@ def delete_company(request, company_id):
 
     context = {'company': company}
     return render(request, 'company_list.html', context)
+
+  

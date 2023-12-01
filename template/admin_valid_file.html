@@ -54,7 +54,7 @@
                 <td>{{ file_document.document_type }}</td>
                 <td>{{ file_document.agency }}</td>
                 <td>
-                  <a href="{{ file.upload_file.url }}" target="_blank">
+                  <a href="{{ file_document.upload_file.url }}" target="_blank">
                     <i
                       class="fas fa-file-alt pdf-icon"
                       style="font-size: 20px; color: #000"
@@ -64,7 +64,7 @@
                 
                 <td>{{ file_document.renewal_date }}</td>
                 <td>{{ file_document.expiry_date }}</td>
-                <td>{{ file_document.user.first_name }} {{ file.user.last_name }}</td>
+                <td>{{ file_document.user.first_name }} {{ file_document.user.last_name }}</td>
                 {% if file_document.receipt_set.all %}
                 {% for receipt in file_document.receipt_set.all %}
                   <td><a href="{{ receipt.receipt.url }}" target="_blank">
@@ -76,11 +76,19 @@
                   <td>{{ receipt.fined }}</td>
                 {% endfor %}
                   {% else %}
-                    <td>None</td>
-                    <td>None</td>
+                    <td><strong>None</strong></td>
+                    <td><strong>None</strong></td>
                   {% endif %}
                   </tr>
               {% endfor %}
+              <tfoot>
+                <tr>
+                  <td colspan="9"></td>
+                  <td class="text-end"><strong>Total: </strong></td>
+                  <td> {{ admin_total_fine }}</td>
+                </tr>
+              </tfoot>
+              
             </tbody>
           </table>
         </div>

@@ -108,6 +108,9 @@ urlpatterns = [
     path('admin_receipt_documents/', admin_receipt_documents, name='admin_receipt_documents'),
 
     path('file_documents_with_receipts', file_documents_with_receipts, name='file_documents_with_receipts'),
+    
+    
+    
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

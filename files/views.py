@@ -165,8 +165,14 @@ def admin_expired_file_list(request):
 @login_required
 def admin_valid_file_list(request):
     file_documents_with_receipts = File_Document.objects.prefetch_related('receipt_set').all()
+    response = requests.get('http://127.0.0.1:8000/api/receipts/')
+    
+    if response.status_code == 200 and response.text:
+        admin_total_fined = response.json()
+        admin_total_fine = sum(float(item['fined']) if item['fined'] else 0 for item in admin_total_fined)
     context = {
         'file_documents_with_receipts': file_documents_with_receipts,
+        'admin_total_fine':admin_total_fine,
     }
     return render(request, 'admin_valid_file.html', context)
     
@@ -434,8 +440,17 @@ def automatic_send_mail(request):
 
 def file_documents_with_receipts(request):
     current_user = request.user
+    response = requests.get('http://127.0.0.1:8000/api/receipts/receipt', params={'user_email': current_user})
+    
+    if response.status_code == 200 and response.text:
+        total_fined = response.json()
+        total_fine = sum(float(item['fined']) if item['fined'] else 0 for item in total_fined)
+    
     file_documents_with_receipts = File_Document.objects.filter(user=current_user).prefetch_related('receipt_set').all()
+    
     context = {
         'file_documents_with_receipts': file_documents_with_receipts,
+        'total_fine': total_fine,  # Corrected placement of the total_fine key
     }
+    
     return render(request, 'valid_file_list.html', context)

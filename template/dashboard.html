@@ -57,6 +57,7 @@
               class="d-sm-flex align-items-center justify-content-between mb-4"
             >  
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+      
               <!-- Admin Side -->
             </div>
             <!-- Content Row -->
@@ -349,7 +350,7 @@ let User_canvas = document.querySelector("#myChart");
 let myChart = new Chart(User_canvas, {
   type: "bar",
   data: {
-    labels: ['Valid', 'For Renewal', 'Expired'],
+    labels: ['Valid', 'For Renewal', 'Expired','Penalty'],
     datasets: [
       {
         label: "Documents",
@@ -357,16 +358,19 @@ let myChart = new Chart(User_canvas, {
             "{{ num_valid_files }}",
             "{{ num_renew_files }}",
             "{{ num_expired_files }}",
+            "{{ num_penalty_files }}",
           ],
           backgroundColor: [
             'rgba(0, 128, 0, 0.2)', // Lighter green
             'rgba(255, 165, 0, 0.2)', // Lighter orange for warning
-            'rgba(255, 0, 0, 0.2)', // Lighter red for danger
+            'rgba(255, 0, 0, 0.2)',
+            'rgba(0, 0, 255, 0.2)', // Lighter red for danger
           ],
           borderColor: [
             'rgba(0, 128, 0, 1)', // Full green
             'rgba(255, 165, 0, 1)', // Full orange for warning
-            'rgba(255, 0, 0, 1)', // Full red for danger
+            'rgba(255, 0, 0, 1)',
+            'rgba(0, 0, 255, 0.2)',// Full red for danger
           ],
           borderWidth: 1,
       },
