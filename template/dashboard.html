@@ -39,8 +39,7 @@
       margin: auto;
  
 
-  }
-    
+  }  
     .card__name {
       margin: 10px;
       text-align: center;
@@ -57,14 +56,14 @@
               class="d-sm-flex align-items-center justify-content-between mb-4"
             >  
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-      
+            <a href="{% url 'sample' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">sample</a>
               <!-- Admin Side -->
             </div>
             <!-- Content Row -->
             <div class="row">
               <!-- Valid  Card -->
               
-              <div class="col-xl-3 col-md-3 mb-4 mx-auto">
+              <div class="col-xl-3 col-md-3 mb-4 mx-auto " >
                 {% if not user.is_staff %}
                 <a href="{% url 'file_documents_with_receipts' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
@@ -72,17 +71,17 @@
                 <a href="{% url 'admin_valid_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                   <div class="card border-left-success shadow h-100 py-2">
-                    <div class="card-body">
+                    <div class="card-body" >
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                             Valid Documents
                           </div>
-                          <div class="h5 mb-0 font-weight-bold text-gray-800">
+                          <div class="h5 mb-0 font-weight-bold text-gray-800 ">
                             {% if user.is_authenticated and user.is_staff %}
                             <span>{{ admin_count1 }}</span>
                             <div
-                            class="text-xs font-weight-bold text-uppercase"
+                            class="text-xs font-weight-bold text-uppercase" 
                           >
                             {% for company_name, agency_counts in admin_agency1.items %}
                                 <span>{{ company_name }}</span>
@@ -240,7 +239,7 @@
                   <div
                     class="text-xs font-weight-bold text-primary text-uppercase mb-1"
                   >
-                    Penalty Documents
+                  Documents with Penalty
                   </div>
                   <div class="h5 mb-0 font-weight-bold text-gray-800">
                     {% if user.is_authenticated and user.is_staff %}
@@ -313,7 +312,7 @@
                       <div class="card-body">
                           <div class="chart-pie pt-4 pb-2">
                             {% if user.is_authenticated and user.is_staff %}
-                              <canvas id="pie" style="height: 150px;"></canvas>
+                              <canvas id="pie" style="width: 400px; height: 300px;"></canvas>
                               {% endif %} 
                               {% if not user.is_staff %}
                               <canvas id="user_pie" style="height: 150px;"></canvas>

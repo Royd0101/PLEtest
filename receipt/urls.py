@@ -19,6 +19,7 @@ urlpatterns = [
           path('receipt/', Receipt_view.as_view({
             'get': 'receipt',  # Custom action for expired files
         })),
+
     ])),
 
 path('create_receipt/<int:file_id>/', views.create_receipt, name='create_receipt'),

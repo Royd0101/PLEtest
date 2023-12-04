@@ -1,59 +1,87 @@
-var pieCanvas = document.getElementById("pie").getContext("2d");
+const pieCanvas = document.querySelector("#pie"); // Assuming you have an HTML element with id="pie" for the pie chart
 
-Promise.all([
-  fetch("/api/file/valid_documents"),
-  fetch("/api/file/renewal_documents"),
-  fetch("/api/file/expired_documents"),
-])
-  .then((responses) => {
-    return Promise.all(
-      responses.map((response) => {
-        if (!response.ok) {
-          throw new Error(
-            `Error fetching data: ${response.status} - ${response.statusText}`
-          );
-        }
-        return response.json();
-      })
-    );
-  })
-
+fetch("/api/receipts/")
+  .then((response) => response.json())
   .then((data) => {
-    var barChart = new Chart(pieCanvas, {
+    const currentYear = new Date().getFullYear();
+
+    // Filter data for the current year
+    const currentYearData = data.filter(
+      (entry) => new Date(entry.expiry_date).getFullYear() === currentYear
+    );
+
+    // Group data by company
+    const groupedData = groupDataByCompany(currentYearData);
+
+    // Extract labels and total fines for each company
+    const labels = Object.keys(groupedData).sort(); // Sort companies alphabetically
+    const totalFines = labels.map((company) =>
+      groupedData[company].reduce(
+        (sum, entry) => sum + parseFloat(entry.fined),
+        0
+      )
+    );
+
+    // Generate colors using the same logic as the bar chart
+    const companyColors = {};
+    labels.forEach((company, index) => {
+      companyColors[company] = getRandomColor(index);
+    });
+
+    // Create the pie chart
+    const myPieChart = new Chart(pieCanvas, {
       type: "pie",
       data: {
-        labels: ["Valid", "For Renewal", "Expired"],
+        labels: labels,
         datasets: [
           {
-            label: "Documents",
-            data: [data[0].length, data[1].length, data[2].length],
-            backgroundColor: [
-              "rgba(0, 128, 0, 0.2)", // Lighter green
-              "rgba(255, 165, 0, 0.2)", // Lighter orange for warning
-              "rgba(255, 0, 0, 0.2)", // Lighter red for danger
-            ],
-            borderColor: [
-              "rgba(0, 128, 0, 1)", // Full green
-              "rgba(255, 165, 0, 1)", // Full orange for warning
-              "rgba(255, 0, 0, 1)", // Full red for danger
-            ],
-            borderWidth: 1,
+            data: totalFines,
+            backgroundColor: labels.map((company) => companyColors[company]),
           },
         ],
       },
       options: {
-        maintainAspectRatio: false,
-        tooltips: {
-          backgroundColor: "rgb(255,255,255)",
-          bodyFontColor: "#858796",
-          borderColor: "#dddfeb",
-          borderWidth: 1,
-          xPadding: 15,
-          yPadding: 15,
-          displayColors: false,
-          caretPadding: 10,
+        responsive: true,
+        plugins: {
+          legend: {
+            display: false,
+          },
+        },
+        title: {
+          display: true,
+          text: `Total Penalty for ${currentYear}`,
+          fontSize: 16,
         },
       },
     });
   })
-  .catch((error) => console.error("Error fetching data:", error));
+  .catch((error) => {
+    console.error("Error fetching data:", error);
+  });
+
+// Helper function to group data by company
+function groupDataByCompany(data) {
+  return data.reduce((result, entry) => {
+    const company = entry.company_name;
+
+    if (!result[company]) {
+      result[company] = [];
+    }
+
+    result[company].push(entry);
+    return result;
+  }, {});
+}
+
+// Helper function to generate a random color
+function getRandomColor(index) {
+  const colors = [
+    "rgba(255, 99, 132, 0.4)", // Lighter red
+    "rgba(54, 162, 235, 0.4)", // Lighter blue
+    "rgba(255, 206, 86, 0.4)", // Lighter yellow
+    "rgba(75, 192, 192, 0.4)", // Lighter green
+    // Add more colors as needed
+  ];
+
+  return colors[index % colors.length];
+}

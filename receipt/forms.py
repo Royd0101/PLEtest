@@ -3,6 +3,7 @@ from .models import Receipt
 
 class receipt_form(forms.ModelForm):
     fined = forms.DecimalField(
+        label="Please enter amount",
         widget=forms.NumberInput(attrs={
             'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
         })
@@ -14,4 +15,7 @@ class receipt_form(forms.ModelForm):
         widgets = {
             'receipt': forms.ClearableFileInput(attrs={'multiple': True}),
             'file': forms.HiddenInput(), 
+        }
+        labels = {
+            'receipt': 'Upload Receipt',
         }

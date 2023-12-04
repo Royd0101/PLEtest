@@ -1,111 +1,145 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    {% load static %}
-          <!-- Custom fonts for this template -->
-          <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
-          <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
-          <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-          
-          <!-- Bootstrap CSS -->
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
-          
-          <!-- DataTables CSS -->
-          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
-    <title>Fined Document List</title>
-  </head>
- <body id="page-top">
-{% include 'toast.html' %} {% csrf_token %}
-      <!-- Page Wrapper -->
-      <div id="wrapper">
-        <!-- Sidebar -->
-        {% include 'sidebar.html' %}
-        <!-- End of Topbar -->
-  
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
-  
-              <!-- DataTales Example -->
-              <div class="card shadow mb-2">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">
-                    Fined Documents
-                  </h6>
-                </div>
-                <div class="card-body">
-          <table id="fine" class="table table-sm">
-            <thead class="bg-primary text-white">
-              <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Company</th>
-                <th scope="col">Department</th>
-                <th scope="col">Document Type</th>
-                <th scope="col">Agency</th>
-                <th scope="col">Document</th>
-                <th scope="col">Renewed Date</th>
-                <th scope="col">Expiry Date</th>
-                <th scope="col">Receipt</th>
-                <th scope="col">Penalty</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for file in valid_receipts %}
-              <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ file.company_name }}</td>
-                <td>{{ file.department_name }}</td>
-                <td>{{ file.document_type }}</td>
-                <td>{{ file.agency }}</td>
-                <td>
-                  <a href="{{ file.document }}" target="_blank">
-                    <i
-                      class="fas fa-file-alt pdf-icon"
-                      style="font-size: 20px; color: #000"
-                    ></i>
-                  </a>
-                </td>
-                <td>{{ file.renewal_date }}</td>
-                <td>{{ file.expiry_date }}</td>
-                <td>
-                    <a href="{{ file.receipt }}" target="_blank">
-                      <i
-                        class="fas fa-file-alt pdf-icon"
-                        style="font-size: 20px; color: #000"
-                      ></i>
-                    </a>
-                  </td>
-                  <td>{{ file.fined }}</td>
-                
-               
-              </tr>
-             
-              {% endfor %}
-              <tfoot>
-                <tr>
-                  <td colspan="8"></td>
-                  <td class="text-end"><strong>Total: </strong></td>
-                  <td> {{ user_total_fine }}</td>
-                </tr>
-              </tfoot>
-            </tbody>
-         
-          </table>
-          
-        </div>
-      </div>
-    </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end mr-4">Back</a>
-  </div>
-</div>
 
-</div>
-</div>
-   
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    {% load static %}
+    <!-- Custom fonts for this template -->
+    <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <title>Fined Document List</title>
+</head>
+
+<body id="page-top">
+    {% include 'toast.html' %} {% csrf_token %}
+    <div id="wrapper">
+        {% include 'sidebar.html' %}
+        <div class="container-fluid">
+            <div class="card shadow mb-2">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">Documents with Penalty</h6>
+                </div>
+                <nav>
+                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                        <button class="nav-link active" id="total-document-tab" data-toggle="tab"
+                            href="#total-document" role="tab" aria-controls="total-document"
+                            aria-selected="true">All Document</button>
+                        {% for file in sample %}
+                        <button class="nav-link" id="{{ file.department_name|slugify }}-tab" data-toggle="tab"
+                            href="#{{ file.department_name|slugify }}" role="tab"
+                            aria-controls="{{ file.department_name|slugify }}" aria-selected="false">
+                            {{ file.department_name }}
+                        </button>
+                        {% endfor %}
+                    </div>
+                </nav>
+                <div class="card-body">
+                    <div class="tab-content">
+                      <div class="tab-pane fade show active" id="total-document" role="tabpanel"
+                      aria-labelledby="total-document-tab">
+                      <div class="table-responsive" style="overflow-x: auto;">
+                      <table id="fine" class="table table-sm">
+                          <thead>
+                              <tr>
+                                  <th scope="col">No.</th>
+                                  <th scope="col">Company</th>
+                                  <th scope="col">Department</th>
+                                  <th scope="col">Document Type</th>
+                                  <th scope="col">Agency</th>
+                                  <th scope="col">Document</th>
+                                  <th scope="col">Renewed Date</th>
+                                  <th scope="col">Expiry Date</th>
+                                  <th scope="col">Receipt</th>
+                                  <th scope="col">Penalty</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {% for files in total_doc %}
+                              <tr>
+                                  <td>{{ forloop.counter }}</td>
+                                  <td>{{ files.company_name }}</td>
+                                  <td>{{ files.department_name }}</td>
+                                  <td>{{ files.document_type }}</td>
+                                  <td>{{ files.agency }}</td>
+                                  <td><a href="{{ files.document }}" target="_blank"><i
+                                              class="fas fa-file-alt pdf-icon"
+                                              style="font-size: 20px; color: #000"></i></a></td>
+                                  <td>{{ files.renewal_date }}</td>
+                                  <td>{{ files.expiry_date }}</td>
+                                  <td><a href="{{ files.receipt }}" target="_blank"><i
+                                              class="fas fa-file-alt pdf-icon"
+                                              style="font-size: 20px; color: #000"></i></a></td>
+                                  <td>{{ files.fined }}</td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  
+                  {% for department, files in department_files.items %}
+                  <div class="tab-pane fade" id="{{ department|slugify }}" role="tabpanel"
+                      aria-labelledby="{{ department|slugify }}-tab">
+                      <div class="table-responsive" style="overflow-x: auto;">
+                      <table id="fines" class="table table-sm">
+                          <thead>
+                              <tr>
+                                  <th scope="col">No.</th>
+                                  <th scope="col">Company</th>
+                                  <th scope="col">Department</th>
+                                  <th scope="col">Document Type</th>
+                                  <th scope="col">Agency</th>
+                                  <th scope="col">Document</th>
+                                  <th scope="col">Renewed Date</th>
+                                  <th scope="col">Expiry Date</th>
+                                  <th scope="col">Receipt</th>
+                                  <th scope="col">Penalty</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                              {% for file in files %}
+                              <tr>
+                                  <td>{{ forloop.counter }}</td>
+                                  <td>{{ file.company_name }}</td>
+                                  <td>{{ file.department_name }}</td>
+                                  <td>{{ file.document_type }}</td>
+                                  <td>{{ file.agency }}</td>
+                                  <td><a href="{{ file.document }}" target="_blank"><i
+                                              class="fas fa-file-alt pdf-icon"
+                                              style="font-size: 20px; color: #000"></i></a></td>
+                                  <td>{{ file.renewal_date }}</td>
+                                  <td>{{ file.expiry_date }}</td>
+                                  <td><a href="{{ file.receipt }}" target="_blank"><i
+                                              class="fas fa-file-alt pdf-icon"
+                                              style="font-size: 20px; color: #000"></i></a></td>
+                                  <td>{{ file.fined }}</td>
+                              </tr>
+                              {% endfor %}
+                          </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  {% endfor %}
+                  
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end mr-4">Back</a>
+    </div>
+    </div>
+    </div>
+
     <!-- Bootstrap core JavaScript-->
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -121,10 +155,12 @@
 
     <script>
       $(document).ready(function () {
-        $("#fine").dataTable({
+        $("#fine, #fines").dataTable({
           lengthMenu: [5, 10, 25, 50, 75, 100],
         });
       });
     </script>
-  </body>
+    
+</body>
+
 </html>

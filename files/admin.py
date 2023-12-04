@@ -15,4 +15,4 @@ class Department_Admin(admin.ModelAdmin):
 @admin.register(FileLog)
 class Department_Admin(admin.ModelAdmin):
     search_fields = ('id', 'action','user','timestamp')
-    list_display = ('id','user','file','action','timestamp','previous_file')
+    list_display = ('id','user','action','timestamp','previous_file')

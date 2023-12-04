@@ -38,7 +38,8 @@
                   </h6>
                 </div>
                 <div class="card-body">
-          <table id="renew" class="table table-sm">
+                  <div class="table-responsive">
+                    <table id="expired" class="table table-sm">
             <thead class="bg-primary text-white table-sm">
               <tr>
                 <th scope="col">No.</th>
@@ -146,7 +147,7 @@
     </script>
     <script>
       $(document).ready(function () {
-        $("#renew").dataTable({
+        $("#expired").dataTable({
           lengthMenu: [5, 10, 25, 50, 75, 100],
         });
       });

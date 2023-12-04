@@ -19,6 +19,11 @@
           <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
     <title>To Be Renewed File List</title>
   </head>
+  <style>
+    #valid {
+        overflow-x: auto;
+            }
+  </style>
  <body id="page-top">
 {% include 'toast.html' %} {% csrf_token %}
       <div id="wrapper">
@@ -31,7 +36,7 @@
                   </h6>
                 </div>
                 <div class="card-body">
-          <table id="renew" class="table table-sm">
+          <table id="valid" class="table table-sm">
             <thead class="bg-primary text-white table-sm">
               <tr>
                 <th scope="col">No.</th>
@@ -39,11 +44,11 @@
                 <th scope="col">Department</th>
                 <th scope="col">Document Type</th>
                 <th scope="col">Agency</th>
-                <th scope="col">Document</th>
+                <th scope="col">Document Scanned Copy</th>
                 <th scope="col">Renewed Date</th>
                 <th scope="col">Expiry Date</th>
-                <th scope="col">Receipt</th>
                 <th scope="col">Penalty</th>
+                <th scope="col">Penalty Receipt</th>
               </tr>
             </thead>
             <tbody>
@@ -65,26 +70,20 @@
                 <td>{{ file_document.renewal_date }}</td>
                 <td>{{ file_document.expiry_date }}</td>
                 {% for receipt in file_document.receipt_set.all %}
+                <td>{{ receipt.fined }}</td>
                     <td> <a href="{{  receipt.receipt.url }}" target="_blank">
                       <i
                         class="fas fa-file-alt pdf-icon"
                         style="font-size: 20px; color: #000"
                       ></i>
                     </a></td>
-                    <td>{{ receipt.fined }}</td>
+                  
                 {% endfor %} {% if not file_document.receipt_set.all %}
                    <td> <strong>None</strong></td>
                    <td> <strong>None</strong></td>
                 {% endif %}
               </tr>
               {% endfor %}
-              <tfoot>
-                <tr>
-                  <td colspan="8"></td>
-                  <td class="text-end"><strong>Total: </strong></td>
-                  <td> {{ total_fine }}</td>
-                </tr>
-              </tfoot>
             </tbody>
           </table>
         </div>
@@ -112,7 +111,7 @@
 
     <script>
       $(document).ready(function () {
-        $("#renew").dataTable({
+        $("#valid").dataTable({
           lengthMenu: [5, 10, 25, 50, 75, 100],
         });
       });

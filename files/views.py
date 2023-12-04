@@ -454,3 +454,27 @@ def file_documents_with_receipts(request):
     }
     
     return render(request, 'valid_file_list.html', context)
+
+
+
+
+@login_required
+def sample(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/receipts/receipt/', params={'user_email': user_email})
+    
+    if response.status_code == 200 and response.text:
+        sample = response.json()
+        unique_departments = set(entry['department_name'] for entry in sample)
+        department_files = {}
+
+        unique_departments = set()
+        unique_sample = [entry for entry in sample if entry['department_name'] not in unique_departments and not unique_departments.add(entry['department_name'])]
+
+        for department in unique_departments:
+            department_files[department] = [entry for entry in sample if entry['department_name'] == department]
+
+        return render(request, 'sample.html', {'sample': unique_sample, 'department_files': department_files})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})

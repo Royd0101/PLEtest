@@ -1,34 +1,30 @@
-const barCanvas = document.querySelector("#bar");
+const PieCanvas = document.querySelector("#user_pie");
 
 // Fetch data from the API
-fetch("/api/receipts/")
+fetch("/api/receipts/receipt/")
   .then((response) => response.json())
   .then((data) => {
-    // Group data by company and agency
-    const groupedData = groupDataByCompanyAndAgency(data);
+    // Group data by department
+    const groupedData = groupDataByDepartment(data);
 
-    // Extract labels, total fines, and document counts for each company and agency
+    // Extract labels and total fines for each department
     const labels = [];
     const totalFines = [];
-    const documentCounts = [];
-    const companyColors = {}; // Store colors for each company
+    const departmentColors = {}; // Store colors for each department
 
-    Object.keys(groupedData).forEach((company, index) => {
-      const color = getRandomColor(index); // Generate a random color for each company
-      companyColors[company] = color;
+    Object.keys(groupedData).forEach((department, index) => {
+      const color = getRandomColor(index); // Generate a random color for each department
+      departmentColors[department] = color;
 
-      Object.keys(groupedData[company]).forEach((agency) => {
-        const agencyData = groupedData[company][agency];
-        labels.push(`${company} - ${agency}`);
-        totalFines.push(
-          agencyData.reduce((sum, entry) => sum + parseFloat(entry.fined), 0)
-        );
-        documentCounts.push(agencyData.length);
-      });
+      const departmentData = groupedData[department];
+      labels.push(department);
+      totalFines.push(
+        departmentData.reduce((sum, entry) => sum + parseFloat(entry.fined), 0)
+      );
     });
 
     // Create the bar chart
-    const myChart = new Chart(barCanvas, {
+    const myChart = new Chart(PieCanvas, {
       type: "bar",
       data: {
         labels: labels,
@@ -36,16 +32,7 @@ fetch("/api/receipts/")
           {
             label: "Total Fine",
             data: totalFines,
-            backgroundColor: labels.map(
-              (label) => companyColors[label.split(" - ")[0]]
-            ),
-            borderWidth: 1,
-          },
-          {
-            label: "Document Count",
-            data: documentCounts,
-            backgroundColor: "rgba(173, 216, 230, 0.4)", // Lighter blue
-            borderColor: "rgba(70, 130, 180, 1)", // Steel blue
+            backgroundColor: labels.map((label) => departmentColors[label]),
             borderWidth: 1,
           },
         ],
@@ -68,21 +55,16 @@ fetch("/api/receipts/")
     console.error("Error fetching data:", error);
   });
 
-// Helper function to group data by company and agency
-function groupDataByCompanyAndAgency(data) {
+// Helper function to group data by department
+function groupDataByDepartment(data) {
   return data.reduce((result, entry) => {
-    const company = entry.company_name;
-    const agency = entry.agency;
+    const department = entry.department_name;
 
-    if (!result[company]) {
-      result[company] = {};
+    if (!result[department]) {
+      result[department] = [];
     }
 
-    if (!result[company][agency]) {
-      result[company][agency] = [];
-    }
-
-    result[company][agency].push(entry);
+    result[department].push(entry);
     return result;
   }, {});
 }

@@ -31,7 +31,7 @@ class File_Document(models.Model):
     expiry_date = models.DateField()
 
     def __str__(self):
-        return self.document_type
+        return f"File Document {self.id} - {self.document_type} - {self.expiry_date}"
     
     def delete(self):
         self.upload_file.delete()
@@ -54,4 +54,4 @@ class FileLog(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.email} {self.action} {self.file.document_type}"
+        return f" {self.action} {self.file.document_type}"

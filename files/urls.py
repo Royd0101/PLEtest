@@ -97,4 +97,6 @@ urlpatterns = [
 
     path('file_documents_with_receipts', views.file_documents_with_receipts, name='file_documents_with_receipts'),
 
+    path('sample', views.sample, name='sample'),
+
 ]

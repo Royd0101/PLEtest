@@ -4,26 +4,25 @@ const barCanvas = document.querySelector("#bar");
 fetch("/api/receipts/")
   .then((response) => response.json())
   .then((data) => {
-    // Group data by company and agency
-    const groupedData = groupDataByCompanyAndAgency(data);
+    // Group data by company and year of expiry date
+    const groupedData = groupDataByCompanyAndYear(data);
 
-    // Extract labels, total fines, and document counts for each company and agency
+    // Extract labels and total fines for each company and year
     const labels = [];
     const totalFines = [];
-    const documentCounts = [];
     const companyColors = {}; // Store colors for each company
 
     Object.keys(groupedData).forEach((company, index) => {
-      const color = getRandomColor(index); // Generate a random color for each company
+      // Use the same color logic as the pie chart
+      const color = getRandomColor(index);
       companyColors[company] = color;
 
-      Object.keys(groupedData[company]).forEach((agency) => {
-        const agencyData = groupedData[company][agency];
-        labels.push(`${company} - ${agency}`);
+      Object.keys(groupedData[company]).forEach((year) => {
+        const yearData = groupedData[company][year];
+        labels.push(`${company} - ${year}`);
         totalFines.push(
-          agencyData.reduce((sum, entry) => sum + parseFloat(entry.fined), 0)
+          yearData.reduce((sum, entry) => sum + parseFloat(entry.fined), 0)
         );
-        documentCounts.push(agencyData.length);
       });
     });
 
@@ -39,13 +38,6 @@ fetch("/api/receipts/")
             backgroundColor: labels.map(
               (label) => companyColors[label.split(" - ")[0]]
             ),
-            borderWidth: 1,
-          },
-          {
-            label: "Document Count",
-            data: documentCounts,
-            backgroundColor: "rgba(173, 216, 230, 0.4)", // Lighter blue
-            borderColor: "rgba(70, 130, 180, 1)", // Steel blue
             borderWidth: 1,
           },
         ],
@@ -68,21 +60,21 @@ fetch("/api/receipts/")
     console.error("Error fetching data:", error);
   });
 
-// Helper function to group data by company and agency
-function groupDataByCompanyAndAgency(data) {
+// Helper function to group data by company and year of expiry date
+function groupDataByCompanyAndYear(data) {
   return data.reduce((result, entry) => {
     const company = entry.company_name;
-    const agency = entry.agency;
+    const expiryYear = new Date(entry.expiry_date).getFullYear();
 
     if (!result[company]) {
       result[company] = {};
     }
 
-    if (!result[company][agency]) {
-      result[company][agency] = [];
+    if (!result[company][expiryYear]) {
+      result[company][expiryYear] = [];
     }
 
-    result[company][agency].push(entry);
+    result[company][expiryYear].push(entry);
     return result;
   }, {});
 }
@@ -94,7 +86,11 @@ function getRandomColor(index) {
     "rgba(54, 162, 235, 0.4)", // Lighter blue
     "rgba(255, 206, 86, 0.4)", // Lighter yellow
     "rgba(75, 192, 192, 0.4)", // Lighter green
-    // Add more colors as needed
+    "rgba(153, 102, 255, 0.4)", // Lighter purple
+    "rgba(255, 159, 64, 0.4)", // Lighter orange
+    "rgba(0, 255, 0, 0.4)", // Lighter lime green
+    "rgba(0, 0, 255, 0.4)", // Lighter navy blue
+    "rgba(128, 0, 128, 0.4)", // Lighter purple
   ];
 
   return colors[index % colors.length];

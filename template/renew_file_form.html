@@ -33,7 +33,7 @@
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
     />
-    <title>Add User</title>
+    <title>Renewal Information</title>
   </head>
   <body id="page-top">
     {% csrf_token %}
@@ -42,7 +42,9 @@
       <div class="container-fluid">
         <div class="card shadow mb-4">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Update User</h6>
+            <h6 class="m-0 font-weight-bold text-primary">
+              Please Enter Renewal Information
+            </h6>
           </div>
           <div class="card-body">
             <form
@@ -66,7 +68,7 @@
                   {{ form.agency.label_tag }} {{ form.agency }}
                 </div>
                 <div class="col">
-                  {{ form.upload_file.label_tag }}
+                  <label>Document Scanned Copy:</label>
                   <div>{{ form.upload_file }}</div>
                 </div>
               </div>

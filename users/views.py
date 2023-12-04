@@ -354,3 +354,25 @@ def delete_company(request, company_id):
     return render(request, 'company_list.html', context)
 
   
+
+@login_required
+def department_total_fine(request):
+    user_email = request.user.email
+    api_url = requests.get('http://127.0.0.1:8000/api/receipts/receipt/', params={'user_email': user_email})
+    response = requests.get(api_url)
+
+    if response.status_code == 200:
+        sample = response.json()
+        department_totals = {}
+        for entry in sample:
+            department_name = entry['department_name']
+            fined_amount = entry['fined']
+            if department_name in department_totals:
+                department_totals[department_name] += fined_amount
+            else:
+                department_totals[department_name] = fined_amount
+        return render(request, 'dashboard.html', {'department_totals': department_totals})
+    else:
+        # If the request was not successful, print an error message
+        error_message = f"Error fetching data. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
