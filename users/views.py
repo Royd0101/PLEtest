@@ -16,6 +16,8 @@ from .forms import update_user_form
 from .forms import company_form 
 from django.http import HttpResponse
 from collections import Counter
+from datetime import datetime
+import json
 from django.http import JsonResponse
 
 
@@ -354,25 +356,29 @@ def delete_company(request, company_id):
     return render(request, 'company_list.html', context)
 
   
-
 @login_required
 def department_total_fine(request):
     user_email = request.user.email
-    api_url = requests.get('http://127.0.0.1:8000/api/receipts/receipt/', params={'user_email': user_email})
-    response = requests.get(api_url)
+    api_url = 'http://127.0.0.1:8000/api/receipts/receipt'
+    try:
+        response = requests.get(api_url, params={'user_email': user_email})
+        response.raise_for_status()  
 
-    if response.status_code == 200:
         sample = response.json()
         department_totals = {}
         for entry in sample:
-            department_name = entry['department_name']
-            fined_amount = entry['fined']
-            if department_name in department_totals:
-                department_totals[department_name] += fined_amount
-            else:
-                department_totals[department_name] = fined_amount
-        return render(request, 'dashboard.html', {'department_totals': department_totals})
-    else:
-        # If the request was not successful, print an error message
-        error_message = f"Error fetching data. Status code: {response.status_code}"
+            department = entry.get('department_name', 'Unknown Department')
+            fined_value = float(entry.get('fined', 0))
+            total_fines = department_totals.get(department, 0) + fined_value
+            department_totals[department] = total_fines
+
+        print(department_totals)
+        return render(request, 'dashboard.html', {'chart_data': department_totals})
+    except requests.RequestException as e:
+        error_message = f"Error fetching data from the API: {str(e)}"
         return render(request, 'error_page.html', {'error_message': error_message})
+
+
+
+
+

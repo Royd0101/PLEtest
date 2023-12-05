@@ -12,9 +12,7 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 import requests
 from rest_framework import status
-from rest_framework.views import APIView
-from django.db.models import Sum, F, DateField
-from django.db.models.functions import ExtractYear
+from datetime import datetime
 # Create your views here.
 
 class Receipt_view(ModelViewSet):
@@ -30,7 +28,6 @@ class Receipt_view(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
-
 @login_required
 def create_receipt(request, file_id):
     file = get_object_or_404(File_Document, id=file_id)

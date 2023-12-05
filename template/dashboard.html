@@ -37,6 +37,8 @@
       display: flex;
       justify-content: center;
       margin: auto;
+      background-color:  rgba(231, 231, 231, 0.4);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
  
 
   }  
@@ -44,8 +46,13 @@
       margin: 10px;
       text-align: center;
     }
+    .legend-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
 </style>
-  <body id="page-top">
+  <body id="page-top"  >
     
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -56,8 +63,6 @@
               class="d-sm-flex align-items-center justify-content-between mb-4"
             >  
             <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-            <a href="{% url 'sample' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">sample</a>
-              <!-- Admin Side -->
             </div>
             <!-- Content Row -->
             <div class="row">
@@ -281,12 +286,12 @@
       </div>
          
             <div class="row">
-              <div class="col-xl-8 col-lg-7">
+              <div class="col-xl-7 col-lg-7">
                   <div class="card shadow mb-4">
                       <!-- Card Header - Dropdown -->
                       <div
                           class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                          <h6 class="m-0 font-weight-bold text-primary">Documents Penalty Overview</h6>
+                          <h6 class="m-0 font-weight-bold text-primary">Yearly Penalties</h6>
                       </div>
                       <!-- Card Body -->
                       <div class="card-body" >
@@ -302,25 +307,38 @@
                   </div>
               </div>
 
-              <!-- Pie Chart -->
-              <div class="col-xl-4 col-lg-5">
-                  <div class="card shadow mb-4">
-                    <div
-                      class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Documents Overview</h6>
+            <!-- Pie Chart -->
+              <div class="col-xl-5 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        {% if user.is_authenticated and user.is_staff %}
+                        <h6 class="m-0 font-weight-bold text-primary">Total Breakdown Per Company</h6>
+                        {% endif %} 
+                        {% if not user.is_staff %}
+                        <h6 class="m-0 font-weight-bold text-primary">Total Breakdown Per Department</h6>
+                        {% endif %} 
                     </div>
-                      <div class="card-body">
-                          <div class="chart-pie pt-4 pb-2">
-                            {% if user.is_authenticated and user.is_staff %}
-                              <canvas id="pie" style="width: 400px; height: 300px;"></canvas>
-                              {% endif %} 
-                              {% if not user.is_staff %}
-                              <canvas id="user_pie" style="height: 150px;"></canvas>
-                              {% endif %} 
-                          </div>
-                      </div>
-                  </div>
+                    <div class="card-body">
+                      <div class="chart-pie pt-4 pb-2" style="position: relative;">
+                        {% if user.is_authenticated and user.is_staff %}
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <canvas id="pie" style="width: 200px; height: 250px; max-height: 300px;"></canvas>
+                            </div>
+                            <div class=" mt-5" style="text-align: center;">
+                                <h6 style="font-size: 14px;">Legend</h6>
+                                <ul class="legend-list" id="legendList" style="list-style-type: none; padding: 0; font-size: 12px;"></ul>
+                            </div>
+                        </div>
+                        {% endif %} 
+                        {% if not user.is_staff %}
+                        <canvas id="user_pie" style="width: 100%; height: auto; max-height: 300px;"></canvas>
+                        {% endif %} 
+                    </div>
+                    </div>
+                </div>
               </div>
+
           </div>
           </div>
         </div>
@@ -343,96 +361,8 @@
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
     <!-- Page level plugins -->
     <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
+    
+    
 
-    <script>
-let User_canvas = document.querySelector("#myChart");
-let myChart = new Chart(User_canvas, {
-  type: "bar",
-  data: {
-    labels: ['Valid', 'For Renewal', 'Expired','Penalty'],
-    datasets: [
-      {
-        label: "Documents",
-        data: [
-            "{{ num_valid_files }}",
-            "{{ num_renew_files }}",
-            "{{ num_expired_files }}",
-            "{{ num_penalty_files }}",
-          ],
-          backgroundColor: [
-            'rgba(0, 128, 0, 0.2)', // Lighter green
-            'rgba(255, 165, 0, 0.2)', // Lighter orange for warning
-            'rgba(255, 0, 0, 0.2)',
-            'rgba(0, 0, 255, 0.2)', // Lighter red for danger
-          ],
-          borderColor: [
-            'rgba(0, 128, 0, 1)', // Full green
-            'rgba(255, 165, 0, 1)', // Full orange for warning
-            'rgba(255, 0, 0, 1)',
-            'rgba(0, 0, 255, 0.2)',// Full red for danger
-          ],
-          borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    responsive: true,
-    scales: {
-      yAxes: [
-        {
-          ticks: {
-            beginAtZero: true,
-          },
-        },
-      ],
-    },
-  },
-});
-
-var User_pieCanvas = document.getElementById("user_pie").getContext("2d");
-
-var validFiles = parseInt("{{ num_valid_files }}");
-var renewFiles = parseInt("{{ num_renew_files }}");
-var expiredFiles = parseInt("{{ num_expired_files }}");
-
-var barChart = new Chart(User_pieCanvas, {
-  type: "pie",
-  data: {
-    labels: ["Valid", "For Renewal", "Expired"],
-    datasets: [
-      {
-        label: "Documents",
-        data: [validFiles, renewFiles, expiredFiles],
-        backgroundColor: [
-          "rgba(0, 128, 0, 0.2)", // Lighter green
-          "rgba(255, 165, 0, 0.2)", // Lighter orange for warning
-          "rgba(255, 0, 0, 0.2)", // Lighter red for danger
-        ],
-        borderColor: [
-          "rgba(0, 128, 0, 1)", // Full green
-          "rgba(255, 165, 0, 1)", // Full orange for warning
-          "rgba(255, 0, 0, 1)", // Full red for danger
-        ],
-        borderWidth: 1,
-      },
-    ],
-  },
-  options: {
-    maintainAspectRatio: false,
-    tooltips: {
-      backgroundColor: "rgb(255,255,255)",
-      bodyFontColor: "#858796",
-      borderColor: "#dddfeb",
-      borderWidth: 1,
-      xPadding: 15,
-      yPadding: 15,
-      displayColors: false,
-      caretPadding: 10,
-    },
-  },
-});
-
-    </script>
-        
   </body>
 </html>
