@@ -116,16 +116,16 @@
           <nav
             class="navbar navbar-expand navbar-light topbar static-top" style="box-shadow: 0 0 2px  #001942;"
           >
-          <div class="nav nav-tabs" id="nav-tab" role="tablist">
-            <button class="nav-link active" id="business-tab" data-toggle="tab" href="#business-content" role="tab" aria-controls="business-content" aria-selected="true" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
-                Business Documents
-            </button>
-            <button class="nav-link" id="professional-tab" data-toggle="tab" href="#professional-content" role="tab" aria-controls="professional-content" aria-selected="false" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
-                Professional Documents
-            </button>
-        </div>
-        
-
+          {% if request.path == '/dashboard/' %}
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="business-tab" data-toggle="tab" href="#business-content" role="tab" aria-controls="business-content" aria-selected="true" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
+                      Business Documents
+                  </button>
+                  <button class="nav-link" id="professional-tab" data-toggle="tab" href="#professional-content" role="tab" aria-controls="professional-content" aria-selected="false" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
+                      Professional Documents
+                  </button>
+              </div>
+          {% endif %}
             <button
               id="sidebarToggleTop"
               class="btn btn-link d-md-none rounded-circle mr-3"
@@ -134,11 +134,11 @@
             </button>
 
             <ul class="navbar-nav ml-auto" style="background-color: #f9fafb;">
-
+              
 
               <li class="nav-item dropdown no-arrow">
                 <a
-                  class="nav-link dropdown-toggle"
+                  class="nav dropdown-toggle"
                   href="{% url 'logout_user' %}"
                   id="userDropdown"
                   role="button"
@@ -146,7 +146,7 @@
                   aria-haspopup="true"
                   aria-expanded="false"
                 >
-                  <i class="fas fa-user"></i>
+                  <i class="fas fa-user" style="color: gray;"></i>
                 </a>
                 <div
                   class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -168,44 +168,43 @@
             </ul>
           </nav>
 
-    <div
-    class="modal fade"
-    id="logoutModal"
-    tabindex="-1"
-    role="dialog"
-    aria-labelledby="exampleModalLabel"
-    aria-hidden="true"
-    style="font-family: 'Open Sans', sans-serif;"
-  >
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-          <button
-            class="close"
-            type="button"
-            data-dismiss="modal"
-            aria-label="Close"
+            <div
+            class="modal fade"
+            id="logoutModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+            style="font-family: 'Open Sans', sans-serif;"
           >
-            <span aria-hidden="true"></span>
-          </button>
-        </div>
-        <div class="modal-body">
-          Select "Logout" below if you are ready to end your current session.
-        </div>
-        <div class="modal-footer">
-          <button
-            class="btn btn-secondary"
-            type="button"
-            data-dismiss="modal"
-          >
-            Cancel
-          </button>
-          <a class="btn btn-primary" href="{% url 'logout_user' %}">Logout</a>
-        </div>
-      </div>
-    </div>
-  </div>
-  <script src="{% static 'js/tabs.js' %}"></script>
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                  <button
+                    class="close"
+                    type="button"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true"></span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  Select "Logout" below if you are ready to end your current session.
+                </div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-secondary"
+                    type="button"
+                    data-dismiss="modal"
+                  >
+                    Cancel
+                  </button>
+                  <a class="btn btn-primary" href="{% url 'logout_user' %}">Logout</a>
+                </div>
+              </div>
+            </div>
+          </div>
   </body>
 </html>

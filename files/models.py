@@ -37,6 +37,8 @@ class File_Document(models.Model):
         self.upload_file.delete()
         super().delete()
 
+
+
 class FileLog(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     file = models.ForeignKey(File_Document, on_delete=models.CASCADE, related_name='file_logs')  

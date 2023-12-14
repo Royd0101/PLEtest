@@ -65,7 +65,7 @@
                     type="button"
                     class="btn btn-sm btn-primary dropdown-toggle dropdown-toggle-split"
                     data-bs-toggle="dropdown"
-                    aria-expanded="false"
+                    aria-expanded="true"
                   >
                     <span class="visually-hidden">Toggle Dropdown</span>
                   </button>
@@ -110,13 +110,14 @@
                 href="#{{ company|slugify }}"
                 role="tab"
                 aria-controls="{{ company|slugify }}"
-                aria-selected="false"
+                aria-selected="true"
               >
                 {{ company }}
               </button>
               {% endfor %}
             </div>
           </nav>
+
           <div class="card-body">
             <div class="tab-content">
               <div
