@@ -76,16 +76,12 @@ def admin_receipt_documents(request):
     response = requests.get('http://127.0.0.1:8000/api/receipts/')
     if response.status_code == 200 and response.text:
         fine_document = response.json()
-
-        # Extract unique years from the dataset
         unique_years = set(entry['expiry_date'][:4] for entry in fine_document)
 
-        # Filter by year if specified in the query parameters
         filter_year = request.GET.get('filter_year', 'all')
         if filter_year != 'all':
             fine_document = [entry for entry in fine_document if entry['expiry_date'][:4] == filter_year]
 
-        # Extract unique companies from the dataset
         unique_companies = set(entry['company_name'] for entry in fine_document)
         company_files = {}
 

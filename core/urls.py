@@ -17,8 +17,8 @@ from django.conf import settings
 from django.conf.urls.static import static 
 from django.contrib import admin
 from django.urls import path, include
-from users.views import dashboard, create_user, create_user_page, user_list, update_user,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user, delete_company,department_total_fine
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,renew_file,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs,admin_expired_file_list,admin_valid_file_list,admin_renew_file_list,file_documents_with_receipts,sample
+from users.views import dashboard, create_user, create_user_page, user_list, update_users,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user, delete_company,department_total_fine,update_company
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,renew_file,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs,admin_expired_file_list,admin_valid_file_list,admin_renew_file_list,file_documents_with_receipts
 from receipt.views import create_receipt,receipt_valid_documents,admin_receipt_documents
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -50,6 +50,8 @@ urlpatterns = [
     path('create_company/', create_company, name='create_company'),
     #delete company
     path('delete_company/', delete_company, name='delete_company'),
+    #delete company
+    path('update_company/', update_company, name='update_company'),
     #company_list
     path('company_list/', company_list, name='company_list'),
     #department_list
@@ -76,7 +78,7 @@ urlpatterns = [
     #create user api function
     path('create_user/', create_user, name='create_user'),
     #update user api
-    path('update_user/', update_user, name='update_user'),
+    path('update_users/', update_users, name='update_users'),
     #delete user
     path('delete_user/', delete_user, name='delete_user'),
 
@@ -109,9 +111,7 @@ urlpatterns = [
 
     path('file_documents_with_receipts', file_documents_with_receipts, name='file_documents_with_receipts'),
 
-
-    path('sample', sample, name='sample'),
-
+    #USER CHART
     path('department_total_fine/', department_total_fine, name='department_total_fine'),
     
     

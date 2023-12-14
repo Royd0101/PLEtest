@@ -12,8 +12,6 @@
     <meta name="author" content="" />
 
     <title>Dashboard</title>
-
-    <!-- Custom fonts for this template-->
     <link
       href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}"
       rel="stylesheet"
@@ -24,8 +22,6 @@
       href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
       rel="stylesheet"
     />
-
-    <!-- Custom styles for this template-->
     <link rel="stylesheet" href="{% static 'bootstrap/css/sb-admin-2.css' %}" />
     <link
       rel="stylesheet"
@@ -33,14 +29,15 @@
     />
   </head>
 <style>
+  .card-header{
+    background-color:  #DFE2E9;
+  }
       .card {
       display: flex;
       justify-content: center;
       margin: auto;
-      background-color:  rgba(231, 231, 231, 0.4);
+      background-color: #DFE2E9;
       box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
- 
-
   }  
     .card__name {
       margin: 10px;
@@ -52,22 +49,22 @@
       margin: 0;
     }
 </style>
-  <body id="page-top"  >
-    
-    <!-- Page Wrapper -->
+  <body id="page-top" style="background-color: #77c4d74d !important" >
     <div id="wrapper">
         {% include 'sidebar.html' %}  {% include 'toast.html' %} {% csrf_token %}
-          <div class="container-fluid">
-            <!-- Page Heading -->
+        
+    <!-- Business Documents Dashboard Begin-->
+      
+       
+            <div class="tab-content">
+            <div class="tab-pane fade show active" id="business-content" role="tabpanel" aria-labelledby="business-tab">
+              <div class="container-fluid" style="background-color: #77C4D74D;">
             <div
               class="d-sm-flex align-items-center justify-content-between mb-4"
             >  
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <h1 class="h3 mb-0 text-gray-800 mt-2"  style="font-family: 'Open Sans', sans-serif;">Dashboard</h1>
             </div>
-            <!-- Content Row -->
             <div class="row">
-              <!-- Valid  Card -->
-              
               <div class="col-xl-3 col-md-3 mb-4 mx-auto " >
                 {% if not user.is_staff %}
                 <a href="{% url 'file_documents_with_receipts' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
@@ -75,18 +72,18 @@
                   {% if user.is_authenticated and user.is_staff %}
                 <a href="{% url 'admin_valid_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
-                  <div class="card border-left-success shadow h-100 py-2">
+                  <div class="card shadow h-100 py-2" style="background-color: #04668b;">
                     <div class="card-body" >
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
-                          <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                          <div class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;">
                             Valid Documents
                           </div>
-                          <div class="h5 mb-0 font-weight-bold text-gray-800 ">
+                          <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
                             {% if user.is_authenticated and user.is_staff %}
                             <span>{{ admin_count1 }}</span>
                             <div
-                            class="text-xs font-weight-bold text-uppercase" 
+                            class="text-xs text-uppercase"
                           >
                             {% for company_name, agency_counts in admin_agency1.items %}
                                 <span>{{ company_name }}</span>
@@ -103,7 +100,7 @@
                             {% endif %}
 
                             <div
-                            class="text-xs font-weight-bold text-uppercase"
+                            class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                           >
                           {% for agency, count in agency_counts1.items %}
                           <div>{{ agency }}: {{ count }}</div>
@@ -128,19 +125,19 @@
                   {% endif %}  {% if user.is_authenticated and user.is_staff %}
                 <a href="{% url 'admin_renew_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
-                <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card shadow h-100 py-2"  style="background-color:  #04668b;">
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
                         <div
-                          class="text-xs font-weight-bold text-warning text-uppercase mb-1"
+                          class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
                         >
                           For Renewal Documents
                         </div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">
+                        <div class="h5 text-white" style="font-family: 'Open Sans', sans-serif;">
                           {% if user.is_authenticated and user.is_staff %}
                           <span>{{ admin_count2 }}</span>
-                          <div class="text-xs font-weight-bold text-uppercase">
+                          <div class="text-xs text-uppercase">
                             {% for company_name, agency_counts in admin_agency2.items %}
                                 <span>{{ company_name }}</span>
                                 <ul>
@@ -155,7 +152,7 @@
                             <span>{{ num_renew_files }}</span>
                             {% endif %} 
                             <div
-                          class="text-xs font-weight-bold text-uppercase"
+                          class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                         >
                         {% for agency, count in agency_counts3.items %}
                         <div>{{ agency }}: {{ count }}</div>
@@ -180,23 +177,23 @@
                 {% endif %}  {% if user.is_authenticated and user.is_staff %}
                 <a href="{% url 'admin_expired_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
-                <div class="card border-left-danger shadow h-100 py-2">
+                <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
                   <div class="card-body">
                     <div class="row no-gutters align-items-center">
                       <div class="col mr-2">
                         <div
-                          class="text-xs font-weight-bold text-danger text-uppercase mb-1"
+                          class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
                         >
                           Expired Documents
                         </div>
                         <div class="row no-gutters align-items-center">
                           <div class="col-auto">
                             <div
-                              class="h5 mb-0 mr-3 font-weight-bold text-gray-800"
+                              class="h5 mb-0 mr-3 text-white" style="font-family: 'Open Sans', sans-serif;"
                             >
                             {% if user.is_authenticated and user.is_staff %}
                             <span>{{ admin_count3 }}</span>
-                            <div class="text-xs font-weight-bold text-uppercase">
+                            <div class="text-xs text-uppercase">
                               {% for company_name, agency_counts in admin_agency3.items %}
                                   <span>{{ company_name }}</span>
                                   <ul>
@@ -211,7 +208,7 @@
                             <span>{{ num_expired_files }}</span>
                             {% endif %} 
                             <div
-                          class="text-xs font-weight-bold text-uppercase"
+                          class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                         >
                         {% for agency, count in agency_counts2.items %}
                         <div>{{ agency }}: {{ count }}</div>
@@ -237,19 +234,19 @@
             {% endif %}  {% if user.is_authenticated and user.is_staff %}
           <a href="{% url 'admin_receipt_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
             {% endif %}
-          <div class="card border-left-primary shadow h-100 py-2">
+          <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
             <div class="card-body">
               <div class="row no-gutters align-items-center">
                 <div class="col mr-2">
                   <div
-                    class="text-xs font-weight-bold text-primary text-uppercase mb-1"
+                    class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
                   >
                   Documents with Penalty
                   </div>
-                  <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
                     {% if user.is_authenticated and user.is_staff %}
                     <span>{{ admin_count4 }}</span>
-                    <div class="text-xs font-weight-bold text-uppercase">
+                    <div class="text-xs text-uppercase">
                       {% for company_name, agency_counts in admin_agency4.items %}
                           <span>{{ company_name }}</span>
                           <ul>
@@ -264,7 +261,7 @@
                       <span>{{ num_penalty_files }}</span>
                       {% endif %} 
                       <div
-                    class="text-xs font-weight-bold text-uppercase"
+                    class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                   >
                   {% for agency, count in agency_counts4.items %}
                   <div>{{ agency }}: {{ count }}</div>
@@ -288,13 +285,11 @@
             <div class="row">
               <div class="col-xl-7 col-lg-7">
                   <div class="card shadow mb-4">
-                      <!-- Card Header - Dropdown -->
                       <div
-                          class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                          <h6 class="m-0 font-weight-bold text-primary">Yearly Penalties</h6>
+                          class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
+                          <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Yearly Penalties</h6>
                       </div>
-                      <!-- Card Body -->
-                      <div class="card-body" >
+                      <div class="card-body"  style="background-color: #f9fafb;" >
                           <div class="chart-area" >
                             {% if not user.is_staff %}
                               <canvas id="myChart"></canvas>
@@ -310,15 +305,15 @@
             <!-- Pie Chart -->
               <div class="col-xl-5 col-lg-5">
                 <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
                         {% if user.is_authenticated and user.is_staff %}
-                        <h6 class="m-0 font-weight-bold text-primary">Total Breakdown Per Company</h6>
+                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown Per Company</h6>
                         {% endif %} 
                         {% if not user.is_staff %}
-                        <h6 class="m-0 font-weight-bold text-primary">Total Breakdown Per Department</h6>
+                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown Per Department</h6>
                         {% endif %} 
                     </div>
-                    <div class="card-body">
+                    <div class="card-body"  style="background-color: #f9fafb;">
                       <div class="chart-pie pt-4 pb-2" style="position: relative;">
                         {% if user.is_authenticated and user.is_staff %}
                         <div style="display: flex; justify-content: space-between;">
@@ -332,37 +327,328 @@
                         </div>
                         {% endif %} 
                         {% if not user.is_staff %}
-                        <canvas id="user_pie" style="width: 100%; height: auto; max-height: 300px;"></canvas>
+                        <div style="display: flex; justify-content: space-between;">
+                          <div>
+                        <canvas id="myPieChart" style="width: 200px; height: 250px; max-height: 300px;"></canvas>
+                      </div>
+                      <div class=" mt-5" style="text-align: center;">
+                          <h6 style="font-size: 14px;">Legend</h6>
+                          <ul class="legend-list" id="UserlegendList" style="list-style-type: none; padding: 0; font-size: 12px;"></ul>
+                      </div>
                         {% endif %} 
                     </div>
                     </div>
                 </div>
               </div>
-
+              
           </div>
+          </div>
+            </div>
           </div>
         </div>
-        <!-- End of Main Content -->
-      </div>
-      <!-- End of Content Wrapper -->
-    </div>
-    <!-- End of Page Wrapper -->
+       <!-- Business Documents Dashboard End-->
+        <!-- Professional Documents Dashboard Begin-->
+        <div class="tab-content">
+        <div class="tab-pane fade" id="professional-content" role="tabpanel" aria-labelledby="professional-tab">
+          <div class="container-fluid" style="background-color: #77C4D74D;">
+            <div
+              class="d-sm-flex align-items-center justify-content-between mb-4"
+            >  
+            <h1 class="h3 mb-0 text-gray-800 mt-2"  style="font-family: 'Open Sans', sans-serif;">Dashboard</h1>
+            </div>
+            <div class="row">
+              <div class="col-xl-3 col-md-3 mb-4 mx-auto " >
+                {% if not user.is_staff %}
+                <a href="{% url 'file_documents_with_receipts' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %}
+                  {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'admin_valid_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %} 
+                  <div class="card shadow h-100 py-2" style="background-color: #04668b;">
+                    <div class="card-body" >
+                      <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                          <div class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;">
+                            Valid Documents
+                          </div>
+                          <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
+                            {% if user.is_authenticated and user.is_staff %}
+                            <span>{{ admin_count1 }}</span>
+                            <div
+                            class="text-xs text-uppercase"
+                          >
+                            {% for company_name, agency_counts in admin_agency1.items %}
+                                <span>{{ company_name }}</span>
+                                <ul>
+                                  {% for agency, count in agency_counts.items %}
+                                    <li>{{ agency }}: {{ count }}</li>
+                                  {% endfor %}
+                                </ul>
+                              {% endfor %}
+                            </div>
+                            {% endif %} 
+                            {% if not user.is_staff %}
+                            <span>{{ num_valid_files }}</span>
+                            {% endif %}
 
-    <!-- Bootstrap core JavaScript-->
-   
+                            <div
+                            class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
+                          >
+                          {% for agency, count in agency_counts1.items %}
+                          <div>{{ agency }}: {{ count }}</div>
+                        {% endfor %}
+                          </div>
+
+                          </div>
+                        </div>
+                        <div class="col-auto">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
+              </a>
+              </div>
+
+              <!-- Renew Card -->
+              <div class="col-xl-3 col-md-6 mb-4 mx-auto">
+                {% if not user.is_staff %}
+                <a href="{% url 'get_renew_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'admin_renew_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %}
+                <div class="card shadow h-100 py-2"  style="background-color:  #04668b;">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div
+                          class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
+                        >
+                          For Renewal Documents
+                        </div>
+                        <div class="h5 text-white" style="font-family: 'Open Sans', sans-serif;">
+                          {% if user.is_authenticated and user.is_staff %}
+                          <span>{{ admin_count2 }}</span>
+                          <div class="text-xs text-uppercase">
+                            {% for company_name, agency_counts in admin_agency2.items %}
+                                <span>{{ company_name }}</span>
+                                <ul>
+                                  {% for agency, count in agency_counts.items %}
+                                    <li>{{ agency }}: {{ count }}</li>
+                                  {% endfor %}
+                                </ul>
+                              {% endfor %}
+                            </div>
+                            {% endif %} 
+                            {% if not user.is_staff %}
+                            <span>{{ num_renew_files }}</span>
+                            {% endif %} 
+                            <div
+                          class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
+                        >
+                        {% for agency, count in agency_counts3.items %}
+                        <div>{{ agency }}: {{ count }}</div>
+                      {% endfor %}
+                        </div>
+                            
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </a>
+                </a>
+              </div>
+
+              <!-- Expired Card -->
+              <div class="col-xl-3 col-md-3 mb-4 mx-auto">
+              {% if not user.is_staff %}   
+              <a href="{% url 'get_expired_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                <a href="{% url 'admin_expired_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                  {% endif %} 
+                <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
+                  <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                      <div class="col mr-2">
+                        <div
+                          class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
+                        >
+                          Expired Documents
+                        </div>
+                        <div class="row no-gutters align-items-center">
+                          <div class="col-auto">
+                            <div
+                              class="h5 mb-0 mr-3 text-white" style="font-family: 'Open Sans', sans-serif;"
+                            >
+                            {% if user.is_authenticated and user.is_staff %}
+                            <span>{{ admin_count3 }}</span>
+                            <div class="text-xs text-uppercase">
+                              {% for company_name, agency_counts in admin_agency3.items %}
+                                  <span>{{ company_name }}</span>
+                                  <ul>
+                                    {% for agency, count in agency_counts.items %}
+                                      <li>{{ agency }}: {{ count }}</li>
+                                    {% endfor %}
+                                  </ul>
+                                {% endfor %}
+                              </div>
+                            {% endif %} 
+                            {% if not user.is_staff %}
+                            <span>{{ num_expired_files }}</span>
+                            {% endif %} 
+                            <div
+                          class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
+                        >
+                        {% for agency, count in agency_counts2.items %}
+                        <div>{{ agency }}: {{ count }}</div>
+                      {% endfor %}
+                        </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-auto">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </a>
+          </a>
+        </div>
+
+         <!-- Fined Card -->
+         <div class="col-xl-3 col-md-6 mb-4 mx-auto">
+          {% if not user.is_staff %}
+          <a href="{% url 'receipt_valid_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+            {% endif %}  {% if user.is_authenticated and user.is_staff %}
+          <a href="{% url 'admin_receipt_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+            {% endif %}
+          <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
+            <div class="card-body">
+              <div class="row no-gutters align-items-center">
+                <div class="col mr-2">
+                  <div
+                    class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
+                  >
+                  Documents with Penalty
+                  </div>
+                  <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
+                    {% if user.is_authenticated and user.is_staff %}
+                    <span>{{ admin_count4 }}</span>
+                    <div class="text-xs text-uppercase">
+                      {% for company_name, agency_counts in admin_agency4.items %}
+                          <span>{{ company_name }}</span>
+                          <ul>
+                            {% for agency, count in agency_counts.items %}
+                              <li>{{ agency }}: {{ count }}</li>
+                            {% endfor %}
+                          </ul>
+                        {% endfor %}
+                      </div>
+                      {% endif %} 
+                      {% if not user.is_staff %}
+                      <span>{{ num_penalty_files }}</span>
+                      {% endif %} 
+                      <div
+                    class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
+                  >
+                  {% for agency, count in agency_counts4.items %}
+                  <div>{{ agency }}: {{ count }}</div>
+                {% endfor %}
+                  </div>
+                      
+                  </div>
+                </div>
+                <div class="col-auto">
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+          </a>
+        </div>
+
+
+      </div>
+         
+            <div class="row">
+              <div class="col-xl-7 col-lg-7">
+                  <div class="card shadow mb-4">
+                      <div
+                          class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
+                          <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Yearly Penalties</h6>
+                      </div>
+                      <div class="card-body"  style="background-color: #f9fafb;" >
+                          <div class="chart-area" >
+                            {% if not user.is_staff %}
+                              <canvas id="myChart"></canvas>
+                              {% endif %} 
+                              {% if user.is_authenticated and user.is_staff %}
+                              <canvas id="bar" style="height: 200px;"></canvas>
+                              {% endif %} 
+                          </div>
+                      </div>
+                  </div>
+              </div>
+
+            <!-- Pie Chart -->
+              <div class="col-xl-5 col-lg-5">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
+                        {% if user.is_authenticated and user.is_staff %}
+                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown Per Company</h6>
+                        {% endif %} 
+                        {% if not user.is_staff %}
+                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown Per Department</h6>
+                        {% endif %} 
+                    </div>
+                    <div class="card-body"  style="background-color: #f9fafb;">
+                      <div class="chart-pie pt-4 pb-2" style="position: relative;">
+                        {% if user.is_authenticated and user.is_staff %}
+                        <div style="display: flex; justify-content: space-between;">
+                            <div>
+                                <canvas id="pie" style="width: 200px; height: 250px; max-height: 300px;"></canvas>
+                            </div>
+                            <div class=" mt-5" style="text-align: center;">
+                                <h6 style="font-size: 14px;">Legend</h6>
+                                <ul class="legend-list" id="legendList" style="list-style-type: none; padding: 0; font-size: 12px;"></ul>
+                            </div>
+                        </div>
+                        {% endif %} 
+                        {% if not user.is_staff %}
+                        <div style="display: flex; justify-content: space-between;">
+                          <div>
+                        <canvas id="myPieChart" style="width: 200px; height: 250px; max-height: 300px;"></canvas>
+                      </div>
+                      <div class=" mt-5" style="text-align: center;">
+                          <h6 style="font-size: 14px;">Legend</h6>
+                          <ul class="legend-list" id="UserlegendList" style="list-style-type: none; padding: 0; font-size: 12px;"></ul>
+                      </div>
+                        {% endif %} 
+                    </div>
+                    </div>
+                </div>
+              </div>
+          </div>
+        </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-        <script src="{% static 'js/pie.js' %}"></script>
-        <script src="{% static 'js/bar.js' %}"></script>
-    <!-- Core plugin JavaScript-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/tabs.js' %}"></script>
+    <script src="{% static 'js/pie.js' %}"></script>
+    <script src="{% static 'js/bar.js' %}"></script>
+    <script src="{% static 'js/user_bar.js' %}"></script>
+    <script src="{% static 'js/user_pie.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
-
-    <!-- Custom scripts for all pages-->
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
-    <!-- Page level plugins -->
-    <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
-    
-    
-
+     <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
   </body>
 </html>

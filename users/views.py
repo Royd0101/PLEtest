@@ -5,6 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from .serializers import UserSerializer, CompanySerializer
 from django.contrib import messages
 import requests
+from django.utils import timezone
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import render, get_object_or_404
 from .models import User, Company
@@ -13,10 +14,11 @@ from django.contrib.auth.decorators import login_required
 #import from form
 from .forms import create_user_form
 from .forms import update_user_form
-from .forms import company_form 
+from .forms import company_form ,update_company_form
 from django.http import HttpResponse
 from collections import Counter
 from datetime import datetime
+from rest_framework.decorators import api_view
 import json
 from django.http import JsonResponse
 
@@ -108,34 +110,26 @@ def create_user(request):
 
 #update user data -----------------------------------------------------------------------------
 @login_required
-def update_user(request, user_id):
+def update_users(request, user_id):
     user = get_object_or_404(User, id=user_id)
     if request.method == 'POST':
         form = update_user_form(request.POST)
         if form.is_valid():
-            user.first_name = form.cleaned_data['first_name']
-            user.last_name = form.cleaned_data['last_name']
-            company = form.cleaned_data['company']
-            company_name = Company.objects.get(company_name=company)
-            user.company = company_name
-            
-            if form.cleaned_data['password']:
-                user.set_password(form.cleaned_data['password'])
-            user.save()
+            form.save(user)
             messages.success(request, 'User updated successfully.')
             return redirect('user_list')
         else:
             messages.warning(request, 'Please correct the errors below.')
     else:
-        form = update_user_form(initial={ 
+        form = update_user_form(initial={
             'first_name': user.first_name,
             'last_name': user.last_name,
             'email': user.email,
             'company': user.company,
         })
-    
+
     context = {'user': user, 'form': form}
-    return render(request, 'admin_update_user.html', context)
+    return render(request, 'update_user.html', context)
 
 
 #delete department
@@ -313,7 +307,7 @@ def user_list(request):
     if request.user.is_staff:
         users = User.objects.filter(is_staff=False).order_by('first_name')
         context = {"users": users}
-        return render(request, 'admin_user_list.html', context)
+        return render(request, 'user_list.html', context)
     else:
         return HttpResponse("You do not have permission to access this page.")
 
@@ -345,6 +339,21 @@ def create_company(request):
     return render(request, 'admin_add_company.html', {'form': form})
 
 @login_required
+def update_company(request, company_id):
+    company = get_object_or_404(Company, id=company_id)
+
+    if request.method == 'POST':
+        form = update_company_form(request.POST, instance=company)
+        if form.is_valid():
+            form.save()
+            return redirect('company_list')
+    else:
+        form = update_company_form(initial={'company_name': company.company_name})
+
+    context = {'company': company, 'form': form}
+    return render(request, 'update_company.html', context)
+
+@login_required
 def delete_company(request, company_id):
     company = get_object_or_404(Company, id=company_id)
     if request.method == 'POST':
@@ -356,29 +365,40 @@ def delete_company(request, company_id):
     return render(request, 'company_list.html', context)
 
   
-@login_required
+@api_view(['GET'])
 def department_total_fine(request):
     user_email = request.user.email
     api_url = 'http://127.0.0.1:8000/api/receipts/receipt'
     try:
         response = requests.get(api_url, params={'user_email': user_email})
-        response.raise_for_status()  
+        response.raise_for_status()
 
         sample = response.json()
         department_totals = {}
+
         for entry in sample:
             department = entry.get('department_name', 'Unknown Department')
             fined_value = float(entry.get('fined', 0))
-            total_fines = department_totals.get(department, 0) + fined_value
-            department_totals[department] = total_fines
+            
+            # Use the timestamp as the basis for fines
+            timestamp_str = entry.get('timestamp', '')
+            timestamp = datetime.strptime(timestamp_str, '%Y-%m-%dT%H:%M:%S.%fZ') if timestamp_str else timezone.now()
 
-        print(department_totals)
-        return render(request, 'dashboard.html', {'chart_data': department_totals})
+            # Extract year from timestamp
+            document_expiry_year = timestamp.year
+
+            # Include the year in the key
+            key = f"{department} - {document_expiry_year}"
+            total_fines = department_totals.get(key, 0) + fined_value
+            department_totals[key] = total_fines
+            
+
+        # Sort the keys based on the extracted year
+        sorted_department_totals = dict(sorted(department_totals.items(), key=lambda x: x[1]))
+
+        return Response(sorted_department_totals)
     except requests.RequestException as e:
-        error_message = f"Error fetching data from the API: {str(e)}"
-        return render(request, 'error_page.html', {'error_message': error_message})
-
-
+        return Response({"error": f"Error fetching data from the API: {str(e)}"}, status=500)
 
 
 

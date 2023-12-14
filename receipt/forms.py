@@ -11,11 +11,12 @@ class receipt_form(forms.ModelForm):
 
     class Meta:
         model = Receipt
-        fields = ['fined', 'receipt','file']
+        fields = ['fined', 'receipt', 'file', 'timestamp']
         widgets = {
             'receipt': forms.ClearableFileInput(attrs={'multiple': True}),
-            'file': forms.HiddenInput(), 
+            'file': forms.HiddenInput(),
+            'timestamp': forms.HiddenInput(),  # Assuming you want to hide the timestamp field
         }
         labels = {
-            'receipt': 'Upload Receipt',
+            'receipt': 'Penalty Receipt',
         }

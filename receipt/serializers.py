@@ -30,4 +30,5 @@ class ReceiptSerializer(serializers.ModelSerializer):
             'receipt',
             'first_name',
             'last_name',
+            'timestamp',
         )

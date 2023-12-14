@@ -52,13 +52,22 @@ class create_user_form(forms.Form):
         return cleaned_data
 
 
-class update_user_form(forms.ModelForm):
-    first_name = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',        
-    }))
-    last_name = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
-    }))
+class update_user_form(forms.Form):
+    first_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
+        })
+    )
+    last_name = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
+        })
+    )
+    email = forms.CharField(
+        widget=forms.TextInput(attrs={
+            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
+        })
+    )
     company = forms.ModelChoiceField(
         queryset=Company.objects.all(),
         empty_label="Select a Company",
@@ -68,29 +77,42 @@ class update_user_form(forms.ModelForm):
         })
     )
     password = forms.CharField(
-        required=False, 
+        required=False,
         min_length=8,
         widget=forms.PasswordInput(attrs={
-            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+            'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;',
         })
     )
 
-    class Meta:
-        model = User
-        fields = ['first_name', 'last_name','company','password']
-
     @transaction.atomic
-    def save(self, commit=True):
-        instance = super().save(commit=False)
+    def save(self, user, commit=True):
+        user.first_name = self.cleaned_data['first_name']
+        user.last_name = self.cleaned_data['last_name']
+        user.email = self.cleaned_data['email']
+        company = self.cleaned_data['company']
+        company_name = Company.objects.get(company_name=company)
+        user.company = company_name
 
-        if self.cleaned_data.get('password'):
-            instance.set_password(self.cleaned_data['password'])
+        if self.cleaned_data['password']:
+            user.set_password(self.cleaned_data['password'])
 
         if commit:
-            instance.save()
-            self.save_m2m()
+            user.save()
 
-        return instance
+        return user
+
+class update_company_form(forms.ModelForm):
+    
+    company_name = forms.CharField(
+        widget=forms.TextInput(
+      attrs={
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+    }))
+    
+    class Meta:
+        model = Company
+        fields = ['company_name']
+
 
 class company_form(forms.ModelForm):
     

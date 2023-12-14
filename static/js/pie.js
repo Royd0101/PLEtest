@@ -10,7 +10,7 @@ fetch("/api/receipts/")
     const currentYear = new Date().getFullYear();
 
     const currentYearData = data.filter((entry) => {
-      const entryYear = new Date(entry.expiry_date).getFullYear();
+      const entryYear = new Date(entry.timestamp).getFullYear();
       return entryYear === currentYear;
     });
 
@@ -24,6 +24,7 @@ fetch("/api/receipts/")
       }, 0)
     );
 
+    console.log(totalFines);
     const totalFine = totalFines.reduce((sum, amount) => sum + amount, 0);
 
     labels.forEach((company, index) => {
@@ -141,7 +142,7 @@ function groupDataByCompany(data) {
 function getRandomColor(index) {
   const colors = [
     "rgba(255, 99, 132, 0.4)", // Lighter red
-    "rgba(54, 162, 235, 0.4)", // Lighter blue
+    "rgba(4, 102, 139, 1)", // Lighter blue
     "rgba(255, 206, 86, 0.4)", // Lighter yellow
     "rgba(75, 192, 192, 0.4)", // Lighter green
     "rgba(153, 102, 255, 0.4)", // Lighter purple

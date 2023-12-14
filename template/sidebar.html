@@ -19,6 +19,11 @@
       rel="stylesheet"
       type="text/css"
     />
+    <link rel="stylesheet" href="{% static 'bootstrap/css/sb-admin-2.css' %}" />
+    <link
+      rel="stylesheet"
+      href="{% static 'bootstrap/css/sb-admin-2.min.css' %}"
+    />
     <link
       href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
       rel="stylesheet"
@@ -27,16 +32,18 @@
     <style>
     
 .navbar {
-  background-color: #E5E8EC; /* Set the background color to #E5E8EC */
+  background-color:  #f9fafb; 
   }
-
+  .navbar-nav{
+    background-color:  #04668b; 
+  }
   </style>
 
   </head>
 
   <body >
       <ul
-        class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
+        class="navbar-nav sidebar sidebar-dark accordion" style="font-family: 'Open Sans', sans-serif;"
         id="accordionSidebar"
       >
         <a
@@ -44,20 +51,15 @@
           href=""
         >
         </a>
-
-        <!-- Divider -->
         <hr class="sidebar-divider my-0" />
 
-        <!-- Nav Item - Dashboard -->
         <li class="nav-item active">
           <a class="nav-link" href="{% url 'dashboard' %}">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a
           >
         </li>
-        <!-- Heading -->
         {% if user.is_authenticated and user.is_staff %}
-        <!-- Nav Item - Tables -->
         <li class="nav-item">
           <a class="nav-link" href="{% url 'company_list' %}">
             <i class="fas fa-fw fa-building"></i>
@@ -77,7 +79,6 @@
               <span>User Management</span></a
             >
           </li>
-         
   
         </li>
         {% endif %}
@@ -102,25 +103,29 @@
         
         </li>
 
-        <!-- Divider -->
         <hr class="sidebar-divider d-none d-md-block" />
 
-        <!-- Sidebar Toggler (Sidebar) -->
         <div class="text-center d-none d-md-inline">
           <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
       </ul>
-      <!-- End of Sidebar -->
 
-      <!-- Content Wrapper -->
-      <div id="content-wrapper" class="d-flex flex-column">
-        <!-- Main Content -->
+      <div id="content-wrapper" class="d-flex flex-column" style="background-color: #77C4D74D;">
         <div id="content">
-          <!-- Topbar -->
+
           <nav
-            class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"
+            class="navbar navbar-expand navbar-light topbar static-top" style="box-shadow: 0 0 2px  #001942;"
           >
-            <!-- Sidebar Toggle (Topbar) -->
+          <div class="nav nav-tabs" id="nav-tab" role="tablist">
+            <button class="nav-link active" id="business-tab" data-toggle="tab" href="#business-content" role="tab" aria-controls="business-content" aria-selected="true" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
+                Business Documents
+            </button>
+            <button class="nav-link" id="professional-tab" data-toggle="tab" href="#professional-content" role="tab" aria-controls="professional-content" aria-selected="false" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
+                Professional Documents
+            </button>
+        </div>
+        
+
             <button
               id="sidebarToggleTop"
               class="btn btn-link d-md-none rounded-circle mr-3"
@@ -128,9 +133,9 @@
               <i class="fa fa-bars"></i>
             </button>
 
-            <!-- Topbar Navbar -->
-            <ul class="navbar-nav ml-auto">
-              <!-- Nav Item - User Information -->
+            <ul class="navbar-nav ml-auto" style="background-color: #f9fafb;">
+
+
               <li class="nav-item dropdown no-arrow">
                 <a
                   class="nav-link dropdown-toggle"
@@ -143,7 +148,6 @@
                 >
                   <i class="fas fa-user"></i>
                 </a>
-                <!-- Dropdown - User Information -->
                 <div
                   class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
@@ -155,7 +159,7 @@
                     data-target="#logoutModal"
                   >
                     <i
-                      class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"
+                      class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-dark"
                     ></i>
                     Logout
                   </a>
@@ -163,9 +167,7 @@
               </li>
             </ul>
           </nav>
-          <!-- End of Topbar -->
-          
-    <!-- Logout Modal-->
+
     <div
     class="modal fade"
     id="logoutModal"
@@ -173,6 +175,7 @@
     role="dialog"
     aria-labelledby="exampleModalLabel"
     aria-hidden="true"
+    style="font-family: 'Open Sans', sans-serif;"
   >
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -203,5 +206,6 @@
       </div>
     </div>
   </div>
+  <script src="{% static 'js/tabs.js' %}"></script>
   </body>
 </html>
