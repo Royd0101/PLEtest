@@ -1,11 +1,11 @@
 from django.shortcuts import render ,redirect
-from .serializers import FileSerializer , DepartmentSerializer,FileLogSerializer
+from .serializers import FileSerializer , DepartmentSerializer,FileLogSerializer, PersonSerializer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from django.utils import timezone
 from datetime import timedelta
-from .models import File_Document ,Department , FileLog
+from .models import File_Document ,Department , FileLog,Person_Document
 from django.shortcuts import render, get_object_or_404
 import requests
 from django.utils import timezone
@@ -16,9 +16,7 @@ from .email_utils import send_notification_email
 from django.shortcuts import HttpResponse
 from .tasks import check_document_expiry
 #import from form
-from .forms import create_file
-from .forms import renew_form
-from .forms import DepartmentForm,update_department_form
+from .forms import DepartmentForm,update_department_form,renew_form,create_file, Person_Documents_Form
 from django.db.models import Count
 from django.conf import settings
 # Create your views here.
@@ -105,7 +103,74 @@ class File_Document_view(ModelViewSet):
         queryset = self.get_queryset().filter(expiry_date__gte=timezone.now(), expiry_date__lte=two_months_before_expiry)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+#Person Api
+class Person_Documents_view(ModelViewSet):
+    serializer_class = PersonSerializer
+
+    def get_queryset(self):
+        return self.serializer_class.Meta.model.objects.all()
     
+    #admin api
+    #get the expired file
+    @action(detail=False, methods=['get'])
+    def admin_person_expired(self, request):
+        queryset = self.get_queryset().filter(expiry_date__lt=timezone.now())
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+#get the valid file
+    @action(detail=False, methods=['get'])
+    def admin_person_valid(self, request):
+        expiration_threshold = timezone.now() + timedelta(days=60)
+        queryset = self.get_queryset().filter(
+            expiry_date__gte=expiration_threshold
+        )
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+#get the file to be renew
+    @action(detail=False, methods=['get'])
+    def admin_person_renew(self, request):
+        two_months_before_expiry = timezone.now() + timedelta(days=60)
+        queryset = self.get_queryset().filter(expiry_date__gte=timezone.now(), expiry_date__lte=two_months_before_expiry)
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+    #user api
+#get the expired file  
+    @action(detail=False, methods=['get'])
+    def user_person_expired(self, request):
+        user_email = request.query_params.get('user_email') 
+        queryset = self.get_queryset().filter(expiry_date__lt=timezone.now(), user__email=user_email)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+#get the valid file
+    @action(detail=False, methods=['get'])
+    def user_person_valid(self, request):
+        user_email = request.query_params.get('user_email') 
+        expiration_threshold = timezone.now() + timedelta(days=60)
+        queryset = self.get_queryset().filter(
+            expiry_date__gte=expiration_threshold,  user__email=user_email
+        )
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
+#get the file to be renew
+    @action(detail=False, methods=['get'])
+    def user_person_renew(self, request):
+        user_email = request.query_params.get('user_email') 
+        two_months_before_expiry = timezone.now() + timedelta(days=60)
+        queryset = self.get_queryset().filter(expiry_date__gte=timezone.now(), expiry_date__lte=two_months_before_expiry,user__email=user_email )
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+
+
+#File Logs
 class FileLog_view(ModelViewSet):
     serializer_class = FileLogSerializer
 
@@ -456,4 +521,96 @@ def file_documents_with_receipts(request):
 
 
 
+@login_required
+def create_person_documents(request):
+    if request.method == 'POST':
+        form = Person_Documents_Form(request.POST, request.FILES)
+        if form.is_valid():
+            person = Person_Document(
+                user=request.user, 
+                person_fullname=form.cleaned_data['person_fullname'],
+                company=form.cleaned_data['company'],
+                document_type=form.cleaned_data['document_type'],
+                agency=form.cleaned_data['agency'],
+                upload_file=form.cleaned_data['upload_file'],
+                renewal_date=form.cleaned_data['renewal_date'],
+                expiry_date=form.cleaned_data['expiry_date']
+            )
+            person.save()
+            messages.success(request, 'Document uploaded successfully!')
+            return redirect('dashboard')
+        else:
+            messages.warning(request, 'Error uploading Documents. Please check your inputs.')
+    else:
+        form = Person_Documents_Form()
+    return render(request, 'add_person_documents.html', {'form': form})
 
+
+#admin side
+#admin get expired person document list
+@login_required
+def expired_person_document_list(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/person_expired_documents/')
+    if response.status_code == 200 and response.text: 
+        person_expired = response.json()
+        return render(request, 'admin_person_expired.html', {'person_expired': person_expired})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
+#get renew person document list
+@login_required
+def renew_person_document_list(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/person_renew_documents/')
+    if response.status_code == 200:
+        person_renew = response.json()
+        return render(request, 'admin_person_renew.html', {'person_renew': person_renew})
+    else:
+        return render(request, 'error_page.html')
+#get expired person document list
+@login_required
+def valid_person_document_list(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/person_valid_documents/')
+    if response.status_code == 200 and response.text: 
+        person_valid = response.json()
+        return render(request, 'admin_person_valid.html', {'person_valid': person_valid})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
+    
+
+#user side
+#get person expired file list
+@login_required
+def get_expired_person_list(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/file/person_expired/', params={'user_email': user_email})
+    if response.status_code == 200 and response.text: 
+        person_expired_file = response.json()
+        return render(request, 'person_expired.html', {'person_expired_file': person_expired_file})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
+
+
+#get person expired file list
+@login_required
+def get_renew_person_list(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/file/person_renew/', params={'user_email': user_email})
+    if response.status_code == 200:
+        person_renew_file = response.json()
+        return render(request, 'person_renew.html', {'person_renew_file': person_renew_file})
+    else:
+        return render(request, 'error_page.html')
+    
+#get person expired file list
+@login_required
+def get_valid_person_list(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/file/person_valid/', params={'user_email': user_email})
+    if response.status_code == 200:
+        person_valid_file = response.json()
+        print(person_valid_file)
+        return render(request, 'person_valid.html', {'person_valid_file': person_valid_file})
+    else:
+        return render(request, 'error_page.html')

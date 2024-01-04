@@ -37,7 +37,22 @@ class File_Document(models.Model):
         self.upload_file.delete()
         super().delete()
 
+class Person_Document(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    person_fullname = models.CharField(max_length=50)
+    company = models.CharField(max_length=50, default=1)
+    document_type = models.CharField(max_length=50)
+    agency = models.CharField(max_length=50, default='Default Agency Name')
+    upload_file = models.FileField(upload_to=get_upload_path)
+    renewal_date = models.DateField()
+    expiry_date = models.DateField()
 
+    def __str__(self):
+        return f"Person Document {self.id} - {self.document_type} - {self.expiry_date} - {self.person_fullname or 'No Name'}"
+    
+    def delete(self):
+        self.upload_file.delete()
+        super().delete()
 
 class FileLog(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)

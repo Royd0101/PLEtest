@@ -2,7 +2,7 @@ from django.urls import path,include
 from . import views
 
 from .views import (
-    File_Document_view, Department_view,FileLog_view
+    File_Document_view, Department_view,FileLog_view,Person_Documents_view
 )
 
 urlpatterns = [
@@ -13,6 +13,15 @@ urlpatterns = [
             'post': 'create',
         })),
         path('<int:pk>/', File_Document_view.as_view({
+            'put': 'update',
+            'delete': 'destroy',
+        })),
+
+         path('Person_Documents/', Person_Documents_view.as_view({
+            'get': 'list',
+            'post': 'create',
+        })),
+        path('Person_Documents/<int:pk>/', Person_Documents_view.as_view({
             'put': 'update',
             'delete': 'destroy',
         })),
@@ -54,6 +63,28 @@ urlpatterns = [
         path('user_log/', FileLog_view.as_view({
             'get': 'user_list_log',  # Custom action for files to be renewed
         })), 
+
+        #admin api person, renew,expired, valid
+        path('person_expired_documents/', Person_Documents_view.as_view({
+            'get': 'admin_person_expired',  # Custom action for expired files
+        })),
+        path('person_valid_documents/', Person_Documents_view.as_view({
+            'get': 'admin_person_valid',  # Custom action for valid files
+        })),
+        path('person_renew_documents/', Person_Documents_view.as_view({
+            'get': 'admin_person_renew',  # Custom action for files to be renewed
+        })), 
+
+        #user api person, renew,expired, valid
+        path('person_expired/', Person_Documents_view.as_view({
+            'get': 'user_person_expired',  # Custom action for expired files
+        })),
+        path('person_renew/', Person_Documents_view.as_view({
+            'get': 'user_person_renew',  # Custom action for valid files
+        })),
+        path('person_valid/', Person_Documents_view.as_view({
+            'get': 'user_person_valid',  # Custom action for files to be renewed
+        })), 
     ])),
 
     #create new file page
@@ -87,6 +118,11 @@ urlpatterns = [
     #renew_file_api
     path('renew_file/<int:file_id>/', views.renew_file, name='renew_file'),
 
+    #api
+    #create person documents
+    path('person_documents/', views.create_person_documents, name='person_documents'),\
+
+
     #sending email
     path('automatic_send_mail/', views.automatic_send_mail, name='automatic_send_mail'),
 
@@ -94,7 +130,17 @@ urlpatterns = [
     path('admin_expired_list/', views.admin_expired_file_list, name='admin_expired_list'),
     path('admin_valid_list', views.admin_valid_file_list, name='admin_valid_list'),
     path('admin_renew_list', views.admin_renew_file_list, name='admin_renew_list'),
-
     path('file_documents_with_receipts', views.file_documents_with_receipts, name='file_documents_with_receipts'),
+
+    #admin person documents
+    path('admin_person_expired_list/', views.expired_person_document_list, name='admin_person_expired_list'),
+    path('admin_person_renew_list', views.renew_person_document_list, name='admin_person_renew_list'),
+    path('admin_person_valid_list', views.valid_person_document_list, name='admin_person_valid_list'),
+
+    #user person documents
+    path('get_expired_person_list/', views.get_expired_person_list, name='get_expired_person_list'),
+    path('get_renew_person_list', views.get_renew_person_list, name='get_renew_person_list'),
+    path('get_valid_person_list', views.get_valid_person_list, name='get_valid_person_list'),
+
 
 ]

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from files.models import File_Document, Department,FileLog
+from files.models import File_Document, Department,FileLog, Person_Document
 
 
 class DepartmentSerializer(serializers.ModelSerializer):
@@ -35,6 +35,26 @@ class FileSerializer(serializers.ModelSerializer):
             'expiry_date',
         )
 
+class PersonSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='user.email', read_only=True)
+    user_firstname = serializers.EmailField(source='user.first_name', read_only=True)
+    user_lastname = serializers.EmailField(source='user.last_name', read_only=True)
+    class Meta:
+        model = Person_Document
+        fields = (
+            'id',
+            'user',
+            'user_email',
+            'company',
+            'user_firstname',
+            'user_lastname',
+            'person_fullname',
+            'document_type',
+            'agency',
+            'upload_file',
+            'renewal_date',
+            'expiry_date',
+        )
 
 
 class FileLogSerializer(serializers.ModelSerializer):

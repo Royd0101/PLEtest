@@ -47,5 +47,6 @@ urlpatterns = [
 
     path('department_total_fine/', department_total_fine, name='department_total_fine'),
 
+
    
 ]

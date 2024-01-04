@@ -86,7 +86,13 @@
         <li class="nav-item">
           <a class="nav-link" href="{% url 'create_new_file_form' %}">
             <i class="fas fa-fw fa-file-alt"></i>
-            <span>Add Document</span></a
+            <span>Business Permit and License</span></a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'person_documents' %}">
+            <i class="fas fa-fw fa-file-alt"></i>
+            <span>Professional License and Permit</span></a
           >
         </li>
         {% endif %}
@@ -119,10 +125,10 @@
           {% if request.path == '/dashboard/' %}
               <div class="nav nav-tabs" id="nav-tab" role="tablist">
                   <button class="nav-link active" id="business-tab" data-toggle="tab" href="#business-content" role="tab" aria-controls="business-content" aria-selected="true" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
-                      Business Documents
+                      Business Permit and Licenses
                   </button>
                   <button class="nav-link" id="professional-tab" data-toggle="tab" href="#professional-content" role="tab" aria-controls="professional-content" aria-selected="false" style="background-color: #f9fafb; font-family: 'Open Sans', sans-serif;">
-                      Professional Documents
+                      Professional Licenses and Permit
                   </button>
               </div>
           {% endif %}
@@ -207,4 +213,5 @@
             </div>
           </div>
   </body>
+  
 </html>

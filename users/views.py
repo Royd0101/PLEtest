@@ -194,6 +194,39 @@ def dashboard(request):
     num_valid_files = num_expired_files = num_renew_files = num_penalty_files = 0
     admin_num_valid_files = admin_num_expired_files = admin_num_renew_files  = admin_num_penalty_files= 0
 
+#admin display person document
+    admin_person_response1 = requests.get('http://127.0.0.1:8000/api/file/person_valid_documents/')
+    admin_person_response2 = requests.get('http://127.0.0.1:8000/api/file/person_renew_documents/')
+    admin_person_response3 = requests.get('http://127.0.0.1:8000/api/file/person_expired_documents/')
+
+    person_valid_files = person_expired_files = person_renew_files  = 0
+
+
+    if admin_person_response1.status_code == 200:
+        person_total_valid = admin_person_response1.json()
+        person_valid_files = len(person_total_valid)
+        print(person_valid_files)
+        person_agencies1 = [item.get('agency') for item in person_total_valid]
+        person_agency_counts1 = dict(Counter(person_agencies1))
+        print(person_agency_counts1)
+        
+    if admin_person_response2.status_code == 200:
+        person_total_renew = admin_person_response2.json()
+        person_renew_files = len(person_total_renew)
+        print(person_renew_files)
+        person_agencies2 = [item.get('agency') for item in person_total_renew]
+        person_agency_counts2 = dict(Counter(person_agencies2))
+        print(person_agency_counts2)
+
+    if admin_person_response3.status_code == 200:
+        person_total_expired = admin_person_response3.json()
+        person_expired_files = len(person_total_expired)
+        print(person_expired_files)
+        person_agencies3 = [item.get('agency') for item in person_total_expired]
+        person_agency_counts3 = dict(Counter(person_agencies3))
+        print(person_agency_counts3)
+
+#admin display business data
 
     if response1.status_code == 200:
         total_valid = response1.json()
@@ -286,7 +319,7 @@ def dashboard(request):
             else:
                 admin_agency_counts_by_company3[company_name][agency] += 1
 
-    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'num_penalty_files': num_penalty_files, 'agency_counts1': agency_counts1, 'agency_counts2': agency_counts2, 'agency_counts3': agency_counts3,  'agency_counts4': agency_counts4, 'admin_count1':admin_num_valid_files,'admin_count2':admin_num_renew_files,'admin_count3':admin_num_expired_files, 'admin_agency1':admin_agency_counts_by_company,'admin_agency2':admin_agency_counts_by_company1,'admin_agency3':admin_agency_counts_by_company2, 'admin_count4':admin_num_penalty_files,'admin_agency4':admin_agency_counts_by_company3  })
+    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'num_penalty_files': num_penalty_files, 'agency_counts1': agency_counts1, 'agency_counts2': agency_counts2, 'agency_counts3': agency_counts3,  'agency_counts4': agency_counts4, 'admin_count1':admin_num_valid_files,'admin_count2':admin_num_renew_files,'admin_count3':admin_num_expired_files, 'admin_agency1':admin_agency_counts_by_company,'admin_agency2':admin_agency_counts_by_company1,'admin_agency3':admin_agency_counts_by_company2, 'admin_count4':admin_num_penalty_files,'admin_agency4':admin_agency_counts_by_company3,'person_valid_files': person_valid_files, 'person_renew_files': person_renew_files, 'person_expired_files': person_expired_files, 'person_agency_counts1': person_agency_counts1, 'person_agency_counts2': person_agency_counts2, 'person_agency_counts3': person_agency_counts3})
 
 
 #create user page -----------------------------------------------------------------------------
