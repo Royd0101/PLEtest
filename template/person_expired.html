@@ -45,7 +45,7 @@
               class="m-0 font-weight-bold text-white"
               style="font-family: 'Open Sans', sans-serif"
             >
-              Valid Documents
+              Expired Documents
             </h6>
           </div>
           <div class="card-body overflow-auto">
@@ -59,11 +59,12 @@
                   <th scope="col">No.</th>
                   <th scope="col" style="white-space: nowrap">FullName</th>
                   <th scope="col" style="white-space: nowrap">Document Type</th>
+                  <th scope="col" style="white-space: nowrap">Company</th>
                   <th scope="col" style="white-space: nowrap">Agency</th>
                   <th scope="col" style="white-space: nowrap">Document</th>
                   <th scope="col" style="white-space: nowrap">Renewed Date</th>
                   <th scope="col" style="white-space: nowrap">Expiry Date</th>
-                  <th scope="col" style="white-space: nowrap">Uploaded By</th>
+                  <th scope="col" style="white-space: nowrap">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,12 +73,10 @@
                   <td>{{ forloop.counter }}</td>
                   <td>{{ person_document.person_fullname }}</td>
                   <td>{{ person_document.document_type }}</td>
+                  <td>{{ person_document.company}}</td>
                   <td>{{ person_document.agency }}</td>
                   <td>
-                    <a
-                      href="{{ person_document.upload_file.url }}"
-                      target="_blank"
-                    >
+                    <a href="{{ person_document.upload_file }}" target="_blank">
                       <i
                         class="fas fa-file-alt pdf-icon"
                         style="font-size: 20px; color: #000"
@@ -88,8 +87,60 @@
                   <td>{{ person_document.renewal_date }}</td>
                   <td>{{ person_document.expiry_date }}</td>
                   <td>
-                    {{ person_document.user_firstname }}
-                    {{person_document.user_lastname }}
+                    <div
+                      class="modal fade"
+                      id="renewConfirmationModal_{{ person_document.id }}"
+                      tabindex="-1"
+                      role="dialog"
+                      aria-labelledby="renewConfirmationModalLabel"
+                      aria-hidden="true"
+                    >
+                      <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5
+                              class="modal-title"
+                              id="renewConfirmationModalLabel"
+                            >
+                              "This document has been renewed after the expiry
+                              date, is there a penalty for renewal?"
+                            </h5>
+                            <button
+                              type="button"
+                              class="close"
+                              data-dismiss="modal"
+                              aria-label="Close"
+                            >
+                              <span aria-hidden="true">&times;</span>
+                            </button>
+                          </div>
+                          <div class="modal-footer">
+                            <a
+                              href="{% url 'create_person_receipt' document_id=person_document.id %}"
+                              class="btn btn-primary"
+                              >Yes</a
+                            >
+                            <a
+                              href="{% url 'renew_person_documents' document_id=person_document.id %}"
+                              class="btn btn-primary"
+                              >No</a
+                            >
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <button
+                      type="button"
+                      class="btn btn-primary btn-sm"
+                      role="button"
+                      aria-pressed="true"
+                      data-toggle="modal"
+                      data-target="#renewConfirmationModal_{{ person_document.id }}"
+                      data-file-id="{{ person_document.id }}"
+                    >
+                      Renew
+                    </button>
                   </td>
                 </tr>
                 {% endfor %}

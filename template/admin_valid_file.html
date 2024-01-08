@@ -95,19 +95,22 @@
                     {{ file_document.user.first_name }}
                     {{file_document.user.last_name }}
                   </td>
-                  {% if file_document.receipt_set.all %}
-                  <div></div>
-                  {%for receipt in file_document.receipt_set.all %}
+                  {% for receipt in file_document.receipt_set.all %}
                   <td>
+                    {% if receipt.receipt %}
                     <a href="{{ receipt.receipt.url }}" target="_blank">
                       <i
                         class="fas fa-file-alt pdf-icon"
                         style="font-size: 20px; color: #000"
                       ></i>
                     </a>
+                    {% else %}
+                    <strong>None</strong>
+                    {% endif %}
                   </td>
                   <td>{{ receipt.fined }}</td>
-                  {% endfor %} {% else %}
+
+                  {% endfor %} {% if not file_document.receipt_set.all %}
                   <td><strong>None</strong></td>
                   <td><strong>None</strong></td>
                   {% endif %}

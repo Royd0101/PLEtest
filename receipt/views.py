@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from rest_framework.viewsets import ModelViewSet
-from .serializers import ReceiptSerializer
+from .serializers import ReceiptSerializer, Person_ReceiptSerializer
 from django.contrib import messages
-from .forms import receipt_form
-from .models import Receipt
+from .forms import receipt_form ,person_receipt_form
+from .models import Receipt ,Person_Document
 from files.models import File_Document
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
@@ -28,6 +28,13 @@ class Receipt_view(ModelViewSet):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
+
+class Person_Receipt_view(ModelViewSet):
+    serializer_class = Person_ReceiptSerializer
+
+    def get_queryset(self):
+        return self.serializer_class.Meta.model.objects.all()
+    
 @login_required
 def create_receipt(request, file_id):
     file = get_object_or_404(File_Document, id=file_id)
@@ -49,6 +56,29 @@ def create_receipt(request, file_id):
 
     context = {'form': form, 'file': file}
     return render(request, 'receipt.html', context)
+
+
+@login_required
+def create_person_receipt(request, document_id):
+    file = get_object_or_404(Person_Document, id=document_id)
+    if request.method == 'POST':
+        form = person_receipt_form(request.POST, request.FILES)
+
+        if form.is_valid():
+            receipt = form.save(commit=False)
+            receipt.file = file
+            receipt.save()
+
+            messages.success(request, 'Uploaded successfully!')
+            return redirect('renew_person_documents', document_id=file.id)
+        else:
+            messages.warning(request, 'Error uploading file. Please check your inputs.')
+            print(f'Form Errors: {form.errors}')
+    else:
+        form = person_receipt_form(initial={'file': file})
+
+    context = {'form': form, 'file': file}
+    return render(request, 'person_receipt.html', context)
 
 @login_required
 def receipt_valid_documents(request):

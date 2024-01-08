@@ -45,7 +45,7 @@
               class="m-0 font-weight-bold text-white"
               style="font-family: 'Open Sans', sans-serif"
             >
-              Valid Documents
+              Due for Renewal Documents
             </h6>
           </div>
           <div class="card-body overflow-auto">
@@ -59,11 +59,12 @@
                   <th scope="col">No.</th>
                   <th scope="col" style="white-space: nowrap">FullName</th>
                   <th scope="col" style="white-space: nowrap">Document Type</th>
+                  <th scope="col" style="white-space: nowrap">Company</th>
                   <th scope="col" style="white-space: nowrap">Agency</th>
                   <th scope="col" style="white-space: nowrap">Document</th>
                   <th scope="col" style="white-space: nowrap">Renewed Date</th>
                   <th scope="col" style="white-space: nowrap">Expiry Date</th>
-                  <th scope="col" style="white-space: nowrap">Uploaded By</th>
+                  <th scope="col" style="white-space: nowrap">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -72,12 +73,10 @@
                   <td>{{ forloop.counter }}</td>
                   <td>{{ person_document.person_fullname }}</td>
                   <td>{{ person_document.document_type }}</td>
+                  <td>{{ person_document.company }}</td>
                   <td>{{ person_document.agency }}</td>
                   <td>
-                    <a
-                      href="{{ person_document.upload_file.url }}"
-                      target="_blank"
-                    >
+                    <a href="{{ person_document.upload_file }}" target="_blank">
                       <i
                         class="fas fa-file-alt pdf-icon"
                         style="font-size: 20px; color: #000"
@@ -88,8 +87,14 @@
                   <td>{{ person_document.renewal_date }}</td>
                   <td>{{ person_document.expiry_date }}</td>
                   <td>
-                    {{ person_document.user_firstname }}
-                    {{person_document.user_lastname }}
+                    <a
+                      href="{% url 'renew_person_documents' document_id=person_document.id %}"
+                      class="btn btn-primary btn-sm"
+                      role="button"
+                      aria-pressed="true"
+                      data-user-id="{{ person_document.id }}"
+                      >Renew</a
+                    >
                   </td>
                 </tr>
                 {% endfor %}

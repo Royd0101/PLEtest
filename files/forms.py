@@ -158,5 +158,29 @@ class Person_Documents_Form(forms.ModelForm):
         )
 
 
-    
-    
+class Person_Documents_Renew_Form(forms.Form):
+    person_fullname = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
+    )
+    company = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
+    )
+    document_type = forms.CharField(
+        required=True,
+        widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
+    )
+    agency = forms.CharField(widget=forms.TextInput(attrs={
+        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
+    }))
+    upload_file = forms.FileField()
+    renewal_date = forms.DateField(
+        initial=datetime.date.today(),
+        required=True,
+        widget=forms.TextInput(attrs={'type': 'date', 'style': 'width: 100%; display: inline-block; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
+    )
+    expiry_date = forms.DateField(
+        required=True,
+        widget=forms.TextInput(attrs={'type': 'date', 'style': 'width: 100%; display: inline-block; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
+    )

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Receipt
+from .models import Receipt, Person_Receipt
 
 
 class ReceiptSerializer(serializers.ModelSerializer):
@@ -20,6 +20,37 @@ class ReceiptSerializer(serializers.ModelSerializer):
             'user_email',
             'fined',
             'file',
+            'department_name',
+            'company_name',
+            'expiry_date',
+            'renewal_date',
+            'document_type',
+            'document',
+            'agency',
+            'receipt',
+            'first_name',
+            'last_name',
+            'timestamp',
+        )
+
+
+class Person_ReceiptSerializer(serializers.ModelSerializer):
+    user_email = serializers.EmailField(source='person_document.user.email', read_only=True)
+    first_name = serializers.EmailField(source='person_document.user.first_name', read_only=True)
+    last_name = serializers.EmailField(source='person_document.user.last_name', read_only=True)
+    department_name = serializers.CharField(source='person_document.department_name', read_only=True)
+    company_name = serializers.EmailField(source='person_document.company', read_only=True)
+    document_type = serializers.CharField(source='person_document.document_type', read_only=True)
+    expiry_date = serializers.EmailField(source='person_document.expiry_date', read_only=True)
+    renewal_date = serializers.CharField(source='person_document.renewal_date', read_only=True)
+    document = serializers.FileField(source='person_document.upload_file', read_only=True)
+    agency = serializers.EmailField(source='person_document.agency', read_only=True)
+    class Meta:
+        model =  Person_Receipt
+        fields = (
+            'id',
+            'user_email',
+            'fined',
             'department_name',
             'company_name',
             'expiry_date',

@@ -16,7 +16,7 @@ from .email_utils import send_notification_email
 from django.shortcuts import HttpResponse
 from .tasks import check_document_expiry
 #import from form
-from .forms import DepartmentForm,update_department_form,renew_form,create_file, Person_Documents_Form
+from .forms import DepartmentForm,update_department_form,renew_form,create_file, Person_Documents_Form,Person_Documents_Renew_Form
 from django.db.models import Count
 from django.conf import settings
 # Create your views here.
@@ -116,7 +116,7 @@ class Person_Documents_view(ModelViewSet):
     @action(detail=False, methods=['get'])
     def admin_person_expired(self, request):
         queryset = self.get_queryset().filter(expiry_date__lt=timezone.now())
-        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
+        agency_counts = queryset.values('company', 'agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -127,7 +127,7 @@ class Person_Documents_view(ModelViewSet):
         queryset = self.get_queryset().filter(
             expiry_date__gte=expiration_threshold
         )
-        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
+        agency_counts = queryset.values('company', 'agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -136,7 +136,7 @@ class Person_Documents_view(ModelViewSet):
     def admin_person_renew(self, request):
         two_months_before_expiry = timezone.now() + timedelta(days=60)
         queryset = self.get_queryset().filter(expiry_date__gte=timezone.now(), expiry_date__lte=two_months_before_expiry)
-        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
+        agency_counts = queryset.values('company', 'agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -146,6 +146,7 @@ class Person_Documents_view(ModelViewSet):
     def user_person_expired(self, request):
         user_email = request.query_params.get('user_email') 
         queryset = self.get_queryset().filter(expiry_date__lt=timezone.now(), user__email=user_email)
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -157,6 +158,7 @@ class Person_Documents_view(ModelViewSet):
         queryset = self.get_queryset().filter(
             expiry_date__gte=expiration_threshold,  user__email=user_email
         )
+        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -345,7 +347,7 @@ def renew_file(request, file_id):
             log_entry = FileLog.objects.create(
                 user=request.user,
                 file=file,
-                previous_file=previous_file_path,  # Assign file path directly
+                previous_file=previous_file_path,  
                 action='renewed'
             )
 
@@ -545,6 +547,39 @@ def create_person_documents(request):
         form = Person_Documents_Form()
     return render(request, 'add_person_documents.html', {'form': form})
 
+@login_required
+def renew_person_documents(request, document_id):
+    person_document = get_object_or_404(Person_Document, id=document_id, user=request.user)
+
+    if request.method == 'POST':
+        form = Person_Documents_Renew_Form(request.POST, request.FILES)
+
+        if form.is_valid():
+            person_document.person_fullname = form.cleaned_data['person_fullname']
+            person_document.company = form.cleaned_data['company']
+            person_document.document_type = form.cleaned_data['document_type']
+            person_document.agency = form.cleaned_data['agency']
+            uploaded_file = form.cleaned_data['upload_file']
+            if uploaded_file:
+                person_document.upload_file = uploaded_file
+            person_document.renewal_date = form.cleaned_data['renewal_date']
+            person_document.expiry_date = form.cleaned_data['expiry_date']
+            person_document.save()
+            messages.success(request, 'Document renewed successfully!')
+            return redirect('dashboard')
+        else:
+            messages.warning(request, 'Error renewing document. Please check your inputs.')
+    else:
+        initial_data = {
+            'person_fullname': person_document.person_fullname,
+            'company': person_document.company,
+            'document_type': person_document.document_type,
+            'agency': person_document.agency,
+        }
+        form = Person_Documents_Renew_Form(initial=initial_data)
+
+    return render(request, 'renew_person_documents.html', {'form': form, 'person_document': person_document})
+
 
 #admin side
 #admin get expired person document list
@@ -586,6 +621,7 @@ def get_expired_person_list(request):
     response = requests.get('http://127.0.0.1:8000/api/file/person_expired/', params={'user_email': user_email})
     if response.status_code == 200 and response.text: 
         person_expired_file = response.json()
+        print(person_expired_file)
         return render(request, 'person_expired.html', {'person_expired_file': person_expired_file})
     else:
         error_message = f"Error fetching expired files. Status code: {response.status_code}"

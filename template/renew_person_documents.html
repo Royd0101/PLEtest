@@ -28,7 +28,7 @@
       rel="stylesheet"
       href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
     />
-    <title>Create Professional Document</title>
+    <title>Renew Professional Documents</title>
   </head>
   <body id="page-top" style="background-color: #77c4d74d !important">
     {% csrf_token %}
@@ -41,13 +41,13 @@
               class="m-0 font-weight-bold text-white"
               style="font-family: 'Open Sans', sans-serif"
             >
-              Create Professional Document
+              Renew Professional Documents
             </h6>
           </div>
           <div class="card-body" style="font-family: 'Open Sans', sans-serif">
             <form
               method="post"
-              action="{% url 'person_documents' %}"
+              action="{% url 'renew_person_documents' document_id=person_document.id %}"
               enctype="multipart/form-data"
             >
               {% csrf_token %}

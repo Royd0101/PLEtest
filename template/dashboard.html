@@ -372,25 +372,31 @@
                           <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
                             {% if user.is_authenticated and user.is_staff %}
                             <span>{{ person_valid_files }}</span>
-                            <div
-                            class="text-xs text-uppercase"
-                          >
-                          {% for agency, count in person_agency_counts1.items %}
-                          <div>{{ agency }}: {{ count }}</div>
-                        {% endfor %}
-                            </div>
-                            {% endif %} 
+                            <div class="text-xs text-uppercase">
+                              {% for company, agency_counts in person_agency_counts1.items %}
+                                  <span>{{ company }}</span>
+                                  <ul style="margin: 0px;">
+                                      {% for agency, count in agency_counts.items %}
+                                          <li>{{ agency }}: {{ count }}</li>
+                                      {% endfor %}
+                                  </ul>
+                              {% endfor %}
+                              </div>
+                              {% endif %} 
                             {% if not user.is_staff %}
-                            <span>{{ num_valid_files }}</span>
-                            {% endif %}
+                            <span>{{ user_person_valid_files }}</span>
+                           
 
                             <div
                             class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                           >
-                          {% for agency, count in agency_counts1.items %}
+                          {% for agency, count in user_person_agency_counts1.items %}
                           <div>{{ agency }}: {{ count }}</div>
+                         
                         {% endfor %}
+                        
                           </div>
+                          {% endif %}
 
                           </div>
                         </div>
@@ -423,21 +429,28 @@
                           {% if user.is_authenticated and user.is_staff %}
                           <span>{{ person_renew_files }}</span>
                           <div class="text-xs text-uppercase">
-                            {% for agency, count in person_agency_counts2.items %}
-                            <div>{{ agency }}: {{ count }}</div>
+                            {% for company, agency_counts in person_agency_counts2.items %}
+                              <span>{{ company }}</span>
+                              <ul style="margin: 0px;">
+                                  {% for agency, count in agency_counts.items %}
+                                      <li>{{ agency }}: {{ count }}</li>
+                                  {% endfor %}
+                              </ul>
                           {% endfor %}
+
                             </div>
                             {% endif %} 
                             {% if not user.is_staff %}
-                            <span>{{ num_renew_files }}</span>
-                            {% endif %} 
+                            <span>{{ user_person_renew_files }}</span>
+                           
                             <div
                           class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                         >
-                        {% for agency, count in agency_counts3.items %}
+                        {% for agency, count in user_person_agency_counts2.items %}
                         <div>{{ agency }}: {{ count }}</div>
                       {% endfor %}
                         </div>
+                        {% endif %} 
                             
                         </div>
                       </div>
@@ -455,7 +468,7 @@
               {% if not user.is_staff %}   
               <a href="{% url 'get_expired_person_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                 {% endif %}  {% if user.is_authenticated and user.is_staff %}
-                <a href="{% url 'admin_expired_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+                <a href="{% url 'admin_person_expired_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                 <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
                   <div class="card-body">
@@ -474,21 +487,27 @@
                             {% if user.is_authenticated and user.is_staff %}
                             <span>{{ person_expired_files }}</span>
                             <div class="text-xs text-uppercase">
-                              {% for agency, count in person_agency_counts3.items %}
-                              <div>{{ agency }}: {{ count }}</div>
+                              {% for company, agency_counts in person_agency_counts3.items %}
+                              <span>{{ company }}</span>
+                              <ul style="margin: 0px;">
+                                  {% for agency, count in agency_counts.items %}
+                                      <li>{{ agency }}: {{ count }}</li>
+                                  {% endfor %}
+                              </ul>
                             {% endfor %}
                               </div>
                             {% endif %} 
                             {% if not user.is_staff %}
-                            <span>{{ num_expired_files }}</span>
-                            {% endif %} 
+                            <span>{{ user_person_expired_files }}</span>
+                           
                             <div
                           class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                         >
-                        {% for agency, count in agency_counts2.items %}
+                        {% for agency, count in user_person_agency_counts3.items %}
                         <div>{{ agency }}: {{ count }}</div>
                       {% endfor %}
                         </div>
+                        {% endif %} 
                             </div>
                           </div>
                         </div>
@@ -633,6 +652,6 @@
     <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
      <script src="{% static 'bootstrap/vendor/chart.js/Chart.min.js' %}"></script>
-     
+    
   </body>
 </html>

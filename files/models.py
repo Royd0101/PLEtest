@@ -31,7 +31,7 @@ class File_Document(models.Model):
     expiry_date = models.DateField()
 
     def __str__(self):
-        return f"File Document {self.id} - {self.document_type} - {self.expiry_date}"
+        return f"File Document {self.user} - {self.document_type} - {self.expiry_date}"
     
     def delete(self):
         self.upload_file.delete()
@@ -48,7 +48,7 @@ class Person_Document(models.Model):
     expiry_date = models.DateField()
 
     def __str__(self):
-        return f"Person Document {self.id} - {self.document_type} - {self.expiry_date} - {self.person_fullname or 'No Name'}"
+        return f"Person Document {self.user} - {self.document_type} - {self.expiry_date} - {self.person_fullname or 'No Name'}"
     
     def delete(self):
         self.upload_file.delete()

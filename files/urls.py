@@ -142,5 +142,7 @@ urlpatterns = [
     path('get_renew_person_list', views.get_renew_person_list, name='get_renew_person_list'),
     path('get_valid_person_list', views.get_valid_person_list, name='get_valid_person_list'),
 
+    path('renew_person_documents/<int:document_id>/', views.renew_person_documents, name='renew_person_documents'),
+
 
 ]
