@@ -38,5 +38,6 @@ path('create_person_receipt/<int:document_id>/', views.create_person_receipt, na
 
 path('receipt_valid_documents/', views.receipt_valid_documents, name='receipt_valid_documents'),
 path('admin_receipt_documents/', views.admin_receipt_documents, name='admin_receipt_documents'),
+path('admin_person_receipt_documents/', views.admin_person_receipt_documents, name='admin_person_receipt_documents'),
 
 ]

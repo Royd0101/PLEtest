@@ -58,17 +58,19 @@
                 <tr>
                   <th scope="col">No.</th>
                   <th scope="col" style="white-space: nowrap">FullName</th>
-                  <th scope="col" style="white-space: nowrap">Document Type</th>
+                  <th scope="col" style="white-space: nowrap">License Type</th>
                   <th scope="col" style="white-space: nowrap">Company</th>
                   <th scope="col" style="white-space: nowrap">Agency</th>
                   <th scope="col" style="white-space: nowrap">Document</th>
                   <th scope="col" style="white-space: nowrap">Renewed Date</th>
                   <th scope="col" style="white-space: nowrap">Expiry Date</th>
-                  <th scope="col" style="white-space: nowrap">Uploaded By</th>
+                  <th scope="col" style="white-space: nowrap">Receipt</th>
+                  <th scope="col" style="white-space: nowrap">Penalty</th>
                 </tr>
               </thead>
               <tbody>
-                {% for person_document in person_valid %}
+                <div></div>
+                {% for person_document in admin_person_documents %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
                   <td>{{ person_document.person_fullname }}</td>
@@ -76,20 +78,39 @@
                   <td>{{ person_document.company }}</td>
                   <td>{{ person_document.agency }}</td>
                   <td>
-                    <a href="{{ person_document.upload_file }}" target="_blank">
+                    <a
+                      href="{{ person_document.upload_file.url }}"
+                      target="_blank"
+                    >
                       <i
                         class="fas fa-file-alt pdf-icon"
                         style="font-size: 20px; color: #000"
                       ></i>
                     </a>
                   </td>
-
                   <td>{{ person_document.renewal_date }}</td>
                   <td>{{ person_document.expiry_date }}</td>
+                  {% if person_document.receipts.exists %}
+                  <div></div>
+                  {% for receipt in person_document.receipts.all %}
+
                   <td>
-                    {{ person_document.user_firstname }}
-                    {{person_document.user_lastname }}
+                    {% if receipt.receipt %}
+                    <a href="{{ receipt.receipt.url }}" target="_blank">
+                      <i
+                        class="fas fa-file-alt pdf-icon"
+                        style="font-size: 20px; color: #000"
+                      ></i>
+                    </a>
+                    {% else %}
+                    <strong>None</strong>
+                    {% endif %}
                   </td>
+                  <td>{{ receipt.fined }}</td>
+                  {% endfor %} {% else %}
+                  <td><strong>None</strong></td>
+                  <td><strong>None</strong></td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
               </tbody>

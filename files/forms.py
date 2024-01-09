@@ -146,6 +146,7 @@ class Person_Documents_Form(forms.ModelForm):
         required=True,
         widget=forms.TextInput(attrs={'type': 'date', 'style': 'width: 100%; display: inline-block; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
+
     class Meta:
         model = Person_Document
         fields = (
@@ -156,7 +157,9 @@ class Person_Documents_Form(forms.ModelForm):
             'renewal_date',
             'expiry_date',
         )
-
+        labels = {
+            'document_type': 'License Type',
+        }
 
 class Person_Documents_Renew_Form(forms.Form):
     person_fullname = forms.CharField(

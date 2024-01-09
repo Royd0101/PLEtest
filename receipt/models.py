@@ -10,7 +10,7 @@ def get_upload_path(instance, filename):
 
 # Create your models here.
 class Receipt(models.Model):
-    file = models.ForeignKey(File_Document, on_delete=models.CASCADE,default=1)
+    file = models.ForeignKey(File_Document, on_delete=models.CASCADE,default=1,related_name='receipt_set')
     fined = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     receipt = models.FileField(upload_to=get_upload_path,  null=True, blank=True)
     timestamp = models.DateTimeField(default=timezone.now)
@@ -28,7 +28,7 @@ class Receipt(models.Model):
     
 
 class Person_Receipt(models.Model):
-    person_document = models.ForeignKey(Person_Document, on_delete=models.CASCADE,default=1)
+    person_document = models.ForeignKey(Person_Document, on_delete=models.CASCADE,default=1,related_name='receipts')
     fined = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
     receipt = models.FileField(upload_to=get_upload_path,  null=True, blank=True)
     timestamp = models.DateTimeField(default=timezone.now)

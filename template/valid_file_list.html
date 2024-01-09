@@ -47,38 +47,40 @@
               </tr>
             </thead>
             <tbody>
-              {% for file_document in file_documents_with_receipts %}
+              {% for person_document in file_documents_with_receipts %}
               <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{file_document.company.company_name }}</td>
-                <td>{{ file_document.department_name.department_name }}</td>
-                <td>{{ file_document.document_type }}</td>
-                <td>{{ file_document.agency }}</td>
-                <td>
-                  <a href="{{ file_document.upload_file.url }}" target="_blank">
-                    <i
-                      class="fas fa-file-alt pdf-icon"
-                      style="font-size: 20px; color: #000"
-                    ></i>
-                  </a>
-                </td>
-                <td>{{ file_document.renewal_date }}</td>
-                <td>{{ file_document.expiry_date }}</td>
-                {% for receipt in file_document.receipt_set.all %}
-                <td>{{ receipt.fined }}</td>
-                    <td> <a href="{{  receipt.receipt.url }}" target="_blank">
-                      <i
-                        class="fas fa-file-alt pdf-icon"
-                        style="font-size: 20px; color: #000"
-                      ></i>
-                    </a></td>
-                  
-                {% endfor %} {% if not file_document.receipt_set.all %}
-                   <td> <strong>None</strong></td>
-                   <td> <strong>None</strong></td>
-                {% endif %}
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ person_document.company }}</td>
+                  <td>{{ person_document.department_name }}</td>
+                  <td>{{ person_document.document_type }}</td>
+                  <td>{{ person_document.agency }}</td>
+                  <td>
+                      <a href="{{ person_document.upload_file.url }}" target="_blank">
+                          <i class="fas fa-file-alt pdf-icon" style="font-size: 20px; color: #000"></i>
+                      </a>
+                  </td>
+                  <td>{{ person_document.renewal_date }}</td>
+                  <td>{{ person_document.expiry_date }}</td>
+                  {% if file_document.receipt_set.exists %}
+                      {% for receipt in file_document.receipt_set.all %}
+                          <td>{{ receipt.fined }}</td>
+                          <td>
+                              {% if receipt.receipt %}
+                                  <a href="{{ receipt.receipt.url }}" target="_blank">
+                                      <i class="fas fa-file-alt pdf-icon" style="font-size: 20px; color: #000"></i>
+                                  </a>
+                              {% else %}
+                                  <strong>None</strong>
+                              {% endif %}
+                          </td>
+                      {% endfor %}
+                  {% else %}
+                      <td><strong>None</strong></td>
+                      <td><strong>None</strong></td>
+                  {% endif %}
               </tr>
-              {% endfor %}
+          {% endfor %}
+          
             </tbody>
           </table>
         </div>

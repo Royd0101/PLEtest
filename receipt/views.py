@@ -128,6 +128,30 @@ def admin_receipt_documents(request):
         return render(request, 'error_page.html', {'error_message': error_message})
 
 
+@login_required
+def admin_person_receipt_documents(request):
+    api_response = requests.get('http://127.0.0.1:8000/api/receipts/person_receipt/')
+    if api_response.status_code == 200 and api_response.text:
+        fined_documents = api_response.json()
+        unique_years = set(entry['expiry_date'][:4] for entry in fined_documents)
+
+        filter_year = request.GET.get('filter_year', 'all')
+
+        if filter_year != 'all':
+            fined_documents = [entry for entry in fined_documents if entry['expiry_date'][:4] == filter_year]
+
+        unique_companies = set(entry['company_name'] for entry in fined_documents)
+        company_files = {}
+
+        unique_samples = [entry for entry in fined_documents if entry['company_name'] not in unique_companies and not unique_companies.add(entry['company_name'])]
+
+        for company in unique_companies:
+            company_files[company] = [entry for entry in fined_documents if entry['company_name'] == company]
+
+        return render(request, 'person_fined_documents.html', {'unique_samples': unique_samples, 'total_documents': fined_documents, 'company_files': company_files, 'unique_years': unique_years, 'selected_year': filter_year})
+    else:
+        error_message = f"Error fetching expired files. Status code: {api_response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
     
 
 

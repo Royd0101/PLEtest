@@ -120,7 +120,7 @@ urlpatterns = [
 
     #api
     #create person documents
-    path('person_documents/', views.create_person_documents, name='person_documents'),\
+    path('person_documents/', views.create_person_documents, name='person_documents'),
 
 
     #sending email
@@ -130,12 +130,13 @@ urlpatterns = [
     path('admin_expired_list/', views.admin_expired_file_list, name='admin_expired_list'),
     path('admin_valid_list', views.admin_valid_file_list, name='admin_valid_list'),
     path('admin_renew_list', views.admin_renew_file_list, name='admin_renew_list'),
-    path('file_documents_with_receipts', views.file_documents_with_receipts, name='file_documents_with_receipts'),
+    path('file_documents_with_receipts/', views.file_documents_with_receipts, name='file_documents_with_receipts'),
+    path('person_documents_with_receipts/', views.person_documents_with_receipts, name='person_documents_with_receipts'),
 
     #admin person documents
     path('admin_person_expired_list/', views.expired_person_document_list, name='admin_person_expired_list'),
     path('admin_person_renew_list', views.renew_person_document_list, name='admin_person_renew_list'),
-    path('admin_person_valid_list', views.valid_person_document_list, name='admin_person_valid_list'),
+    path('admin_person_valid_list', views.admin_person_valid_list, name='admin_person_valid_list'),
 
     #user person documents
     path('get_expired_person_list/', views.get_expired_person_list, name='get_expired_person_list'),

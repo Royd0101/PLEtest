@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import File_Document , Department,FileLog
+from .models import File_Document , Department,FileLog,Person_Document
 # Register your models here.
 @admin.register(File_Document)
 class File_Document_Admin(admin.ModelAdmin):
@@ -16,3 +16,8 @@ class Department_Admin(admin.ModelAdmin):
 class Department_Admin(admin.ModelAdmin):
     search_fields = ('id', 'action','user','timestamp')
     list_display = ('id','user','action','timestamp','previous_file')
+
+@admin.register(Person_Document)
+class Person_Document_Admin(admin.ModelAdmin):
+    search_fields = ('id','person_fullname')
+    list_display = ('id','person_fullname','company','document_type')

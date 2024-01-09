@@ -302,7 +302,6 @@ def create_new_file(request):
                 renewal_date=form.cleaned_data['renewal_date'],
                 expiry_date=form.cleaned_data['expiry_date']
             )
-            print(department_name)
             file_document.save()
 
             log_entry = FileLog.objects.create(
@@ -522,6 +521,38 @@ def file_documents_with_receipts(request):
     return render(request, 'valid_file_list.html', context)
 
 
+def person_documents_with_receipts(request):
+    current_user = request.user
+    response = requests.get('http://127.0.0.1:8000/api/receipts/person_receipt/', params={'user_email': current_user})
+    
+    if response.status_code == 200 and response.text:
+        total_fined = response.json()
+        total_fine = sum(float(item['fined']) if item['fined'] else 0 for item in total_fined)
+    
+    person_documents_with_receipts = Person_Document.objects.filter(user=current_user).prefetch_related('receipts').all()
+    context = {
+        'person_documents_with_receipts': person_documents_with_receipts,
+        'total_fine': total_fine,  # Corrected placement of the total_fine key
+    }
+    
+    return render(request, 'person_valid.html', context)
+
+
+
+@login_required
+def admin_person_valid_list(request):
+    file_documents_with_receipts = Person_Document.objects.prefetch_related('receipts').all()
+    response = requests.get('http://127.0.0.1:8000/api/receipts/person_receipt/')
+    
+    if response.status_code == 200 and response.text:
+        admin_total_fined = response.json()
+        admin_total_fine = sum(float(item['fined']) if item['fined'] else 0 for item in admin_total_fined)
+    
+    context = {
+        'admin_person_documents': file_documents_with_receipts,
+        'admin_total_fine': admin_total_fine,
+    }
+    return render(request, 'admin_person_valid.html', context)
 
 @login_required
 def create_person_documents(request):
@@ -621,7 +652,6 @@ def get_expired_person_list(request):
     response = requests.get('http://127.0.0.1:8000/api/file/person_expired/', params={'user_email': user_email})
     if response.status_code == 200 and response.text: 
         person_expired_file = response.json()
-        print(person_expired_file)
         return render(request, 'person_expired.html', {'person_expired_file': person_expired_file})
     else:
         error_message = f"Error fetching expired files. Status code: {response.status_code}"
@@ -646,7 +676,6 @@ def get_valid_person_list(request):
     response = requests.get('http://127.0.0.1:8000/api/file/person_valid/', params={'user_email': user_email})
     if response.status_code == 200:
         person_valid_file = response.json()
-        print(person_valid_file)
         return render(request, 'person_valid.html', {'person_valid_file': person_valid_file})
     else:
         return render(request, 'error_page.html')
