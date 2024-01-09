@@ -1,5 +1,5 @@
 from django.shortcuts import render ,redirect
-from .serializers import FileSerializer , DepartmentSerializer,FileLogSerializer, PersonSerializer
+from .serializers import FileSerializer , DepartmentSerializer,FileLogSerializer, PersonSerializer,PersonLogSerializer
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
@@ -116,7 +116,6 @@ class Person_Documents_view(ModelViewSet):
     @action(detail=False, methods=['get'])
     def admin_person_expired(self, request):
         queryset = self.get_queryset().filter(expiry_date__lt=timezone.now())
-        agency_counts = queryset.values('company', 'agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -127,7 +126,6 @@ class Person_Documents_view(ModelViewSet):
         queryset = self.get_queryset().filter(
             expiry_date__gte=expiration_threshold
         )
-        agency_counts = queryset.values('company', 'agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -136,7 +134,6 @@ class Person_Documents_view(ModelViewSet):
     def admin_person_renew(self, request):
         two_months_before_expiry = timezone.now() + timedelta(days=60)
         queryset = self.get_queryset().filter(expiry_date__gte=timezone.now(), expiry_date__lte=two_months_before_expiry)
-        agency_counts = queryset.values('company', 'agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -146,7 +143,6 @@ class Person_Documents_view(ModelViewSet):
     def user_person_expired(self, request):
         user_email = request.query_params.get('user_email') 
         queryset = self.get_queryset().filter(expiry_date__lt=timezone.now(), user__email=user_email)
-        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -158,7 +154,6 @@ class Person_Documents_view(ModelViewSet):
         queryset = self.get_queryset().filter(
             expiry_date__gte=expiration_threshold,  user__email=user_email
         )
-        agency_counts = queryset.values('agency').annotate(count=Count('agency'))
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
     
@@ -190,7 +185,20 @@ class FileLog_view(ModelViewSet):
         queryset = self.get_queryset().filter(user__email=user_email)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+#Person Logs
+class PersonLog_view(ModelViewSet):
+    serializer_class = PersonLogSerializer
+
+    def get_queryset(self):
+        return self.serializer_class.Meta.model.objects.all()
     
+    @action(detail=False, methods=['get'])
+    def person_list_log(self, request, *args, **kwargs):
+        user_email = request.query_params.get('user_email') 
+        queryset = self.get_queryset().filter(user__email=user_email)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
 
 #user ---------------------------------------------------------------------------------------------
 #get expired file list
@@ -562,9 +570,7 @@ def create_person_documents(request):
             person = Person_Document(
                 user=request.user, 
                 person_fullname=form.cleaned_data['person_fullname'],
-                company=form.cleaned_data['company'],
                 document_type=form.cleaned_data['document_type'],
-                agency=form.cleaned_data['agency'],
                 upload_file=form.cleaned_data['upload_file'],
                 renewal_date=form.cleaned_data['renewal_date'],
                 expiry_date=form.cleaned_data['expiry_date']
@@ -587,9 +593,7 @@ def renew_person_documents(request, document_id):
 
         if form.is_valid():
             person_document.person_fullname = form.cleaned_data['person_fullname']
-            person_document.company = form.cleaned_data['company']
             person_document.document_type = form.cleaned_data['document_type']
-            person_document.agency = form.cleaned_data['agency']
             uploaded_file = form.cleaned_data['upload_file']
             if uploaded_file:
                 person_document.upload_file = uploaded_file
@@ -603,9 +607,7 @@ def renew_person_documents(request, document_id):
     else:
         initial_data = {
             'person_fullname': person_document.person_fullname,
-            'company': person_document.company,
             'document_type': person_document.document_type,
-            'agency': person_document.agency,
         }
         form = Person_Documents_Renew_Form(initial=initial_data)
 

@@ -35,6 +35,13 @@ class Person_Receipt_view(ModelViewSet):
     def get_queryset(self):
         return self.serializer_class.Meta.model.objects.all()
     
+    @action(detail=False, methods=['get'])
+    def user_receipt(self, request, *args, **kwargs):
+        user_email = request.query_params.get('user_email')
+        queryset = self.get_queryset().filter(person_document__user__email=user_email)
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)
+    
 @login_required
 def create_receipt(request, file_id):
     file = get_object_or_404(File_Document, id=file_id)
@@ -133,26 +140,22 @@ def admin_person_receipt_documents(request):
     api_response = requests.get('http://127.0.0.1:8000/api/receipts/person_receipt/')
     if api_response.status_code == 200 and api_response.text:
         fined_documents = api_response.json()
-        unique_years = set(entry['expiry_date'][:4] for entry in fined_documents)
-
-        filter_year = request.GET.get('filter_year', 'all')
-
-        if filter_year != 'all':
-            fined_documents = [entry for entry in fined_documents if entry['expiry_date'][:4] == filter_year]
-
-        unique_companies = set(entry['company_name'] for entry in fined_documents)
-        company_files = {}
-
-        unique_samples = [entry for entry in fined_documents if entry['company_name'] not in unique_companies and not unique_companies.add(entry['company_name'])]
-
-        for company in unique_companies:
-            company_files[company] = [entry for entry in fined_documents if entry['company_name'] == company]
-
-        return render(request, 'person_fined_documents.html', {'unique_samples': unique_samples, 'total_documents': fined_documents, 'company_files': company_files, 'unique_years': unique_years, 'selected_year': filter_year})
+        return render(request, 'person_fined_documents.html', {'total_documents': fined_documents})
     else:
         error_message = f"Error fetching expired files. Status code: {api_response.status_code}"
         return render(request, 'error_page.html', {'error_message': error_message})
     
+
+def person_receipt_documents(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/receipts/user_receipt/', params={'user_email': user_email})
+    if response.status_code == 200 and response.text:
+        person_receipt = response.json()
+
+        return render(request, 'user_person_fined_license.html', {'person_receipt': person_receipt})
+    else:
+        error_message = f"Error fetching expired files. Status code: {response.status_code}"
+        return render(request, 'error_page.html', {'error_message': error_message})
 
 
     

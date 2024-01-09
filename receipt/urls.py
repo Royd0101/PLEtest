@@ -26,8 +26,11 @@ urlpatterns = [
             'delete': 'destroy',
         })),
 
-          path('receipt/', Receipt_view.as_view({
+        path('receipt/', Receipt_view.as_view({
             'get': 'receipt',  # Custom action for expired files
+        })),
+        path('user_receipt/', Person_Receipt_view.as_view({
+            'get': 'user_receipt',  # Custom action for expired files
         })),
 
     ])),
@@ -39,5 +42,6 @@ path('create_person_receipt/<int:document_id>/', views.create_person_receipt, na
 path('receipt_valid_documents/', views.receipt_valid_documents, name='receipt_valid_documents'),
 path('admin_receipt_documents/', views.admin_receipt_documents, name='admin_receipt_documents'),
 path('admin_person_receipt_documents/', views.admin_person_receipt_documents, name='admin_person_receipt_documents'),
+path('person_receipt_documents/', views.person_receipt_documents, name='person_receipt_documents'),
 
 ]

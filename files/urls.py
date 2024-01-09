@@ -2,7 +2,7 @@ from django.urls import path,include
 from . import views
 
 from .views import (
-    File_Document_view, Department_view,FileLog_view,Person_Documents_view
+    File_Document_view, Department_view,FileLog_view,Person_Documents_view,PersonLog_view
 )
 
 urlpatterns = [
@@ -17,13 +17,27 @@ urlpatterns = [
             'delete': 'destroy',
         })),
 
-         path('Person_Documents/', Person_Documents_view.as_view({
+        path('Person_Documents/', Person_Documents_view.as_view({
             'get': 'list',
             'post': 'create',
         })),
         path('Person_Documents/<int:pk>/', Person_Documents_view.as_view({
             'put': 'update',
             'delete': 'destroy',
+        })),
+
+        #person log view
+        path('Person_log/', PersonLog_view.as_view({
+            'get': 'list',
+            'post': 'create',
+        })),
+        path('Person_log/<int:pk>/', PersonLog_view.as_view({
+            'put': 'update',
+            'delete': 'destroy',
+        })),
+
+         path('User_Person_log/', PersonLog_view.as_view({
+            'get': 'person_list_log',
         })),
         
 

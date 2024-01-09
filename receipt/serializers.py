@@ -40,12 +40,10 @@ class Person_ReceiptSerializer(serializers.ModelSerializer):
     last = serializers.CharField(source='person_document.user.last_name', read_only=True)
     person_fullname = serializers.CharField(source='person_document.person_fullname', read_only=True)
     department_name = serializers.CharField(source='person_document.department_name', read_only=True)
-    company_name = serializers.CharField(source='person_document.company', read_only=True)
     document_type = serializers.CharField(source='person_document.document_type', read_only=True)
     expiry_date = serializers.DateField(source='person_document.expiry_date', read_only=True)
     renewal_date = serializers.DateField(source='person_document.renewal_date', read_only=True)
     document = serializers.FileField(source='person_document.upload_file', read_only=True)
-    agency = serializers.CharField(source='person_document.agency', read_only=True)
 
     class Meta:
         model = Person_Receipt
@@ -56,13 +54,11 @@ class Person_ReceiptSerializer(serializers.ModelSerializer):
             'first',
             'last',
             'department_name',
-            'company_name',
             'person_fullname',
             'expiry_date',
             'renewal_date',
             'document_type',
             'document',
-            'agency',
             'receipt',
             'timestamp',
         )

@@ -20,4 +20,4 @@ class Department_Admin(admin.ModelAdmin):
 @admin.register(Person_Document)
 class Person_Document_Admin(admin.ModelAdmin):
     search_fields = ('id','person_fullname')
-    list_display = ('id','person_fullname','company','document_type')
+    list_display = ('id','person_fullname','document_type')

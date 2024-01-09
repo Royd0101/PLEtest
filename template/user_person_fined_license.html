@@ -78,13 +78,10 @@
                         </th>
                         <th scope="col" style="white-space: nowrap">Receipt</th>
                         <th scope="col" style="white-space: nowrap">Penalty</th>
-                        <th scope="col" style="white-space: nowrap">
-                          Uploaded by:
-                        </th>
                       </tr>
                     </thead>
                     <tbody>
-                      {% for file in total_documents %}
+                      {% for file in person_receipt %}
                       <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ file.person_fullname }}</td>
@@ -108,7 +105,6 @@
                           </a>
                         </td>
                         <td>{{ file.fined }}</td>
-                        <td>{{ file.first }} {{ file.last }}</td>
                       </tr>
                       {% endfor %}
                     </tbody>

@@ -35,7 +35,7 @@ class person_receipt_form(forms.ModelForm):
         fields = ['fined', 'receipt', 'person_document', 'timestamp']
         widgets = {
             'receipt': forms.ClearableFileInput(attrs={'multiple': True}),
-            'file': forms.HiddenInput(),
+            'person_document': forms.HiddenInput(),
             'timestamp': forms.HiddenInput(),  # Assuming you want to hide the timestamp field
         }
         labels = {

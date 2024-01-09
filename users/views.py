@@ -194,6 +194,7 @@ def dashboard(request):
     user_response1 = requests.get('http://127.0.0.1:8000/api/file/person_valid/', params={'user_email': user_email})
     user_response2 = requests.get('http://127.0.0.1:8000/api/file/person_renew/', params={'user_email': user_email})
     user_response3 = requests.get('http://127.0.0.1:8000/api/file/person_expired/', params={'user_email': user_email})
+    user_response4 = requests.get('http://127.0.0.1:8000/api/receipts/user_receipt/', params={'user_email': user_email})
 
     num_valid_files = num_expired_files = num_renew_files = num_penalty_files = 0
     admin_num_valid_files = admin_num_expired_files = admin_num_renew_files  = admin_num_penalty_files= 0
@@ -202,62 +203,31 @@ def dashboard(request):
     admin_person_response1 = requests.get('http://127.0.0.1:8000/api/file/person_valid_documents/')
     admin_person_response2 = requests.get('http://127.0.0.1:8000/api/file/person_renew_documents/')
     admin_person_response3 = requests.get('http://127.0.0.1:8000/api/file/person_expired_documents/')
+    admin_person_response4 = requests.get('http://127.0.0.1:8000/api/receipts/person_receipt/')
 
     
 
-    person_valid_files = person_expired_files = person_renew_files  = 0
-    user_person_valid_files = user_person_expired_files = user_person_renew_files  = 0
+    person_valid_files = person_expired_files = person_renew_files  = person_fined_files = 0
+
+    user_person_valid_files = user_person_expired_files = user_person_renew_files  = user_person_fined_files = 0
 
     if admin_person_response1.status_code == 200:
         person_total_valid = admin_person_response1.json()
         person_valid_files = len(person_total_valid)
 
-        person_agency_counts1 = {}
-
-        for item in person_total_valid:
-            company_name = item.get('company')  
-            agency = item.get('agency')
-            if company_name not in person_agency_counts1:
-                person_agency_counts1[company_name] = {}
-
-            if agency not in person_agency_counts1[company_name]:
-                person_agency_counts1[company_name][agency] = 1
-            else:
-                person_agency_counts1[company_name][agency] += 1
         
     if admin_person_response2.status_code == 200:
         person_total_renew = admin_person_response2.json()
         person_renew_files = len(person_total_renew)
 
-        person_agency_counts2 = {}
-
-        for item in person_total_renew:
-            company_name = item.get('company')  
-            agency = item.get('agency')
-            if company_name not in person_agency_counts2:
-                person_agency_counts2[company_name] = {}
-
-            if agency not in person_agency_counts2[company_name]:
-                person_agency_counts2[company_name][agency] = 1
-            else:
-                person_agency_counts2[company_name][agency] += 1
 
     if admin_person_response3.status_code == 200:
         person_total_expired = admin_person_response3.json()
         person_expired_files = len(person_total_expired)
-        
-        person_agency_counts3= {}
 
-        for item in person_total_expired:
-            company_name = item.get('company')  
-            agency = item.get('agency')
-            if company_name not in person_agency_counts3:
-                person_agency_counts3[company_name] = {}
-
-            if agency not in person_agency_counts3[company_name]:
-                person_agency_counts3[company_name][agency] = 1
-            else:
-                person_agency_counts3[company_name][agency] += 1
+    if admin_person_response4.status_code == 200:
+        person_total_fined = admin_person_response4.json()
+        person_fined_files = len(person_total_fined)
 
 
 
@@ -266,20 +236,21 @@ def dashboard(request):
     if user_response1.status_code == 200:
         user_person_total_valid = user_response1.json()
         user_person_valid_files = len(user_person_total_valid)
-        user_person_agencies1 = [item.get('agency') for item in user_person_total_valid]
-        user_person_agency_counts1 = dict(Counter(user_person_agencies1))
+
         #renew
     if user_response2.status_code == 200:
         user_person_total_renew = user_response2.json()
         user_person_renew_files = len(user_person_total_renew)
-        user_person_agencies2 = [item.get('agency') for item in user_person_total_renew]
-        user_person_agency_counts2 = dict(Counter(user_person_agencies2))
+
         #expired
     if user_response3.status_code == 200:
         user_person_total_expired = user_response3.json()
         user_person_expired_files = len(user_person_total_expired)
-        user_person_agencies3 = [item.get('agency') for item in user_person_total_expired]
-        user_person_agency_counts3 = dict(Counter(user_person_agencies3))
+
+    if user_response4.status_code == 200:
+        user_person_total_fined = user_response4.json()
+        user_person_fined_files = len(user_person_total_fined)
+
 
 #admin display business data
 
@@ -374,7 +345,34 @@ def dashboard(request):
             else:
                 admin_agency_counts_by_company3[company_name][agency] += 1
 
-    return render(request, 'dashboard.html', {'num_valid_files': num_valid_files, 'num_expired_files': num_expired_files, 'num_renew_files': num_renew_files, 'num_penalty_files': num_penalty_files, 'agency_counts1': agency_counts1, 'agency_counts2': agency_counts2, 'agency_counts3': agency_counts3,  'agency_counts4': agency_counts4, 'admin_count1':admin_num_valid_files,'admin_count2':admin_num_renew_files,'admin_count3':admin_num_expired_files, 'admin_agency1':admin_agency_counts_by_company,'admin_agency2':admin_agency_counts_by_company1,'admin_agency3':admin_agency_counts_by_company2, 'admin_count4':admin_num_penalty_files,'admin_agency4':admin_agency_counts_by_company3,'person_valid_files': person_valid_files, 'person_renew_files': person_renew_files, 'person_expired_files': person_expired_files, 'person_agency_counts1': person_agency_counts1, 'person_agency_counts2': person_agency_counts2, 'person_agency_counts3': person_agency_counts3, 'user_person_expired_files':user_person_expired_files, 'user_person_renew_files': user_person_renew_files,'user_person_valid_files':user_person_valid_files,'user_person_agency_counts1':user_person_agency_counts1, 'user_person_agency_counts2':user_person_agency_counts2,'user_person_agency_counts3':user_person_agency_counts3})
+    context = {
+            'num_valid_files': num_valid_files,
+            'num_expired_files': num_expired_files,
+            'num_renew_files': num_renew_files,
+            'num_penalty_files': num_penalty_files,
+            'agency_counts1': agency_counts1,
+            'agency_counts2': agency_counts2,
+            'agency_counts3': agency_counts3,
+            'agency_counts4': agency_counts4,
+            'admin_count1': admin_num_valid_files,
+            'admin_count2': admin_num_renew_files,
+            'admin_count3': admin_num_expired_files,
+            'admin_agency1': admin_agency_counts_by_company,
+            'admin_agency2': admin_agency_counts_by_company1,
+            'admin_agency3': admin_agency_counts_by_company2,
+            'admin_count4': admin_num_penalty_files,
+            'admin_agency4': admin_agency_counts_by_company3,
+            'person_valid_files': person_valid_files,
+            'person_renew_files': person_renew_files,
+            'person_expired_files': person_expired_files,
+            'user_person_expired_files': user_person_expired_files,
+            'user_person_renew_files': user_person_renew_files,
+            'user_person_valid_files': user_person_valid_files,
+            'person_fined_files': person_fined_files,
+            'user_person_fined_files': user_person_fined_files,
+        }
+
+    return render(request, 'dashboard.html',context)
 
 
 #create user page -----------------------------------------------------------------------------

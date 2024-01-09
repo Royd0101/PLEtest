@@ -344,6 +344,7 @@
             </div>
           </div>
         </div>
+        
        <!-- Business Documents Dashboard End-->
         <!-- Professional Documents Dashboard Begin-->
         <div class="tab-content">
@@ -367,20 +368,13 @@
                       <div class="row no-gutters align-items-center">
                         <div class="col mr-2">
                           <div class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;">
-                            Valid Documents
+                            Valid License
                           </div>
                           <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
                             {% if user.is_authenticated and user.is_staff %}
                             <span>{{ person_valid_files }}</span>
                             <div class="text-xs text-uppercase">
-                              {% for company, agency_counts in person_agency_counts1.items %}
-                                  <span>{{ company }}</span>
-                                  <ul style="margin: 0px;">
-                                      {% for agency, count in agency_counts.items %}
-                                          <li>{{ agency }}: {{ count }}</li>
-                                      {% endfor %}
-                                  </ul>
-                              {% endfor %}
+                              
                               </div>
                               {% endif %} 
                             {% if not user.is_staff %}
@@ -390,10 +384,7 @@
                             <div
                             class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                           >
-                          {% for agency, count in user_person_agency_counts1.items %}
-                          <div>{{ agency }}: {{ count }}</div>
-                         
-                        {% endfor %}
+                        
                         
                           </div>
                           {% endif %}
@@ -423,20 +414,13 @@
                         <div
                           class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
                         >
-                          For Renewal Documents
+                          For Renewal License
                         </div>
                         <div class="h5 text-white" style="font-family: 'Open Sans', sans-serif;">
                           {% if user.is_authenticated and user.is_staff %}
                           <span>{{ person_renew_files }}</span>
                           <div class="text-xs text-uppercase">
-                            {% for company, agency_counts in person_agency_counts2.items %}
-                              <span>{{ company }}</span>
-                              <ul style="margin: 0px;">
-                                  {% for agency, count in agency_counts.items %}
-                                      <li>{{ agency }}: {{ count }}</li>
-                                  {% endfor %}
-                              </ul>
-                          {% endfor %}
+                           
 
                             </div>
                             {% endif %} 
@@ -446,9 +430,7 @@
                             <div
                           class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                         >
-                        {% for agency, count in user_person_agency_counts2.items %}
-                        <div>{{ agency }}: {{ count }}</div>
-                      {% endfor %}
+                        
                         </div>
                         {% endif %} 
                             
@@ -477,7 +459,7 @@
                         <div
                           class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
                         >
-                          Expired Documents
+                          Expired License
                         </div>
                         <div class="row no-gutters align-items-center">
                           <div class="col-auto">
@@ -487,14 +469,6 @@
                             {% if user.is_authenticated and user.is_staff %}
                             <span>{{ person_expired_files }}</span>
                             <div class="text-xs text-uppercase">
-                              {% for company, agency_counts in person_agency_counts3.items %}
-                              <span>{{ company }}</span>
-                              <ul style="margin: 0px;">
-                                  {% for agency, count in agency_counts.items %}
-                                      <li>{{ agency }}: {{ count }}</li>
-                                  {% endfor %}
-                              </ul>
-                            {% endfor %}
                               </div>
                             {% endif %} 
                             {% if not user.is_staff %}
@@ -503,9 +477,7 @@
                             <div
                           class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                         >
-                        {% for agency, count in user_person_agency_counts3.items %}
-                        <div>{{ agency }}: {{ count }}</div>
-                      {% endfor %}
+                       
                         </div>
                         {% endif %} 
                             </div>
@@ -524,7 +496,7 @@
          <!-- Fined Card -->
          <div class="col-xl-3 col-md-6 mb-4 mx-auto">
           {% if not user.is_staff %}
-          <a href="{% url 'receipt_valid_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
+          <a href="{% url 'person_receipt_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
             {% endif %}  {% if user.is_authenticated and user.is_staff %}
           <a href="{% url 'admin_person_receipt_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
             {% endif %}
@@ -535,33 +507,22 @@
                   <div
                     class="text-xs font-weight-bold text-white text-uppercase mb-1" style="font-family: 'Open Sans', sans-serif;"
                   >
-                  Documents with Penalty
+                  License with Penalty
                   </div>
                   <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
                     {% if user.is_authenticated and user.is_staff %}
-                    <span>{{ admin_count4 }}</span>
+                    <span>{{ person_fined_files }}</span>
                     <div class="text-xs text-uppercase">
-                      {% for company_name, agency_counts in admin_agency4.items %}
-                          <span>{{ company_name }}</span>
-                          <ul>
-                            {% for agency, count in agency_counts.items %}
-                              <li>{{ agency }}: {{ count }}</li>
-                            {% endfor %}
-                          </ul>
-                        {% endfor %}
+                     
                       </div>
                       {% endif %} 
                       {% if not user.is_staff %}
-                      <span>{{ num_penalty_files }}</span>
+                      <span>{{ user_person_fined_files }}</span>
                       {% endif %} 
                       <div
                     class="text-xs text-uppercase" style="font-family: 'Open Sans', sans-serif;"
                   >
-                  {% for agency, count in agency_counts4.items %}
-                  <div>{{ agency }}: {{ count }}</div>
-                {% endfor %}
                   </div>
-                      
                   </div>
                 </div>
                 <div class="col-auto">
@@ -581,7 +542,7 @@
                   <div class="card shadow mb-4">
                       <div
                           class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
-                          <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Yearly Penalties</h6>
+                          <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Yearly Expired License</h6>
                       </div>
                       <div class="card-body"  style="background-color: #f9fafb;" >
                           <div class="chart-area" >
@@ -600,12 +561,7 @@
               <div class="col-xl-5 col-lg-5">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
-                        {% if user.is_authenticated and user.is_staff %}
-                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown Per Company</h6>
-                        {% endif %} 
-                        {% if not user.is_staff %}
-                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown Per Department</h6>
-                        {% endif %} 
+                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown of Expired License</h6>        
                     </div>
                     <div class="card-body"  style="background-color: #f9fafb;">
                       <div class="chart-pie pt-4 pb-2" style="position: relative;">

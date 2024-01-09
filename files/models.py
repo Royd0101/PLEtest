@@ -40,9 +40,7 @@ class File_Document(models.Model):
 class Person_Document(models.Model):
     user = models.ForeignKey('users.User', on_delete=models.CASCADE)
     person_fullname = models.CharField(max_length=50)
-    company = models.CharField(max_length=50, default=1)
     document_type = models.CharField(max_length=50)
-    agency = models.CharField(max_length=50, default='Default Agency Name')
     upload_file = models.FileField(upload_to=get_upload_path)
     renewal_date = models.DateField()
     expiry_date = models.DateField()
@@ -72,3 +70,21 @@ class FileLog(models.Model):
 
     def __str__(self):
         return f" {self.action} {self.file.document_type}"
+    
+class PersonLog(models.Model):
+    person = models.ForeignKey(Person_Document, on_delete=models.CASCADE, related_name='person_logs')  
+    previous_file = models.FileField(upload_to=get_upload_path, null=True, blank=True)
+    expiry_date = models.DateField(default=None, null=True, blank=True)
+    action = models.CharField(max_length=50)
+    timestamp = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        current_utc_time = timezone.now()
+        time_difference = timedelta(hours=8) 
+
+        self.timestamp = current_utc_time + time_difference
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f" {self.action} {self.person.document_type}"

@@ -125,17 +125,10 @@ class Person_Documents_Form(forms.ModelForm):
         required=True,
         widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
-    company = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
-    )
     document_type = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
-    agency = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
-    }))
     upload_file = forms.FileField()
     renewal_date = forms.DateField(
         initial=datetime.date.today(),
@@ -152,31 +145,21 @@ class Person_Documents_Form(forms.ModelForm):
         fields = (
             'person_fullname',
             'document_type',
-            'agency',
             'upload_file',
             'renewal_date',
             'expiry_date',
         )
-        labels = {
-            'document_type': 'License Type',
-        }
 
 class Person_Documents_Renew_Form(forms.Form):
     person_fullname = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
-    company = forms.CharField(
-        required=True,
-        widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
-    )
+
     document_type = forms.CharField(
         required=True,
         widget=forms.TextInput(attrs={'style': 'width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'})
     )
-    agency = forms.CharField(widget=forms.TextInput(attrs={
-        'style': 'width: 100%; padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box;'
-    }))
     upload_file = forms.FileField()
     renewal_date = forms.DateField(
         initial=datetime.date.today(),
