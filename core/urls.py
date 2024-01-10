@@ -18,7 +18,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from users.views import dashboard, create_user, create_user_page, user_list, update_users,redirect_to_login, login_user, login_page, logout_user,company_page,create_company,company_list,delete_user, delete_company,department_total_fine,update_company
-from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,renew_file,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs,admin_expired_file_list,admin_valid_file_list,admin_renew_file_list,file_documents_with_receipts,create_person_documents,  expired_person_document_list,renew_person_document_list,get_expired_person_list,get_renew_person_list,get_valid_person_list,renew_person_documents,person_documents_with_receipts,admin_person_valid_list
+from files.views import create_new_file_form,create_new_file, renew_file_form ,get_expired_file_list, get_renew_file_list,renew_file,department_page,department_list,create_department,display_file_page,admin_logs,update_department,delete_department,automatic_send_mail,user_logs,admin_expired_file_list,admin_valid_file_list,admin_renew_file_list,file_documents_with_receipts,create_person_documents,  expired_person_document_list,renew_person_document_list,get_expired_person_list,get_renew_person_list,get_valid_person_list,renew_person_documents,person_documents_with_receipts,admin_person_valid_list,admin_person_logs,person_logs,yearly_expired_license,yearly_expired_files_by_month
 from receipt.views import create_receipt,receipt_valid_documents,admin_receipt_documents,create_person_receipt,admin_person_receipt_documents,person_receipt_documents
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -60,9 +60,12 @@ urlpatterns = [
     path('create_department/', create_department, name='create_department'),
     #display file profile
     path('display_file_page/', display_file_page, name='display_file_page'),
-    #user logs
+    #file logs
     path('admin_logs/', admin_logs, name='admin_logs'),
     path('user_logs/',user_logs, name='user_logs'),
+    #person logs
+    path('admin_person_logs/', admin_person_logs, name='admin_person_logs'),
+    path('person_logs/', person_logs, name='person_logs'),
     #update department
     path('update_department/', update_department, name='update_department'),
     #delete department
@@ -131,6 +134,9 @@ urlpatterns = [
 
     path('admin_person_receipt_documents/', admin_person_receipt_documents, name='admin_person_receipt_documents'),
     path('person_receipt_documents/', person_receipt_documents, name='person_receipt_documents'),
+
+    path('yearly_expired_license/', yearly_expired_license, name='yearly_expired_license'),
+    path('yearly_expired_files_by_month/', yearly_expired_files_by_month, name='yearly_expired_files_by_month'),
   
     
 ]

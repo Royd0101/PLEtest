@@ -112,6 +112,19 @@
         
         </li>
 
+        <li class="nav-item">
+          {% if not user.is_staff %}
+          <a class="nav-link" href=" {% url 'person_logs' %}">
+            {% endif %}
+            {% if user.is_authenticated and user.is_staff %}
+          <a class="nav-link" href="{% url 'admin_person_logs' %}">
+            {% endif %}
+            <i class="fas fa-fw fa-box-open"></i>
+            <span>Professional User Logs</span></a
+          >
+        
+        </li>
+
         <hr class="sidebar-divider d-none d-md-block" />
 
 

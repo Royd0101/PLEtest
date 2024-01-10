@@ -1,158 +1,82 @@
-const personPieCanvas = document.querySelector("#person_pie");
-const chartTitleElement = document.querySelector("#chartTitle");
-const chartYearElement = document.querySelector("#chartYear");
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the canvas element
+  const canvasperson_pie = document.getElementById("person_pie");
 
-fetch("/api/receipts/person_receipt/")
-  .then((response) => response.json())
-  .then((data) => {
-    console.log("Fetched data:", data);
-
-    const currentYear = new Date().getFullYear();
-
-    const currentYearData = data.filter((entry) => {
-      const entryYear = new Date(entry.timestamp).getFullYear();
-      return entryYear === currentYear;
-    });
-
-    const groupedData = groupDataByCompany(currentYearData);
-
-    const companyLabels = Object.keys(groupedData).sort();
-
-    const totalFines = companyLabels.map((company) =>
-      groupedData[company].reduce((sum, entry) => {
-        return sum + parseFloat(entry.fined);
-      }, 0)
-    );
-
-    console.log(totalFines);
-    const totalFine = totalFines.reduce((sum, amount) => sum + amount, 0);
-
-    companyLabels.forEach((company, index) => {
-      const companyPercentage = ((totalFines[index] / totalFine) * 100).toFixed(
-        2
+  // Fetch data from the API
+  fetch("http://127.0.0.1:8000/api/file/Person_log/")
+    .then((response) => response.json())
+    .then((data) => {
+      // Filter data for the current year and renewed files
+      const currentYear = new Date().getFullYear();
+      const filteredData = data.filter(
+        (entry) =>
+          entry.action === "Renewed" &&
+          new Date(entry.expiry_date).getFullYear() === currentYear
       );
-    });
 
-    const companyColors = {};
-    companyLabels.forEach((company, index) => {
-      companyColors[company] = getRandomColor(index);
-    });
+      // Process the data to get monthly counts
+      const monthlyCounts = {};
+      filteredData.forEach((entry) => {
+        const month = new Date(entry.expiry_date).getMonth(); // Month is 0-indexed
+        const monthName = new Date(entry.expiry_date).toLocaleString(
+          "default",
+          { month: "long" }
+        );
+        monthlyCounts[monthName] = (monthlyCounts[monthName] || 0) + 1;
+      });
 
-    const myPieChart = new Chart(personPieCanvas, {
-      type: "doughnut",
-      data: {
-        labels: companyLabels,
-        datasets: [
-          {
-            data: totalFines,
-            backgroundColor: companyLabels.map(
-              (company) => companyColors[company]
-            ),
-            datalabels: {
-              display: false,
-            },
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            display: false,
-          },
-          tooltip: {
-            callbacks: {
-              label: (context) => {
-                const label = context.label || "";
-                const value = context.parsed || 0;
-                const companyIndex = companyLabels.indexOf(label);
-                const companyPercentage = (
-                  (totalFines[companyIndex] / totalFine) *
-                  100
-                ).toFixed(2);
-                const amount = value.toFixed(0);
+      // Create an array of labels and data for the chart
+      const labels = Object.keys(monthlyCounts);
+      const counts = Object.values(monthlyCounts);
 
-                return `${label}: ${companyPercentage}% (${amount})`;
-              },
+      // Create the pie chart
+      const PersonPieChart = new Chart(canvasperson_pie, {
+        type: "doughnut",
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: "Monthly Renewed Licenses",
+              data: counts,
+              backgroundColor: [
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(255, 159, 64, 0.2)",
+                "rgba(255, 99, 132, 0.2)",
+                "rgba(54, 162, 235, 0.2)",
+                "rgba(255, 206, 86, 0.2)",
+                "rgba(75, 192, 192, 0.2)",
+                "rgba(153, 102, 255, 0.2)",
+                "rgba(255, 159, 64, 0.2)",
+              ],
+              borderColor: [
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)",
+                "rgba(255, 99, 132, 1)",
+                "rgba(54, 162, 235, 1)",
+                "rgba(255, 206, 86, 1)",
+                "rgba(75, 192, 192, 1)",
+                "rgba(153, 102, 255, 1)",
+                "rgba(255, 159, 64, 1)",
+              ],
+              borderWidth: 1,
             },
-          },
-          datalabels: {
-            color: "white",
-            font: {
-              weight: "bold",
-              size: 14,
-              display: false,
-            },
-            formatter: (value, context) => {
-              const companyIndex = companyLabels.indexOf(
-                context.chart.data.labels[context.dataIndex]
-              );
-              const companyPercentage = (
-                (totalFines[companyIndex] / totalFine) *
-                100
-              ).toFixed(2);
-              return `${companyPercentage}%`;
-            },
+          ],
+        },
+        options: {
+          title: {
+            display: true,
+            text: "Monthly Renewed Licenses for " + currentYear,
           },
         },
-        title: {
-          display: true,
-          text: `Total Penalty for ${currentYear}`,
-          fontSize: 16,
-        },
-      },
-    });
-
-    // Populate the legend
-    const legendList = document.querySelector("#legendList");
-
-    companyLabels.forEach((company, index) => {
-      const companyPercentage = ((totalFines[index] / totalFine) * 100).toFixed(
-        2
-      );
-      const amount = totalFines[index].toFixed(0);
-
-      // Create legend item
-      const legendItem = document.createElement("li");
-      legendItem.innerHTML = `
-            <span style="background-color: ${companyColors[company]};"></span>
-            <span>${company}</span>
-            <span>${companyPercentage}%</span>
-          `;
-
-      // Append the legend item to the legend list
-      legendList.appendChild(legendItem);
-    });
-  })
-  .catch((error) => {
-    console.error("Error fetching data:", error);
-  });
-
-function groupDataByCompany(data) {
-  return data.reduce((result, entry) => {
-    const company = entry.company_name;
-
-    if (!result[company]) {
-      result[company] = [];
-    }
-
-    result[company].push(entry);
-    return result;
-  }, {});
-}
-
-function getRandomColor(index) {
-  const colors = [
-    "rgba(255, 99, 132, 0.4)", // Lighter red
-    "rgba(4, 102, 139, 1)", // Lighter blue
-    "rgba(255, 206, 86, 0.4)", // Lighter yellow
-    "rgba(75, 192, 192, 0.4)", // Lighter green
-    "rgba(153, 102, 255, 0.4)", // Lighter purple
-    "rgba(255, 159, 64, 0.4)", // Lighter orange
-    "rgba(0, 255, 0, 0.4)", // Lighter lime green
-    "rgba(0, 0, 255, 0.4)", // Lighter navy blue
-    "rgba(128, 0, 128, 0.4)", // Lighter purple
-  ];
-
-  return colors[index % colors.length];
-}
+      });
+    })
+    .catch((error) => console.error("Error fetching data:", error));
+});

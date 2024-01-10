@@ -63,39 +63,40 @@
                     </thead>
                     <tbody>
                       {% if user.is_authenticated and user.is_staff %}
-                      {% for log in admin_logs %}
-                          <tr>
-                              <td>
-                                  <p>
-                                      User {{ log.first_name }} {{ log.last_name }}
-                                      {% if log.action == 'Renewed' %}
-                                          {{ log.action }} a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expire on "{{ log.expired_date }}".
-                                          <p><b>Old Document: </b><a href="{{ log.previous_file }}" target="_blank">Open File</a></p>
-                                          <p><b>New Document: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
-                                      {% elif log.action == 'Uploaded' %}
-                                          Uploaded a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expire on "{{ log.expiry_date }}". 
-                                          <p><b>New Document: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
-                                      {% endif %}
-                                  </p>
-                              </td>
-                              <td>{{ log.timestamp }}</td>
-                          </tr>
+                      {% for log in admin_person_logs %}
+                      <tr>
+                        <td>
+                            <p>
+                                User {{ log.first_name }} {{ log.last_name }}
+                                {% if log.action == 'Renewed' %}
+                                  {{ log.action }} a license for "{{ log.fullname }}" that will expire on "{{ log.expired_date }}".
+                                  <p><b>Old License: </b><a href="{{ log.previous_file }}" target="_blank">Open File</a></p>
+                                  <p><b>New License: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
+                                {% elif log.action == 'Uploaded' %}
+                                  uploaded a license for "{{ log.fullname }}" that will expired on "{{ log.expiry_date }}". 
+                                  <p><b>New License: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
+                                {% endif %}
+                            </p>
+                        </td>
+                        <td>{{ log.timestamp }}</td>
+                      
+                    </tr>
                       {% endfor %}
                       {% endif %}
                       {% if not user.is_staff %}
-                      {% for user_logs in user_log %}
+                      {% for user_logs in user_person_logs %}
                       <tr>
                         <td>
                             <p>
                                   
                                 {% if user_logs.action == 'Renewed' %}
-                                You  {{ user_logs.action }} a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expire on "{{ user_logs.expired_date }}".
-                                    <p><b>Old Document: </b><a href="{{ user_logs.previous_file }}" target="_blank">Open File</a></p>
-                                    <p><b>New Document: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
+                                You  {{ user_logs.action }} a license for "{{ user_logs.fullname }}"" that will expire on "{{ user_logs.expired_date }}".
+                                    <p><b>Old License: </b><a href="{{ user_logs.previous_file }}" target="_blank">Open File</a></p>
+                                    <p><b>New License: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
                                 {% elif user_logs.action == 'Uploaded' %}
-                                You uploaded a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expired on "{{ user_logs.expiry_date }}".
+                                You uploaded a license for "{{ user_logs.fullname }}" that will expired on "{{ user_logs.expiry_date }}".
                                 
-                                    <p><b>New Document: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
+                                    <p><b>New License: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
                                 {% endif %}
                             </p>
                         </td>

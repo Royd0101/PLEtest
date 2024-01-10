@@ -109,9 +109,12 @@ urlpatterns = [
     path('renew_file_form/<int:file_id>/', views.renew_file_form, name='renew_file_form'),
     #file profile page
     path('display_file_page/<int:file_id>/', views.display_file_page, name='display_file_page'),
-    #user logs
+    #file logs
     path('admin_logs/', views.admin_logs, name='admin_logs'),
     path('user_logs/', views.user_logs, name='user_logs'),
+    #person logs
+    path('admin_person_logs/', views.admin_person_logs, name='admin_person_logs'),
+    path('person_logs/', views.person_logs, name='person_logs'),
 
 
     #render admin page for dashboard
@@ -158,6 +161,9 @@ urlpatterns = [
     path('get_valid_person_list', views.get_valid_person_list, name='get_valid_person_list'),
 
     path('renew_person_documents/<int:document_id>/', views.renew_person_documents, name='renew_person_documents'),
+
+    path('yearly_expired_license/', views.yearly_expired_license, name='yearly_expired_license'),
+    path('yearly_expired_files_by_month/', views.yearly_expired_files_by_month, name='yearly_expired_files_by_month'),
 
 
 ]

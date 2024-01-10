@@ -24,7 +24,7 @@ class Receipt(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Receipt #{self.file}"
+        return f"File Document {self.user} - {self.document_type} - {self.expiry_date}"
     
 
 class Person_Receipt(models.Model):
@@ -42,6 +42,6 @@ class Person_Receipt(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"Receipt #{self.person_document}"
+        return f"Person Document {self.user} - {self.document_type} - {self.expiry_date} - {self.person_fullname or 'No Name'}"
     
     

@@ -67,7 +67,7 @@
                 {% if not user.is_staff %}
                 <a href="{% url 'file_documents_with_receipts' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
-                  {% if user.is_authenticated and user.is_staff %}
+                  {% if user.is_staff %}
                 <a href="{% url 'admin_valid_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                   <div class="card shadow h-100 py-2" style="background-color: #04668b;">
@@ -78,7 +78,7 @@
                             Valid Documents
                           </div>
                           <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
-                            {% if user.is_authenticated and user.is_staff %}
+                            {% if user.is_staff %}
                             <span>{{ admin_count1 }}</span>
                             <div
                             class="text-xs text-uppercase"
@@ -120,7 +120,7 @@
               <div class="col-xl-3 col-md-6 mb-4 mx-auto">
                 {% if not user.is_staff %}
                 <a href="{% url 'get_renew_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
-                  {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                  {% endif %}  {% if user.is_staff %}
                 <a href="{% url 'admin_renew_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
                 <div class="card shadow h-100 py-2"  style="background-color:  #04668b;">
@@ -133,7 +133,7 @@
                           For Renewal Documents
                         </div>
                         <div class="h5 text-white" style="font-family: 'Open Sans', sans-serif;">
-                          {% if user.is_authenticated and user.is_staff %}
+                          {% if user.is_staff %}
                           <span>{{ admin_count2 }}</span>
                           <div class="text-xs text-uppercase">
                             {% for company_name, agency_counts in admin_agency2.items %}
@@ -172,7 +172,7 @@
               <div class="col-xl-3 col-md-3 mb-4 mx-auto">
               {% if not user.is_staff %}   
               <a href="{% url 'get_expired_file_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
-                {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                {% endif %}  {% if user.is_staff %}
                 <a href="{% url 'admin_expired_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                 <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
@@ -189,7 +189,7 @@
                             <div
                               class="h5 mb-0 mr-3 text-white" style="font-family: 'Open Sans', sans-serif;"
                             >
-                            {% if user.is_authenticated and user.is_staff %}
+                            {% if user.is_staff %}
                             <span>{{ admin_count3 }}</span>
                             <div class="text-xs text-uppercase">
                               {% for company_name, agency_counts in admin_agency3.items %}
@@ -229,7 +229,7 @@
          <div class="col-xl-3 col-md-6 mb-4 mx-auto">
           {% if not user.is_staff %}
           <a href="{% url 'receipt_valid_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
-            {% endif %}  {% if user.is_authenticated and user.is_staff %}
+            {% endif %}  {% if user.is_staff %}
           <a href="{% url 'admin_receipt_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
             {% endif %}
           <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
@@ -242,7 +242,7 @@
                   Documents with Penalty
                   </div>
                   <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
-                    {% if user.is_authenticated and user.is_staff %}
+                    {% if user.is_staff %}
                     <span>{{ admin_count4 }}</span>
                     <div class="text-xs text-uppercase">
                       {% for company_name, agency_counts in admin_agency4.items %}
@@ -292,7 +292,7 @@
                             {% if not user.is_staff %}
                               <canvas id="myChart"></canvas>
                               {% endif %} 
-                              {% if user.is_authenticated and user.is_staff %}
+                              {% if user.is_staff %}
                               <canvas id="bar" style="height: 200px;"></canvas>
                               {% endif %} 
                           </div>
@@ -304,7 +304,7 @@
               <div class="col-xl-5 col-lg-5">
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
-                        {% if user.is_authenticated and user.is_staff %}
+                        {% if user.is_staff %}
                         <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown Per Company</h6>
                         {% endif %} 
                         {% if not user.is_staff %}
@@ -313,7 +313,7 @@
                     </div>
                     <div class="card-body"  style="background-color: #f9fafb;">
                       <div class="chart-pie pt-4 pb-2" style="position: relative;">
-                        {% if user.is_authenticated and user.is_staff %}
+                        {% if user.is_staff %}
                         <div style="display: flex; justify-content: space-between;">
                             <div>
                                 <canvas id="pie" style="width: 200px; height: 250px; max-height: 300px;"></canvas>
@@ -360,7 +360,7 @@
                 {% if not user.is_staff %}
                 <a href="{% url 'person_documents_with_receipts' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
-                  {% if user.is_authenticated and user.is_staff %}
+                  {% if user.is_staff %}
                 <a href="{% url 'admin_person_valid_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                   <div class="card shadow h-100 py-2" style="background-color: #04668b;">
@@ -371,7 +371,7 @@
                             Valid License
                           </div>
                           <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
-                            {% if user.is_authenticated and user.is_staff %}
+                            {% if user.is_staff %}
                             <span>{{ person_valid_files }}</span>
                             <div class="text-xs text-uppercase">
                               
@@ -404,7 +404,7 @@
               <div class="col-xl-3 col-md-6 mb-4 mx-auto">
                 {% if not user.is_staff %}
                 <a href="{% url 'get_renew_person_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
-                  {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                  {% endif %}  {% if user.is_staff %}
                 <a href="{% url 'admin_person_renew_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %}
                 <div class="card shadow h-100 py-2"  style="background-color:  #04668b;">
@@ -417,7 +417,7 @@
                           For Renewal License
                         </div>
                         <div class="h5 text-white" style="font-family: 'Open Sans', sans-serif;">
-                          {% if user.is_authenticated and user.is_staff %}
+                          {% if user.is_staff %}
                           <span>{{ person_renew_files }}</span>
                           <div class="text-xs text-uppercase">
                            
@@ -449,7 +449,7 @@
               <div class="col-xl-3 col-md-3 mb-4 mx-auto">
               {% if not user.is_staff %}   
               <a href="{% url 'get_expired_person_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
-                {% endif %}  {% if user.is_authenticated and user.is_staff %}
+                {% endif %}  {% if user.is_staff %}
                 <a href="{% url 'admin_person_expired_list' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
                   {% endif %} 
                 <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
@@ -466,7 +466,7 @@
                             <div
                               class="h5 mb-0 mr-3 text-white" style="font-family: 'Open Sans', sans-serif;"
                             >
-                            {% if user.is_authenticated and user.is_staff %}
+                            {% if user.is_staff %}
                             <span>{{ person_expired_files }}</span>
                             <div class="text-xs text-uppercase">
                               </div>
@@ -497,7 +497,7 @@
          <div class="col-xl-3 col-md-6 mb-4 mx-auto">
           {% if not user.is_staff %}
           <a href="{% url 'person_receipt_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
-            {% endif %}  {% if user.is_authenticated and user.is_staff %}
+            {% endif %}  {% if user.is_staff %}
           <a href="{% url 'admin_person_receipt_documents' %}" class="custom-modal-button" role="button" aria-pressed="true" style="text-decoration: none">
             {% endif %}
           <div class="card shadow h-100 py-2"  style="background-color: #04668b;;">
@@ -510,7 +510,7 @@
                   License with Penalty
                   </div>
                   <div class="h5 mb-0 text-white" style="font-family: 'Open Sans', sans-serif;">
-                    {% if user.is_authenticated and user.is_staff %}
+                    {% if user.is_staff %}
                     <span>{{ person_fined_files }}</span>
                     <div class="text-xs text-uppercase">
                      
@@ -547,10 +547,10 @@
                       <div class="card-body"  style="background-color: #f9fafb;" >
                           <div class="chart-area" >
                             {% if not user.is_staff %}
-                              <canvas id="myChart"></canvas>
+                              <canvas id="user_person_bar"></canvas>
                               {% endif %} 
-                              {% if user.is_authenticated and user.is_staff %}
-                              <canvas id="person_bar" style="height: 200px;"></canvas>
+                              {% if user.is_staff %}
+                              <canvas id="person_bar"></canvas>
                               {% endif %} 
                           </div>
                       </div>
@@ -558,40 +558,33 @@
               </div>
 
             <!-- Pie Chart -->
-              <div class="col-xl-5 col-lg-5">
-                <div class="card shadow mb-4">
-                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
-                        <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown of Expired License</h6>        
-                    </div>
-                    <div class="card-body"  style="background-color: #f9fafb;">
-                      <div class="chart-pie pt-4 pb-2" style="position: relative;">
-                        {% if user.is_authenticated and user.is_staff %}
-                        <div style="display: flex; justify-content: space-between;">
-                            <div>
-                                <canvas id="person_pie" style="width: 200px; height: 250px; max-height: 300px;"></canvas>
-                            </div>
-                            <div class=" mt-5" style="text-align: center;">
-                                <h6 style="font-size: 14px;">Legend</h6>
-                                <ul class="legend-list" id="legendList" style="list-style-type: none; padding: 0; font-size: 12px;"></ul>
-                            </div>
-                        </div>
-                        {% endif %} 
-                        {% if not user.is_staff %}
-                        <div style="display: flex; justify-content: space-between;">
+            <div class="col-xl-5 col-lg-5">
+              <div class="card shadow mb-4">
+                  <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between" style="background-color: #04668b;">
+                      <h6 class="m-0 font-weight-bold text-white"  style="font-family: 'Open Sans', sans-serif;">Total Breakdown of Expired License</h6>            
+                  </div>
+                  <div class="card-body"  style="background-color: #f9fafb;">
+                    <div class="chart-pie pt-4 pb-2" style="position: relative;">
+                      {% if user.is_staff %}
+                      <div style="display: flex; justify-content: space-between;">
                           <div>
-                        <canvas id="myPieChart" style="width: 200px; height: 250px; max-height: 300px;"></canvas>
+                              <canvas id="user_person_pie"></canvas>
+                          </div>
                       </div>
-                      <div class=" mt-5" style="text-align: center;">
-                          <h6 style="font-size: 14px;">Legend</h6>
-                          <ul class="legend-list" id="UserlegendList" style="list-style-type: none; padding: 0; font-size: 12px;"></ul>
-                      </div>
-                        {% endif %} 
+                      {% endif %} 
+                      {% if not user.is_staff %}
+                      <div style="display: flex; justify-content: space-between;">
+                        <div>
+                      <canvas id="person_pie"></canvas>
                     </div>
-                    </div>
-                </div>
+                      {% endif %} 
+                  </div>
+                  </div>
               </div>
+            </div>
           </div>
         </div>
+
           </div>
         </div>
         </div>
@@ -600,10 +593,12 @@
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script src="{% static 'js/tabs.js' %}"></script>
     <script src="{% static 'js/pie.js' %}"></script>
     <script src="{% static 'js/bar.js' %}"></script>
+    <script src="{% static 'js/user_person_bar.js' %}"></script>
+    <script src="{% static 'js/user_person_pie.js' %}"></script>
+    <script src="{% static 'js/person_pie.js' %}"></script>
     <script src="{% static 'js/person_bar.js' %}"></script>
     <script src="{% static 'js/user_bar.js' %}"></script>
     <script src="{% static 'js/user_pie.js' %}"></script>

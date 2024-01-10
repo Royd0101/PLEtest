@@ -5,7 +5,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework.decorators import action
 from django.utils import timezone
 from datetime import timedelta
-from .models import File_Document ,Department , FileLog,Person_Document
+from .models import File_Document ,Department , FileLog,Person_Document,PersonLog
 from django.shortcuts import render, get_object_or_404
 import requests
 from django.utils import timezone
@@ -19,6 +19,8 @@ from .tasks import check_document_expiry
 from .forms import DepartmentForm,update_department_form,renew_form,create_file, Person_Documents_Form,Person_Documents_Renew_Form
 from django.db.models import Count
 from django.conf import settings
+from django.http import JsonResponse
+from datetime import datetime
 # Create your views here.
 
     
@@ -196,7 +198,7 @@ class PersonLog_view(ModelViewSet):
     @action(detail=False, methods=['get'])
     def person_list_log(self, request, *args, **kwargs):
         user_email = request.query_params.get('user_email') 
-        queryset = self.get_queryset().filter(user__email=user_email)
+        queryset = self.get_queryset().filter(person__user__email=user_email)
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
 
@@ -316,7 +318,7 @@ def create_new_file(request):
                 user=request.user,
                 file=file_document,
                 expiry_date= file_document.expiry_date,
-                action='created'
+                action='Uploaded'
             )
 
             messages.success(request, 'File created successfully!')
@@ -355,7 +357,7 @@ def renew_file(request, file_id):
                 user=request.user,
                 file=file,
                 previous_file=previous_file_path,  
-                action='renewed'
+                action='Renewed'
             )
 
             messages.success(request, 'File renewed successfully!')
@@ -576,6 +578,14 @@ def create_person_documents(request):
                 expiry_date=form.cleaned_data['expiry_date']
             )
             person.save()
+
+            log_entry = PersonLog(
+                person=person,
+                expiry_date=person.expiry_date,
+                action='Uploaded',
+            )
+            log_entry.save()
+
             messages.success(request, 'Document uploaded successfully!')
             return redirect('dashboard')
         else:
@@ -592,6 +602,7 @@ def renew_person_documents(request, document_id):
         form = Person_Documents_Renew_Form(request.POST, request.FILES)
 
         if form.is_valid():
+            previous_file_path = person_document.upload_file.path
             person_document.person_fullname = form.cleaned_data['person_fullname']
             person_document.document_type = form.cleaned_data['document_type']
             uploaded_file = form.cleaned_data['upload_file']
@@ -600,6 +611,14 @@ def renew_person_documents(request, document_id):
             person_document.renewal_date = form.cleaned_data['renewal_date']
             person_document.expiry_date = form.cleaned_data['expiry_date']
             person_document.save()
+
+            log_entry = PersonLog.objects.create(
+                person=person_document,
+                previous_file=previous_file_path,
+                expiry_date=person_document.expiry_date,
+                action='Renewed'
+            )
+
             messages.success(request, 'Document renewed successfully!')
             return redirect('dashboard')
         else:
@@ -612,6 +631,50 @@ def renew_person_documents(request, document_id):
         form = Person_Documents_Renew_Form(initial=initial_data)
 
     return render(request, 'renew_person_documents.html', {'form': form, 'person_document': person_document})
+
+
+@login_required
+def admin_person_logs(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/Person_log/')
+    if response.status_code == 200:
+        admin_person_logs = response.json()
+
+        # Convert timestamp to Philippines time and update the logs
+        for log_entry in admin_person_logs:
+            timestamp_utc = timezone.datetime.strptime(log_entry['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            timestamp_manila = timestamp_utc + timezone.timedelta(hours=0) 
+            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M %p") 
+
+            for log_entry in admin_person_logs:
+                log_entry['current_file_url'] = f"{settings.MEDIA_URL}{log_entry.get('current_file_name', '')}" 
+
+        # Sort logs based on the converted timestamp
+        admin_person_logs = sorted(admin_person_logs, key=lambda x: timezone.datetime.strptime(x['timestamp'], "%Y-%m-%d %I:%M %p"), reverse=True)
+
+        return render(request, 'person_logs.html', {'admin_person_logs': admin_person_logs})
+    else:
+        return render(request, 'error_page.html')
+    
+@login_required
+def person_logs(request):
+    user = request.user  # Use request.user to access the authenticated user
+    response = requests.get('http://127.0.0.1:8000/api/file/User_Person_log/', params={'user_email': user.email})
+    if response.status_code == 200:
+        user_person_logs = response.json()
+
+        for log_entry in user_person_logs:
+            timestamp_utc = timezone.datetime.strptime(log_entry['timestamp'], "%Y-%m-%dT%H:%M:%S.%fZ")
+            timestamp_manila = timestamp_utc + timezone.timedelta(hours=0)  
+            log_entry['timestamp'] = timestamp_manila.strftime("%Y-%m-%d %I:%M %p")  
+
+            log_entry['current_file_url'] = f"{settings.MEDIA_URL}{log_entry.get('current_file_name', '')}"
+            log_entry['previous_file_url'] = f"{settings.MEDIA_URL}{log_entry.get('previous_file_name', '')}"
+
+        user_person_logs.sort(key=lambda x: timezone.datetime.strptime(x['timestamp'], "%Y-%m-%d %I:%M %p"), reverse=True)
+
+        return render(request, 'person_logs.html', {'user_person_logs': user_person_logs})
+    else:
+        return render(request, 'error_page.html')
 
 
 #admin side
@@ -681,3 +744,57 @@ def get_valid_person_list(request):
         return render(request, 'person_valid.html', {'person_valid_file': person_valid_file})
     else:
         return render(request, 'error_page.html')
+    
+
+def yearly_expired_license(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/file/User_Person_log/', params={'user_email': user_email})
+
+    if response.status_code == 200:
+        data = response.json()
+
+        # Process the data to get yearly counts for expired files before the current date
+        yearly_expired_counts = {}
+        current_date = datetime.now().date()
+
+        for entry in data:
+            expiry_date = datetime.strptime(entry['expiry_date'], "%Y-%m-%d").date()
+            if expiry_date < current_date:
+                year = expiry_date.year
+                yearly_expired_counts[year] = yearly_expired_counts.get(year, 0) + 1
+
+        # Create a dictionary for JSON response
+        response_data = {
+            'yearly_expired_counts': yearly_expired_counts,
+        }
+
+        return JsonResponse(response_data, status=200)
+    else:
+        return JsonResponse({'error': 'Failed to fetch data'}, status=500)
+
+
+def yearly_expired_files_by_month(request):
+    user_email = request.user.email
+    response = requests.get('http://127.0.0.1:8000/api/file/User_Person_log/', params={'user_email': user_email})
+
+    if response.status_code == 200:
+        api_data = response.json()
+
+        # Process the data to get monthly counts for expired files before the current date
+        current_date = datetime.now().date()
+        monthly_expired_counts = {}
+
+        for entry in api_data:
+            expiry_date = datetime.strptime(entry['expiry_date'], "%Y-%m-%d").date()
+            if expiry_date.year == current_date.year and expiry_date < current_date:
+                month = expiry_date.month
+                monthly_expired_counts[month] = monthly_expired_counts.get(month, 0) + 1
+
+        data = {
+            'api_data': api_data,
+            'monthly_expired_counts': monthly_expired_counts,
+        }
+
+        return JsonResponse(data, status=200)
+    else:
+        return JsonResponse({'error': 'Failed to fetch API data'}, status=500)
