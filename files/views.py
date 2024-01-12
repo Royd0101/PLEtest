@@ -23,6 +23,8 @@ from django.http import JsonResponse
 from datetime import datetime
 # Create your views here.
 
+from .tasks import check_person_document_expiry
+
     
 class Department_view(ModelViewSet):
     serializer_class = DepartmentSerializer
@@ -550,21 +552,6 @@ def person_documents_with_receipts(request):
 
 
 @login_required
-def admin_person_valid_list(request):
-    file_documents_with_receipts = Person_Document.objects.prefetch_related('receipts').all()
-    response = requests.get('http://127.0.0.1:8000/api/receipts/person_receipt/')
-    
-    if response.status_code == 200 and response.text:
-        admin_total_fined = response.json()
-        admin_total_fine = sum(float(item['fined']) if item['fined'] else 0 for item in admin_total_fined)
-    
-    context = {
-        'admin_person_documents': file_documents_with_receipts,
-        'admin_total_fine': admin_total_fine,
-    }
-    return render(request, 'admin_person_valid.html', context)
-
-@login_required
 def create_person_documents(request):
     if request.method == 'POST':
         form = Person_Documents_Form(request.POST, request.FILES)
@@ -780,21 +767,56 @@ def yearly_expired_files_by_month(request):
     if response.status_code == 200:
         api_data = response.json()
 
-        # Process the data to get monthly counts for expired files before the current date
+        # Filter data for the current year
+        current_year = datetime.now().year
+        filtered_data = [entry for entry in api_data if datetime.strptime(entry['expiry_date'], "%Y-%m-%d").year == current_year]
+
+        # Process the data to get monthly counts for expired files
         current_date = datetime.now().date()
         monthly_expired_counts = {}
 
-        for entry in api_data:
+        for entry in filtered_data:
             expiry_date = datetime.strptime(entry['expiry_date'], "%Y-%m-%d").date()
-            if expiry_date.year == current_date.year and expiry_date < current_date:
+            if expiry_date < current_date:
                 month = expiry_date.month
-                monthly_expired_counts[month] = monthly_expired_counts.get(month, 0) + 1
+                month_name = expiry_date.strftime('%B')  # Get full month name
+                monthly_expired_counts[month_name] = monthly_expired_counts.get(month_name, 0) + 1
 
         data = {
-            'api_data': api_data,
+            'api_data': filtered_data,
             'monthly_expired_counts': monthly_expired_counts,
         }
 
         return JsonResponse(data, status=200)
     else:
         return JsonResponse({'error': 'Failed to fetch API data'}, status=500)
+    
+
+#admin 
+def admin_yearly_expired_license(request):
+    response = requests.get('http://127.0.0.1:8000/api/file/Person_log/')
+
+    if response.status_code == 200:
+        data = response.json()
+
+        yearly_expired_counts = {}
+        current_date = datetime.now().date()
+
+        for entry in data:
+            expiry_date = datetime.strptime(entry['expiry_date'], "%Y-%m-%d").date()
+            if expiry_date < current_date:
+                year = expiry_date.year
+                yearly_expired_counts[year] = yearly_expired_counts.get(year, 0) + 1
+
+        # Create a dictionary for JSON response
+        response_data = {
+            'yearly_expired_counts': yearly_expired_counts,
+        }
+
+        return JsonResponse(response_data, status=200)
+    else:
+        return JsonResponse({'error': 'Failed to fetch data'}, status=500)
+    
+
+
+        

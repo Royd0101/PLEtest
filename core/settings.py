@@ -189,6 +189,11 @@ CELERY_BEAT_SCHEDULE = {
         'schedule': timezone.timedelta(hours=12, minutes=0),   
         'args': (),  
     },
+    'check_person_document_expiry': {
+        'task': 'files.tasks.check_person_document_expiry',
+        'schedule': timezone.timedelta(hours=12, minutes=0),
+        'args': (),
+    },
 }
 
 

@@ -62,13 +62,11 @@
                   <th scope="col" style="white-space: nowrap">License</th>
                   <th scope="col" style="white-space: nowrap">Renewed Date</th>
                   <th scope="col" style="white-space: nowrap">Expiry Date</th>
-                  <th scope="col" style="white-space: nowrap">Receipt</th>
-                  <th scope="col" style="white-space: nowrap">Penalty</th>
                 </tr>
               </thead>
               <tbody>
                 <div></div>
-                {% for person_document in admin_person_documents %}
+                {% for person_document in person_valid %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
                   <td>{{ person_document.person_fullname }}</td>
@@ -86,27 +84,6 @@
                   </td>
                   <td>{{ person_document.renewal_date }}</td>
                   <td>{{ person_document.expiry_date }}</td>
-                  {% if person_document.receipts.exists %}
-                  <div></div>
-                  {% for receipt in person_document.receipts.all %}
-
-                  <td>
-                    {% if receipt.receipt %}
-                    <a href="{{ receipt.receipt.url }}" target="_blank">
-                      <i
-                        class="fas fa-file-alt pdf-icon"
-                        style="font-size: 20px; color: #000"
-                      ></i>
-                    </a>
-                    {% else %}
-                    <strong>None</strong>
-                    {% endif %}
-                  </td>
-                  <td>{{ receipt.fined }}</td>
-                  {% endfor %} {% else %}
-                  <td><strong>None</strong></td>
-                  <td><strong>None</strong></td>
-                  {% endif %}
                 </tr>
                 {% endfor %}
               </tbody>

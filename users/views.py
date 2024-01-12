@@ -21,6 +21,7 @@ from datetime import datetime
 from rest_framework.decorators import api_view
 import json
 from django.http import JsonResponse
+from django.contrib.auth.decorators import user_passes_test
 
 
 # Create your views here.
@@ -109,13 +110,14 @@ def create_user(request):
 
 
 #update user data -----------------------------------------------------------------------------
+@user_passes_test(lambda u: u.is_superuser)  # Only allow superusers
 @login_required
 def update_users(request, user_id):
-    user = get_object_or_404(User, id=user_id)
+    user = get_object_or_404(User, id=user_id,)
     if request.method == 'POST':
         form = update_user_form(request.POST)
         if form.is_valid():
-            form.save(user)
+            form.save()
             messages.success(request, 'User updated successfully.')
             return redirect('user_list')
         else:
@@ -346,30 +348,30 @@ def dashboard(request):
                 admin_agency_counts_by_company3[company_name][agency] += 1
 
     context = {
-            'num_valid_files': num_valid_files,
-            'num_expired_files': num_expired_files,
-            'num_renew_files': num_renew_files,
-            'num_penalty_files': num_penalty_files,
-            'agency_counts1': agency_counts1,
-            'agency_counts2': agency_counts2,
-            'agency_counts3': agency_counts3,
-            'agency_counts4': agency_counts4,
-            'admin_count1': admin_num_valid_files,
-            'admin_count2': admin_num_renew_files,
-            'admin_count3': admin_num_expired_files,
-            'admin_agency1': admin_agency_counts_by_company,
-            'admin_agency2': admin_agency_counts_by_company1,
-            'admin_agency3': admin_agency_counts_by_company2,
-            'admin_count4': admin_num_penalty_files,
-            'admin_agency4': admin_agency_counts_by_company3,
-            'person_valid_files': person_valid_files,
-            'person_renew_files': person_renew_files,
-            'person_expired_files': person_expired_files,
-            'user_person_expired_files': user_person_expired_files,
-            'user_person_renew_files': user_person_renew_files,
-            'user_person_valid_files': user_person_valid_files,
-            'person_fined_files': person_fined_files,
-            'user_person_fined_files': user_person_fined_files,
+            'num_valid': num_valid_files,
+            'num_expired': num_expired_files,
+            'num_renew': num_renew_files,
+            'num_penalty': num_penalty_files,
+            'a_c1': agency_counts1,
+            'a_c2': agency_counts2,
+            'a_c3': agency_counts3,
+            'a_c4': agency_counts4,
+            'admin_c1': admin_num_valid_files,
+            'admin_c2': admin_num_renew_files,
+            'admin_c3': admin_num_expired_files,
+            'admin_c4': admin_num_penalty_files,
+            'admin_a1': admin_agency_counts_by_company,
+            'admin_a2': admin_agency_counts_by_company1,
+            'admin_a3': admin_agency_counts_by_company2,
+            'admin_a4': admin_agency_counts_by_company3,
+            'person_valid': person_valid_files,
+            'person_renew': person_renew_files,
+            'person_expired': person_expired_files,
+            'user_p_expired': user_person_expired_files,
+            'user_p_renew': user_person_renew_files,
+            'user_p_valid': user_person_valid_files,
+            'person_fined': person_fined_files,
+            'user_pe_fined': user_person_fined_files,
         }
 
     return render(request, 'dashboard.html',context)

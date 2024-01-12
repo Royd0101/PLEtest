@@ -153,7 +153,8 @@ urlpatterns = [
     #admin person documents
     path('admin_person_expired_list/', views.expired_person_document_list, name='admin_person_expired_list'),
     path('admin_person_renew_list', views.renew_person_document_list, name='admin_person_renew_list'),
-    path('admin_person_valid_list', views.admin_person_valid_list, name='admin_person_valid_list'),
+    path('valid_person_document_list', views.valid_person_document_list, name='valid_person_document_list'),
+    
 
     #user person documents
     path('get_expired_person_list/', views.get_expired_person_list, name='get_expired_person_list'),
@@ -162,6 +163,7 @@ urlpatterns = [
 
     path('renew_person_documents/<int:document_id>/', views.renew_person_documents, name='renew_person_documents'),
 
+    path('admin_yearly_expired_license/', views.admin_yearly_expired_license, name='admin_yearly_expired_license'),
     path('yearly_expired_license/', views.yearly_expired_license, name='yearly_expired_license'),
     path('yearly_expired_files_by_month/', views.yearly_expired_files_by_month, name='yearly_expired_files_by_month'),
 
