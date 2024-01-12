@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    {% load static %}
+          <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
+          <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
+          <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
+          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
+          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <title>To Be Renewed File List</title>
+  </head>
+  <style>
+ .card {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .card-header {
+            position: sticky;
+            top: 0;
+            background-color: #04668b;
+            z-index: 1000; 
+            padding: 10px 0
+        }
+
+        th {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 30px; /* Adjust as needed */
+        background-color: white;
+        z-index: 1;
+    }
+
+  </style>
+
+ <body id="page-top" style="background-color: #77c4d74d !important">
+  {% include 'toast.html' %} {% csrf_token %}
+      <div id="wrapper">
+        {% include 'sidebar.html' %}
+            <div class="container-fluid mt-5">
+              <div class="card shadow mb-4">
+                <div class="card-header py-3" style="background-color: #04668b">
+                  <div class="d-flex align-items-center">
+                    <h6
+                      class="m-0 font-weight-bold text-white"
+                      style="font-family: 'Open Sans', sans-serif"
+                    >
+                      User Log
+                    </h6>
+                  </div>
+                  </div>
+                  <table id="renew" class="table table-sm" >
+                    <thead id="log-table-body">
+                      <tr>
+                        <th scope="col" >Recent Activity</th>
+                        <th scope="col">Date/Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if user.is_authenticated and user.is_staff %}
+                      {% for log in admin_person_logs %}
+                      <tr>
+                        <td>
+                            <p>
+                                User {{ log.first_name }} {{ log.last_name }}
+                                {% if log.action == 'Renewed' %}
+                                  {{ log.action }} a license for "{{ log.fullname }}" that will expire on "{{ log.expired_date }}".
+                                  <p><b>Old License: </b><a href="{{ log.previous_file }}" target="_blank">Open File</a></p>
+                                  <p><b>New License: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
+                                {% elif log.action == 'Uploaded' %}
+                                  uploaded a license for "{{ log.fullname }}" that will expired on "{{ log.expiry_date }}". 
+                                  <p><b>New License: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
+                                {% endif %}
+                            </p>
+                        </td>
+                        <td>{{ log.timestamp }}</td>
+                      
+                    </tr>
+                      {% endfor %}
+                      {% endif %}
+                      {% if not user.is_staff %}
+                      {% for user_logs in user_person_logs %}
+                      <tr>
+                        <td>
+                            <p>
+                                  
+                                {% if user_logs.action == 'Renewed' %}
+                                You  {{ user_logs.action }} a license for "{{ user_logs.fullname }}"" that will expire on "{{ user_logs.expired_date }}".
+                                    <p><b>Old License: </b><a href="{{ user_logs.previous_file }}" target="_blank">Open File</a></p>
+                                    <p><b>New License: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
+                                {% elif user_logs.action == 'Uploaded' %}
+                                You uploaded a license for "{{ user_logs.fullname }}" that will expired on "{{ user_logs.expiry_date }}".
+                                
+                                    <p><b>New License: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
+                                {% endif %}
+                            </p>
+                        </td>
+                        <td>{{ user_logs.timestamp }}</td>
+                    </tr>
+                      {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+              </div>
+              <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end me-4">Back</a>
+            </div>
+      </div>
+    <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'bootstrap/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
+  </body>
+</html>

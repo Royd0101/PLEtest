@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'users',
     'files',
+    'receipt',
 
     'celery',
     'django_celery_beat',
@@ -99,9 +100,13 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+     'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'testple',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '5432',
     }
 }
 
@@ -183,6 +188,11 @@ CELERY_BEAT_SCHEDULE = {
         'task': 'files.tasks.check_document_expiry',
         'schedule': timezone.timedelta(hours=12, minutes=0),   
         'args': (),  
+    },
+    'check_person_document_expiry': {
+        'task': 'files.tasks.check_person_document_expiry',
+        'schedule': timezone.timedelta(hours=12, minutes=0),
+        'args': (),
     },
 }
 

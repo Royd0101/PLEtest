@@ -7,92 +7,130 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     {% load static %}
-          <!-- Custom fonts for this template -->
-          <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
-          <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
-          <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-          
-          <!-- Bootstrap CSS -->
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
-          
-          <!-- DataTables CSS -->
-          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <!-- Custom fonts for this template -->
+    <link
+      href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{% static 'bootstrap/css/sb-admin-2.min.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+    />
+    <!-- Example using CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="..."
+    />
+
+    <!-- DataTables CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
+    />
     <title>Company List</title>
   </head>
- <body id="page-top">
-{% csrf_token %}
-      <!-- Page Wrapper -->
-      <div id="wrapper">
-        <!-- Sidebar -->
-        {% include 'sidebar.html' %} {% include 'toast.html' %} 
-            <div class="container-fluid">
-              <div class="card shadow mb-2">
-                <div class="card-header py-3">
-                  <div class=" d-flex align-items-center">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                        Company List
-                    </h6>
-                    <a href="{% url 'create_company' %}" class="btn btn-primary ml-auto" role="button">Add Company</a>
-                  </div>
-                
-                </div>
-                <div class="card-body">
-          <table id="company_list" class="table table-sm">
-            <thead class="bg-primary text-white table-sm">
-              <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Company</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for company in list_company %}
-              <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ company.company_name }}</td>
-                <td><form
-                method="post"
-                action="{% url 'delete_company' company_id=company.id %}"
-                style="display: inline"
-                onsubmit="return confirm('Are you sure you want to delete this Company?');"
+  <body id="page-top" style="background-color: #77c4d74d !important">
+    {% csrf_token %}
+    <div id="wrapper">
+      {% include 'sidebar.html' %} {% include 'toast.html' %}
+      <div class="container-fluid mt-5">
+        <div class="card shadow mb-2">
+          <div class="card-header py-3" style="background-color: #04668b">
+            <div class="d-flex align-items-center">
+              <h6
+                class="m-0 font-weight-bold text-white"
+                style="font-family: 'Open Sans', sans-serif"
               >
-                {% csrf_token %}
-                <button
-                  type="submit"
-                  class="btn btn-danger btn-sm"
-                  data-user-id="{{ company.id }}"
-                >
-                  <i class="fas fa-trash"></i>
-                </button>
-              </form>
-            </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+                Company List
+              </h6>
+              <a
+                href="{% url 'create_company' %}"
+                class="btn btn-primary ml-auto"
+                role="button"
+                style="
+                  font-family: 'Open Sans', sans-serif;
+                  border-radius: 20px;
+                "
+              >
+                <i class="fas fa-plus"></i> Company</a
+              >
+            </div>
+          </div>
+          <div class="card-body">
+            <table
+              id="company_list"
+              class="table table-sm"
+              style="font-family: 'Open Sans', sans-serif"
+            >
+              <thead class="bg-primary text-white table-sm">
+                <tr>
+                  <th scope="col">No.</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for company in list_company %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ company.company_name }}</td>
+                  <td>
+                    <a
+                      href="{% url 'update_company' company_id=company.id %}"
+                      class="btn btn-primary btn-sm"
+                      role="button"
+                      aria-pressed="true"
+                      data-user-id="{{ company.id }}"
+                      >Edit</a
+                    >
+                    <form
+                      method="post"
+                      action="{% url 'delete_company' company_id=company.id %}"
+                      style="display: inline"
+                      onsubmit="return confirm('Are you sure you want to delete this Company?');"
+                    >
+                      {% csrf_token %}
+                      <button
+                        type="submit"
+                        class="btn btn-danger btn-sm"
+                        data-user-id="{{ company.id }}"
+                      >
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+      <a
+        href="{% url 'dashboard' %}"
+        class="btn btn-secondary float-end m-1 mr-4"
+        >Back</a
+      >
     </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end m-1  mr-4">Back</a>
-  </div>
-</div>
-
-</div>
-</div>
-   
-    <!-- Bootstrap core JavaScript-->
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
-
-    <!-- Page level plugins -->
     <script src="{% static 'bootstrap/vendor/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
-
-    <!-- Page level custom scripts -->
     <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
-
     <script>
       $(document).ready(function () {
         $("#company_list").dataTable({

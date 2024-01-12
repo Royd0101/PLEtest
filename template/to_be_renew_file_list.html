@@ -7,106 +7,111 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     {% load static %}
-          <!-- Custom fonts for this template -->
-          <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
-          <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
-          <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-          
-          <!-- Bootstrap CSS -->
-          <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
-          
-          <!-- DataTables CSS -->
-          <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
+    <link
+      href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="{% static 'bootstrap/css/sb-admin-2.min.css' %}"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css"
+    />
     <title>To Be Renewed File List</title>
   </head>
- <body id="page-top">
-{% include 'toast.html' %} {% csrf_token %}
-      <!-- Page Wrapper -->
-      <div id="wrapper">
-        <!-- Sidebar -->
-        {% include 'sidebar.html' %}
-        <!-- End of Topbar -->
-  
-            <!-- Begin Page Content -->
-            <div class="container-fluid">
-  
-              <!-- DataTales Example -->
-              <div class="card shadow mb-2">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">
-                    Due for Renewal Documents
-                  </h6>
-                </div>
-                <div class="card-body">
-          <table id="renew" class="table table-sm">
-            <thead class="bg-primary text-white">
-              <tr>
-                <th scope="col">No.</th>
-                <th scope="col">Company</th>
-                <th scope="col">Department</th>
-                <th scope="col">Document Type</th>
-                <th scope="col">Agency</th>
-                <th scope="col">Document</th>
-                <th scope="col">Renewed Date</th>
-                <th scope="col">Expiry Date</th>
-                <th scope="col">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% for file in renew_file %}
-              <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ file.company_name }}</td>
-                <td>{{ file.department_name }}</td>
-                <td>{{ file.document_type }}</td>
-                <td>{{ file.agency }}</td>
-                <td>
-                  <a href="{{ file.upload_file }}" target="_blank">
-                    <i
-                      class="fas fa-file-alt pdf-icon"
-                      style="font-size: 20px; color: #000"
-                    ></i>
-                  </a>
-                </td>
-                <td>{{ file.renewal_date }}</td>
-                <td>{{ file.expiry_date }}</td>
-                
-                <td>
-                  <a
-                    href="{% url 'renew_file_form' file_id=file.id %}"
-                    class="btn btn-primary btn-sm"
-                    role="button"
-                    aria-pressed="true"
-                    >Renew</a
-                  >
-                </td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
+  <body id="page-top" style="background-color: #77c4d74d !important">
+    {% include 'toast.html' %} {% csrf_token %}
+    <div id="wrapper">
+      {% include 'sidebar.html' %}
+      <div class="container-fluid mt-5">
+        <div class="card shadow mb-2">
+          <div class="card-header py-3" style="background-color: #04668b">
+            <h6
+              class="m-0 font-weight-bold text-white"
+              style="font-family: 'Open Sans', sans-serif"
+            >
+              Due for Renewal Documents
+            </h6>
+          </div>
+          <div class="card-body">
+            <table
+              id="renew"
+              class="table table-sm"
+              style="font-family: 'Open Sans', sans-serif"
+            >
+              <thead class="bg-primary text-white">
+                <tr>
+                  <th scope="col">No.</th>
+                  <th scope="col">Company</th>
+                  <th scope="col">Department</th>
+                  <th scope="col">Document Type</th>
+                  <th scope="col">Agency</th>
+                  <th scope="col">Document</th>
+                  <th scope="col">Renewed Date</th>
+                  <th scope="col">Expiry Date</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for file in renew_file %}
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                  <td>{{ file.company_name }}</td>
+                  <td>{{ file.department_name }}</td>
+                  <td>{{ file.document_type }}</td>
+                  <td>{{ file.agency }}</td>
+                  <td>
+                    <a href="{{ file.upload_file }}" target="_blank">
+                      <i
+                        class="fas fa-file-alt pdf-icon"
+                        style="font-size: 20px; color: #000"
+                      ></i>
+                    </a>
+                  </td>
+                  <td>{{ file.renewal_date }}</td>
+                  <td>{{ file.expiry_date }}</td>
+
+                  <td>
+                    <a
+                      href="{% url 'renew_file_form' file_id=file.id %}"
+                      class="btn btn-primary btn-sm"
+                      role="button"
+                      aria-pressed="true"
+                      >Renew</a
+                    >
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
+      <a
+        href="{% url 'dashboard' %}"
+        class="btn btn-secondary float-end mr-4"
+        style="font-family: 'Open Sans', sans-serif"
+        >Back</a
+      >
     </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end mr-4">Back</a>
-  </div>
-</div>
-
-</div>
-</div>
-   
-    <!-- Bootstrap core JavaScript-->
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
-
-    <!-- Page level plugins -->
     <script src="{% static 'bootstrap/vendor/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
-
-    <!-- Page level custom scripts -->
     <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
-
     <script>
       $(document).ready(function () {
         $("#renew").dataTable({

@@ -1,0 +1,35 @@
+<!-- renew_confirmation.html -->
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Renew Confirmation</title>
+    {% load static %}
+    <!-- Include your CSS and Bootstrap links here -->
+  </head>
+  <body>
+    <div class="container" style="font-family: 'Open Sans', sans-serif">
+      <h3>Renew Confirmation</h3>
+      <p>
+        This document has been renewed after the expiry date. Is there a penalty
+        for renewal?
+      </p>
+      <a
+        href="{% url 'create_receipt' file_id=file_id %}"
+        class="btn btn-primary"
+        style="font-family: 'Open Sans', sans-serif"
+        >Yes</a
+      >
+      <a
+        href="{% url 'renew_file_form' file_id=file_id %}"
+        class="btn btn-secondary"
+        style="font-family: 'Open Sans', sans-serif"
+        >No</a
+      >
+    </div>
+  </body>
+</html>

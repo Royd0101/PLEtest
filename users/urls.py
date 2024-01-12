@@ -1,6 +1,5 @@
 from django.urls import path, include
-from .views import Users, create_user, update_user, dashboard, create_user_page, user_list,redirect_to_login, login_user, login_page, logout_user, company_page,create_company,company_list,delete_user,delete_company
-from django.contrib.auth import views as auth_views
+from .views import Users, create_user, update_users, dashboard, create_user_page, user_list,redirect_to_login, login_user, login_page, logout_user, company_page,create_company,company_list,delete_user,delete_company,department_total_fine,update_company
 
 
 from .views import (
@@ -27,7 +26,7 @@ urlpatterns = [
     #user Crud
     path('user_list/', user_list, name='user_list'),
     path('create_user/', create_user, name='create_user'),
-    path('update_user/<int:user_id>/', update_user, name='update_user'),
+    path('update_users/<int:user_id>/', update_users, name='update_users'),
     path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
 
     path('login_user/', login_user, name='login_user'),
@@ -36,6 +35,7 @@ urlpatterns = [
     #company Crud
     path('create_company/', create_company, name='create_company'),
     path('delete_company/<int:company_id>/', delete_company, name='delete_company'),
+    path('update_company/<int:company_id>/', update_company, name='update_company'),
     path('company_list/', company_list, name='company_list'),
 
     #pages
@@ -44,7 +44,9 @@ urlpatterns = [
     path('dashboard/', dashboard, name='dashboard'),
     path('company_page/', company_page, name='company_page'),
     path('create_user_page/', create_user_page, name='create_user_page'),
-    
-   
+
+    path('department_total_fine/', department_total_fine, name='department_total_fine'),
+
+
    
 ]

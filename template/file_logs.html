@@ -7,128 +7,114 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     {% load static %}
-          <!-- Custom fonts for this template -->
           <link href="{% static 'bootstrap/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css" />
           <link href="{% static 'bootstrap/css/sb-admin-2.min.css' %}" rel="stylesheet" />
           <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet" />
-          
-          <!-- Bootstrap CSS -->
           <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" />
-          
-          <!-- DataTables CSS -->
           <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap5.min.css" />
     <title>To Be Renewed File List</title>
   </head>
   <style>
-    .card {
-      max-height: 400px;
-      overflow-y: auto;
+ .card {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .card-header {
+            position: sticky;
+            top: 0;
+            background-color: #04668b;
+            z-index: 1000; 
+            padding: 10px 0
+        }
+
+        th {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 30px; /* Adjust as needed */
+        background-color: white;
+        z-index: 1;
     }
 
-    .card .table th {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      background-color: white;
-      z-index: 1;
-    }
-
-    h6 {
-      position: -webkit-sticky;
-      position: sticky;
-      top: 0;
-      z-index: 1;
-      padding: 10px 0;
-    }
   </style>
 
-  <!-- Your existing code ... -->
-</head>
- <body id="page-top">
-{% include 'toast.html' %} {% csrf_token %}
-      <!-- Page Wrapper -->
+ <body id="page-top" style="background-color: #77c4d74d !important">
+  {% include 'toast.html' %} {% csrf_token %}
       <div id="wrapper">
-        <!-- Sidebar -->
         {% include 'sidebar.html' %}
-        <h3 class="m-0 font-weight-bold text-primary ml-4">
-          User Logs
-          </h3>
-            <div class="container-fluid">
+            <div class="container-fluid mt-5">
               <div class="card shadow mb-4">
-                <div class="card-body">
-          <table id="renew" class="table table-sm">
-            <tbody id="log-table-body">
-              <tr>
-                <th scope="col">Recent Activity</th>
-                <th scope="col">Date/Time</th>
-              </tr>
-            </thead>
-            <tbody>
-              {% if user.is_authenticated and user.is_staff %}
-              {% for log in admin_logs %}
-              <tr>
-                <td>
-                    <p>
-                        User {{ log.first_name }} {{ log.last_name }}
-                        {% if log.action == 'renewed' %}
-                          {{ log.action }} a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expire on "{{ log.expired_date }}".
-                          <p><b>Old File: </b><a href="{{ log.previous_file }}" target="_blank">Open File</a>
-                          <p><b>New File: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
-                        {% elif log.action == 'created' %}
-                          uploaded a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expired on "{{ log.expiry_date }}". 
-                           <p><b>New File: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
-                        {% endif %}
-                    </p>
-                </td>
-                <td>{{ log.timestamp }}</td>
-              
-            </tr>
-              {% endfor %}
-              {% endif %}
-              {% if not user.is_staff %}
-              {% for user_logs in user_log %}
-              <tr>
-                <td>
-                    <p>
-                          
-                        {% if user_logs.action == 'renewed' %}
-                        You  {{ user_logs.action }} a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expire on "{{ user_logs.expired_date }}".
-                            <p><b>Old File: </b><a href="{{ user_logs.previous_file }}" target="_blank">Open File</a>
-                            <p><b>New File: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
-                        {% elif user_logs.action == 'created' %}
-                        You uploaded a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expired on "{{ user_logs.expiry_date }}".
-                        
-                            <p><b>New File: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
-                        {% endif %}
-                    </p>
-                </td>
-                <td>{{ user_logs.timestamp }}</td>
-            </tr>
-              {% endfor %}
-              {% endif %}
-            </tbody>
-          </table>
-        </div>
+                <div class="card-header py-3" style="background-color: #04668b">
+                  <div class="d-flex align-items-center">
+                    <h6
+                      class="m-0 font-weight-bold text-white"
+                      style="font-family: 'Open Sans', sans-serif"
+                    >
+                      User Log
+                    </h6>
+                  </div>
+                  </div>
+                  <table id="renew" class="table table-sm" >
+                    <thead id="log-table-body">
+                      <tr>
+                        <th scope="col" >Recent Activity</th>
+                        <th scope="col">Date/Time</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% if user.is_authenticated and user.is_staff %}
+                      {% for log in admin_logs %}
+                          <tr>
+                              <td>
+                                  <p>
+                                      User {{ log.first_name }} {{ log.last_name }}
+                                      {% if log.action == 'Renewed' %}
+                                          {{ log.action }} a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expire on "{{ log.expired_date }}".
+                                          <p><b>Old Document: </b><a href="{{ log.previous_file }}" target="_blank">Open File</a></p>
+                                          <p><b>New Document: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
+                                      {% elif log.action == 'Uploaded' %}
+                                          Uploaded a document for "{{ log.company_name }}" "{{ log.department_name }}" that will expire on "{{ log.expiry_date }}". 
+                                          <p><b>New Document: </b><a href="{{ log.current_file_url }}" target="_blank">Open File</a></p>
+                                      {% endif %}
+                                  </p>
+                              </td>
+                              <td>{{ log.timestamp }}</td>
+                          </tr>
+                      {% endfor %}
+                      {% endif %}
+                      {% if not user.is_staff %}
+                      {% for user_logs in user_log %}
+                      <tr>
+                        <td>
+                            <p>
+                                  
+                                {% if user_logs.action == 'Renewed' %}
+                                You  {{ user_logs.action }} a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expire on "{{ user_logs.expired_date }}".
+                                    <p><b>Old Document: </b><a href="{{ user_logs.previous_file }}" target="_blank">Open File</a></p>
+                                    <p><b>New Document: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
+                                {% elif user_logs.action == 'Uploaded' %}
+                                You uploaded a document for "{{ user_logs.company_name }}" "{{ user_logs.department_name }}" that will expired on "{{ user_logs.expiry_date }}".
+                                
+                                    <p><b>New Document: </b><a href="{{ user_logs.current_file_url }}" target="_blank">Open File</a></p>
+                                {% endif %}
+                            </p>
+                        </td>
+                        <td>{{ user_logs.timestamp }}</td>
+                    </tr>
+                      {% endfor %}
+                      {% endif %}
+                    </tbody>
+                  </table>
+              </div>
+              <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end me-4">Back</a>
+            </div>
       </div>
-    </div>
-    <a href="{% url 'dashboard' %}" class="btn btn-secondary float-end me-4">Back</a>
-  </div>
-</div>
-
-</div>
-</div>
-   
-    <!-- Bootstrap core JavaScript-->
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
-
-    <!-- Page level plugins -->
     <script src="{% static 'bootstrap/vendor/datatables/jquery.dataTables.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
-
-    <!-- Page level custom scripts -->
     <script src="{% static 'bootstrap/js/demo/datatables-demo.js' %}"></script>
   </body>
 </html>

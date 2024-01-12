@@ -31,7 +31,22 @@ class File_Document(models.Model):
     expiry_date = models.DateField()
 
     def __str__(self):
-        return self.document_type
+        return f"File Document {self.user} - {self.document_type} - {self.expiry_date}"
+    
+    def delete(self):
+        self.upload_file.delete()
+        super().delete()
+
+class Person_Document(models.Model):
+    user = models.ForeignKey('users.User', on_delete=models.CASCADE)
+    person_fullname = models.CharField(max_length=50)
+    document_type = models.CharField(max_length=50)
+    upload_file = models.FileField(upload_to=get_upload_path)
+    renewal_date = models.DateField()
+    expiry_date = models.DateField()
+
+    def __str__(self):
+        return f"Person Document {self.user} - {self.document_type} - {self.expiry_date} - {self.person_fullname or 'No Name'}"
     
     def delete(self):
         self.upload_file.delete()
@@ -54,4 +69,22 @@ class FileLog(models.Model):
         super().save(*args, **kwargs)
 
     def __str__(self):
-        return f"{self.user.email} {self.action} {self.file.document_type}"
+        return f" {self.action} {self.file.document_type}"
+    
+class PersonLog(models.Model):
+    person = models.ForeignKey(Person_Document, on_delete=models.CASCADE, related_name='person_logs')  
+    previous_file = models.FileField(upload_to=get_upload_path, null=True, blank=True)
+    expiry_date = models.DateField(default=None, null=True, blank=True)
+    action = models.CharField(max_length=50)
+    timestamp = models.DateTimeField()
+
+    def save(self, *args, **kwargs):
+        current_utc_time = timezone.now()
+        time_difference = timedelta(hours=8) 
+
+        self.timestamp = current_utc_time + time_difference
+
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f" {self.action} {self.person.document_type}"

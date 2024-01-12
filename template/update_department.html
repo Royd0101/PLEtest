@@ -35,36 +35,49 @@
     />
     <title>Add Department</title>
   </head>
-  <body id="page-top">
- {% csrf_token %}
+  <body id="page-top" style="background-color: #77c4d74d !important">
+    {% csrf_token %}
     <!-- Page Wrapper -->
     <div id="wrapper">
       <!-- Sidebar -->
       {% include 'sidebar.html' %} {% include 'toast.html' %}
       <div class="container-fluid">
-        <!-- DataTales Example -->
-        <div class="card shadow mb-4">
+        <div class="card shadow mb-4 mt-5">
           <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Update Department</h6>
+            <h6
+              class="m-0 font-weight-bold text-dark"
+              style="font-family: 'Open Sans', sans-serif"
+            >
+              Update Department
+            </h6>
           </div>
-          <div class="card-body">
-            <form method="post" action="{% url 'update_department' department_id=department.id %}">
+          <div class="card-body" style="font-family: 'Open Sans', sans-serif">
+            <form
+              method="post"
+              action="{% url 'update_department' department_id=department.id %}"
+            >
               {% csrf_token %} {{ form.as_p }}
-              <div class="text-end">
-                <a class="btn btn-danger btn-sm" href="{% url 'department_list' %}">Cancel</a>
-                <button class="btn btn-primary btn-sm" type="submit">Submit</button>
-              </div>
+              <div
+                class="text-end"
+                style="font-family: 'Open Sans', sans-serif"
+              >
+                <a
+                  class="btn btn-danger btn-sm"
+                  href="{% url 'department_list' %}"
+                  >Cancel</a
+                >
+                <button class="btn btn-primary btn-sm" type="submit">
+                  Submit
+                </button>
               </div>
             </form>
           </div>
         </div>
       </div>
     </div>
-    <!-- Bootstrap core JavaScript-->
     <script src="{% static 'bootstrap/vendor/jquery/jquery.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
     <script src="{% static 'bootstrap/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
     <script src="{% static 'bootstrap/js/sb-admin-2.min.js' %}"></script>
   </body>
 </html>
-
