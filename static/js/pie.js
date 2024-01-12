@@ -10,7 +10,7 @@ fetch("/api/receipts/")
     const currentYear = new Date().getFullYear();
 
     const currentYearData = data.filter((entry) => {
-      const entryYear = new Date(entry.timestamp).getFullYear();
+      const entryYear = new Date(entry.invoice_date).getFullYear();
       return entryYear === currentYear;
     });
 

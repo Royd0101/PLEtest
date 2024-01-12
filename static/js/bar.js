@@ -4,7 +4,7 @@ const barCanvas = document.querySelector("#bar");
 fetch("/api/receipts/")
   .then((response) => response.json())
   .then((data) => {
-    // Group data by company and year of timestamp
+    // Group data by company and year of invoice_date
     const groupedData = groupDataByCompanyAndYear(data);
 
     // Extract labels and total fines for each company and year
@@ -17,9 +17,9 @@ fetch("/api/receipts/")
       const color = getRandomColor(index);
       companyColors[company] = color;
 
-      Object.keys(groupedData[company]).forEach((timestamp) => {
-        const yearData = groupedData[company][timestamp];
-        labels.push(`${company} - ${timestamp}`);
+      Object.keys(groupedData[company]).forEach((invoiceDate) => {
+        const yearData = groupedData[company][invoiceDate];
+        labels.push(`${company} - ${invoiceDate}`);
         totalFines.push(
           yearData.reduce((sum, entry) => sum + parseFloat(entry.fined), 0)
         );
@@ -60,21 +60,21 @@ fetch("/api/receipts/")
     console.error("Error fetching data:", error);
   });
 
-// Helper function to group data by company and year of timestamp
+// Helper function to group data by company and year of invoice_date
 function groupDataByCompanyAndYear(data) {
   return data.reduce((result, entry) => {
     const company = entry.company_name;
-    const timestamp = new Date(entry.timestamp).getFullYear();
+    const invoiceDate = new Date(entry.invoice_date).getFullYear();
 
     if (!result[company]) {
       result[company] = {};
     }
 
-    if (!result[company][timestamp]) {
-      result[company][timestamp] = [];
+    if (!result[company][invoiceDate]) {
+      result[company][invoiceDate] = [];
     }
 
-    result[company][timestamp].push(entry);
+    result[company][invoiceDate].push(entry);
     return result;
   }, {});
 }
@@ -84,13 +84,7 @@ function getRandomColor(index) {
   const colors = [
     "rgba(255, 99, 132, 0.4)", // Lighter red
     "rgba(4, 102, 139, 1)", // Lighter blue
-    "rgba(255, 206, 86, 0.4)", // Lighter yellow
-    "rgba(75, 192, 192, 0.4)", // Lighter green
-    "rgba(153, 102, 255, 0.4)", // Lighter purple
-    "rgba(255, 159, 64, 0.4)", // Lighter orange
-    "rgba(0, 255, 0, 0.4)", // Lighter lime green
-    "rgba(0, 0, 255, 0.4)", // Lighter navy blue
-    "rgba(128, 0, 128, 0.4)", // Lighter purple
+    // ... (other colors)
   ];
 
   return colors[index % colors.length];

@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", function () {
       let pieValues = Object.values(currentYearData);
 
       let companyColors = {};
-      pieLabels.forEach((company, index) => {
-        companyColors[company] = getRandomColor(index);
+      pieLabels.forEach((label, index) => {
+        companyColors[label] = getRandomColor(index);
       });
 
       let legendList = document.getElementById("UserlegendList");

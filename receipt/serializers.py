@@ -30,7 +30,7 @@ class ReceiptSerializer(serializers.ModelSerializer):
             'receipt',
             'first_name',
             'last_name',
-            'timestamp',
+            'invoice_date',
         )
 
 
@@ -60,5 +60,5 @@ class Person_ReceiptSerializer(serializers.ModelSerializer):
             'document_type',
             'document',
             'receipt',
-            'timestamp',
+            'invoice_date',
         )
